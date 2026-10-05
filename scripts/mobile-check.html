@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Comprobación en ancho de móvil</title>
+<!--
+  Herramienta de revisión, no forma parte de la web.
+
+  Chrome en modo headless impone un ancho mínimo de ventana (unos 492 px), así
+  que no se puede capturar la página a 390 px con --window-size: la captura
+  sale recortada de una vista más ancha y parece que el diseño se rompe cuando
+  en realidad no lo hace.
+
+  Metiendo la página en un iframe del ancho deseado, el navegador le da ese
+  viewport propio y las media queries responden de verdad.
+
+  Uso:
+    chrome --headless=new --screenshot=mobile.png --window-size=520,9000 \
+           --virtual-time-budget=9000 scripts/mobile-check.html
+
+  Cambia --ancho en la URL (?ancho=360) para probar otro tamaño.
+-->
+<style>
+  html, body { margin: 0; background: #6b6b6b; }
+  iframe { display: block; border: 0; height: 9000px; width: 390px; background: #fff; }
+</style>
+</head>
+<body>
+<iframe id="marco" src="../index.html" title="Rock Bikes"></iframe>
+<script>
+  var ancho = new URLSearchParams(location.search).get('ancho');
+  if (ancho) { document.getElementById('marco').style.width = ancho + 'px'; }
+</script>
+</body>
+</html>

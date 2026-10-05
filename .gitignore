@@ -1,0 +1,27 @@
+# Credenciales — nunca subir esto
+.figma-token
+.env
+.env.*
+
+# Las fuentes de titulares son la versión de DEMOSTRACIÓN de Obviously Demo.
+# Para publicar el sitio hace falta licencia; si el repositorio va a ser
+# público, descomenta la línea de abajo para no redistribuirlas.
+# assets/fonts/
+
+# Dependencias y builds
+node_modules/
+dist/
+build/
+
+# Salidas generadas por scripts/figma-fetch.mjs
+design/
+
+# Exportaciones originales de Figma: 109,58 MB. No las usa la página — hay 32
+# referencias a assets/opt/ y ninguna a assets/img —, son la ENTRADA de
+# scripts/optimize-images.py, que es quien genera assets/opt/.
+#
+# Se pueden volver a exportar cuando haga falta con scripts/figma-assets.mjs,
+# así que no hace falta versionarlas. Si las quieres dentro del repositorio,
+# comenta esta línea; pesan 110 MB y conviene decidirlo antes del primer commit,
+# porque quitarlas después obliga a reescribir el historial.
+assets/img/

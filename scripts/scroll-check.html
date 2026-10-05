@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Comprobación de desplazamiento</title>
+<!--
+  Herramienta de revisión, no forma parte de la web.
+
+  Una captura normal siempre sale con la página arriba del todo, así que no
+  sirve para comprobar si un elemento fijo (el menú) se queda pegado al borde
+  al bajar, ni si los enlaces con # dejan el titular tapado.
+
+  Esto carga la página dentro de un iframe y lo desplaza a la altura indicada.
+  Como el iframe es del mismo origen, el padre puede moverlo.
+
+  Tiene que servirse por http, no abrirse con file://, o el navegador no deja
+  que el padre toque el iframe.
+
+  Uso:
+    http://127.0.0.1:5500/scripts/scroll-check.html?y=1600
+    http://127.0.0.1:5500/scripts/scroll-check.html?y=0&ancho=390
+-->
+<style>
+  html, body { margin: 0; background: #6b6b6b; }
+  iframe { display: block; border: 0; width: 1366px; height: 900px; background: #fff; }
+</style>
+</head>
+<body>
+<iframe id="marco" src="../index.html" title="Rock Bikes"></iframe>
+<script>
+  var p = new URLSearchParams(location.search);
+  var marco = document.getElementById('marco');
+  var ancho = p.get('ancho');
+  if (ancho) { marco.style.width = ancho + 'px'; }
+  var alto = p.get('alto');
+  if (alto) { marco.style.height = alto + 'px'; }
+
+  marco.addEventListener('load', function () {
+    var y = parseInt(p.get('y') || '0', 10);
+    // Sin desplazamiento suave: la captura debe salir ya en la posición final.
+    marco.contentDocument.documentElement.style.scrollBehavior = 'auto';
+    marco.contentWindow.scrollTo(0, y);
+  });
+</script>
+</body>
+</html>

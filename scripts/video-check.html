@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Comprobación del vídeo del hero</title>
+<!--
+  Herramienta de revisión temporal, no forma parte de la web.
+
+  Carga la página en un iframe, espera unos segundos y escribe encima el estado
+  real del elemento <video>: si hay error, si está pausado, el tiempo que lleva
+  reproducido y qué fuente eligió el navegador. Una captura normal no lo dice.
+
+  Tiene que servirse por http (mismo origen) para que el padre pueda leer el DOM
+  del iframe. Se captura y se lee el texto de la imagen.
+-->
+<style>
+  html, body { margin: 0; background: #6b6b6b; }
+  iframe { display: block; width: 1366px; height: 760px; border: 0; background: #fff; }
+  #out {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 99;
+    margin: 0; padding: 8px 10px;
+    background: #fff; color: #000;
+    font: 13px/17px monospace; white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+<iframe id="f" src="../index.html" title="Rock Bikes"></iframe>
+<pre id="out">esperando…</pre>
+<script>
+  var f = document.getElementById('f');
+  var segundos = parseFloat(new URLSearchParams(location.search).get('t') || '3');
+
+  f.addEventListener('load', function () {
+    var vs = f.contentDocument.querySelectorAll('video');
+    setTimeout(function () {
+      var lineas = ['vídeos encontrados: ' + vs.length, ''];
+      Array.prototype.forEach.call(vs, function (v, i) {
+        lineas.push('--- vídeo ' + (i + 1) + '  (' + (v.className || 'sin clase') + ') ---');
+        lineas.push('  error         : ' + (v.error ? v.error.code + ' - ' + (v.error.message || 'sin detalle') : 'ninguno'));
+        lineas.push('  readyState    : ' + v.readyState + '   (4 = hay datos para reproducir)');
+        lineas.push('  paused        : ' + v.paused);
+        lineas.push('  currentTime   : ' + v.currentTime.toFixed(2) + ' s');
+        lineas.push('  duración      : ' + (isFinite(v.duration) ? v.duration.toFixed(2) : '-') + ' s');
+        lineas.push('  resolución    : ' + (v.videoWidth ? v.videoWidth + 'x' + v.videoHeight : '-'));
+        lineas.push('  tamaño en caja: ' + Math.round(v.getBoundingClientRect().width) + 'x' + Math.round(v.getBoundingClientRect().height));
+        lineas.push('  fuente        : ' + (v.currentSrc ? v.currentSrc.split('/').pop() : 'ninguna'));
+        lineas.push('');
+      });
+      document.getElementById('out').textContent = lineas.join('\n');
+    }, segundos * 1000);
+  });
+</script>
+</body>
+</html>

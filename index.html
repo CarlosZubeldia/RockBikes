@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rock Bikes — Mountain bike and electric scooter specialists</title>
+<meta name="description" content="Mountain bikes and electric scooters. Free shipping over €250, free returns and our own workshop.">
+
+<!-- Favicon. Solo el rayo sobre el circulo negro: con las letras no se
+     distinguia a 16 px, que es como se ve de verdad en una pestana.
+     32x32 es la medida exacta que pide un navegador, y el PNG de 180 lo
+     necesita iOS aparte, porque no admite iconos vectoriales. -->
+<link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============================ CABECERA ============================ -->
+<header class="site-header">
+  <div class="nav">
+    <div class="nav__brand">
+      <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <a class="nav__logo" href="#" aria-label="Rock Bikes, home">
+        <img src="assets/svg/frame-1410106506-I15076-6464;15048-25588.svg" alt="Rock Bikes" width="171" height="18">
+      </a>
+    </div>
+
+    <nav class="nav__menu" id="nav-menu" aria-label="Principal">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="#categories">Models <svg class="icon-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li><a class="nav__link" href="#brands">Brands <svg class="icon-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li><a class="nav__link" href="#products">Best sellers <svg class="icon-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li><a class="nav__link" href="#accessories">Accesories <svg class="icon-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li><a class="nav__offer" href="#">Offers</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav__actions">
+      <button class="nav__icon" type="button" aria-label="Search">
+        <img src="assets/svg/iconamoon-search-bold-I15076-6464;15048-24573.svg" alt="" width="24" height="24">
+      </button>
+      <button class="nav__icon" type="button" aria-label="My account">
+        <img src="assets/svg/component-206-I15076-6464;15048-24574.svg" alt="" width="24" height="24">
+      </button>
+      <button class="nav__icon" type="button" aria-label="Cart">
+        <img src="assets/svg/component-205-I15076-6464;15048-24575.svg" alt="" width="24" height="24">
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================== HERO ============================== -->
+<section class="hero">
+
+  <!-- Fondo en vídeo. El póster es la imagen que había antes, así que mientras
+       el vídeo carga —o si el navegador no lo reproduce— se ve exactamente
+       igual que antes. Los tres atributos que hacen que arranque solo son
+       muted, autoplay y playsinline: sin muted los navegadores lo bloquean. -->
+  <video class="hero__video"
+         autoplay muted loop playsinline preload="auto"
+         poster="assets/opt/frame-1410106389-540de9.webp"
+         aria-hidden="true" tabindex="-1">
+    <!-- El navegador usa la primera fuente que sepa reproducir, así que el
+         orden importa: si algún día añades un WebM, ponlo antes que el MP4. -->
+    <source src="assets/video/hero.mp4" type="video/mp4">
+    <source src="assets/video/hero.webm" type="video/webm">
+  </video>
+
+  <div class="hero__inner">
+    <div class="hero__copy">
+      <h1 class="hero__title">Mountain<br>Bikes <span class="hero__title-alt">specialist</span></h1>
+      <p class="hero__lead">Lorem ipsum dolor sit amet consectetur. Vel elementum felis ut pharetra.</p>
+      <a class="btn btn--light" href="#categories">See more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+    <div class="hero__card" data-carousel data-carousel-mode="fade">
+      <div class="pcard">
+        <div class="pcard__media">
+          <img src="assets/opt/img-0b4ee9.png" alt="BBQ MTX Mountain Bike" width="156" height="177" loading="eager">
+        </div>
+        <div class="pcard__body">
+          <div class="pcard__slides" data-carousel-track>
+            <article class="pcard__slide">
+              <p class="pcard__brand">BBQ MTX</p>
+              <h3 class="pcard__name">Lorem Brand Mountain Bike</h3>
+              <p class="pcard__price"><span>€225</span><span class="pcard__dot" aria-hidden="true"></span></p>
+            </article>
+            <article class="pcard__slide">
+              <p class="pcard__brand">BBQ MTX</p>
+              <h3 class="pcard__name">Lorem Brand Mountain Bike</h3>
+              <p class="pcard__price"><span>€225</span><span class="pcard__dot" aria-hidden="true"></span></p>
+            </article>
+            <article class="pcard__slide">
+              <p class="pcard__brand">BBQ MTX</p>
+              <h3 class="pcard__name">Lorem Brand Mountain Bike</h3>
+              <p class="pcard__price"><span>€225</span><span class="pcard__dot" aria-hidden="true"></span></p>
+            </article>
+          </div>
+          <div class="pcard__foot">
+            <div class="carousel-nav">
+              <button class="cbtn" type="button" data-carousel-prev aria-label="Previous product">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="cbtn" type="button" data-carousel-next aria-label="Next product">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="usp">
+    <li>Free shipping over €250</li>
+    <li>Free returns</li>
+    <li>Fast and secure shipping</li>
+    <li>Our own workshop</li>
+    <li>Secure payment</li>
+  </ul>
+</section>
+
+<!-- =========================== CATEGORÍAS =========================== -->
+<section class="section section--surface" id="categories">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <h2 class="display display--dark">Categories</h2>
+        <p class="section__lead">Lorem ipsum dolor sit amet consectetur. Vel elementum felis ut pharetra.</p>
+      </div>
+      <a class="btn btn--dark" href="#">All categories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+    <div class="cat-grid">
+      <a class="cat cat--wide cat--photo" href="#">
+        <img src="assets/opt/frame-1410106400-171909.webp" alt="" loading="lazy">
+      </a>
+
+      <a class="cat cat--plum" href="#">
+        <span class="cat__badge" aria-hidden="true"><span></span></span>
+        <div class="cat__text">
+          <h3 class="cat__title">Electric scooters</h3>
+          <p class="cat__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p>
+        </div>
+      </a>
+
+      <a class="cat cat--plum" href="#">
+        <span class="cat__badge" aria-hidden="true"><span></span></span>
+        <div class="cat__text">
+          <h3 class="cat__title">Accessories</h3>
+          <p class="cat__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p>
+        </div>
+      </a>
+
+      <a class="cat cat--light" href="#">
+        <span class="cat__badge" aria-hidden="true"><span></span></span>
+        <div class="cat__text">
+          <h3 class="cat__title">Wheels</h3>
+          <p class="cat__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p>
+        </div>
+      </a>
+
+      <a class="cat cat--photo" href="#">
+        <img src="assets/opt/frame-1410106400-35050f.webp" alt="" loading="lazy">
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== MOST WANTED ========================== -->
+<section class="section" id="products">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <h2 class="display display--dark">Most wanted</h2>
+        <p class="section__lead">Lorem ipsum dolor sit amet consectetur. Vel elementum felis ut pharetra.</p>
+      </div>
+      <a class="btn btn--dark" href="#">All categories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+    <div class="carousel" data-carousel>
+      <div class="carousel__viewport">
+        <ul class="carousel__track" data-carousel-track>
+          <!-- Se repite la tarjeta de producto: por eso conviene tenerla como una sola pieza -->
+          <li class="prod">
+            <div class="prod__media">
+              <span class="prod__tag">New</span>
+              <img src="assets/opt/img-0b4ee9.png" alt="Xiaomi Electric Scooter 4 Lite 2ndGen" loading="lazy">
+            </div>
+            <div class="prod__body">
+              <p class="prod__brand">Xiaomi</p>
+              <h3 class="prod__name">Xiaomi Electric Scooter 4 Lite 2ndGen</h3>
+              <p class="prod__price">€225<span class="prod__swatch" aria-hidden="true"></span></p>
+            </div>
+          </li>
+          <li class="prod">
+            <div class="prod__media">
+              <img src="assets/opt/img-0b4ee9.png" alt="Xiaomi Electric Scooter 4 Lite 2ndGen" loading="lazy">
+            </div>
+            <div class="prod__body">
+              <p class="prod__brand">Xiaomi</p>
+              <h3 class="prod__name">Xiaomi Electric Scooter 4 Lite 2ndGen</h3>
+              <p class="prod__price">€225<span class="prod__swatch" aria-hidden="true"></span></p>
+            </div>
+          </li>
+          <li class="prod">
+            <div class="prod__media">
+              <span class="prod__tag">New</span>
+              <img src="assets/opt/img-0b4ee9.png" alt="Xiaomi Electric Scooter 4 Lite 2ndGen" loading="lazy">
+            </div>
+            <div class="prod__body">
+              <p class="prod__brand">Xiaomi</p>
+              <h3 class="prod__name">Xiaomi Electric Scooter 4 Lite 2ndGen</h3>
+              <p class="prod__price">€225<span class="prod__swatch" aria-hidden="true"></span></p>
+            </div>
+          </li>
+          <li class="prod">
+            <div class="prod__media">
+              <img src="assets/opt/img-0b4ee9.png" alt="Xiaomi Electric Scooter 4 Lite 2ndGen" loading="lazy">
+            </div>
+            <div class="prod__body">
+              <p class="prod__brand">Xiaomi</p>
+              <h3 class="prod__name">Xiaomi Electric Scooter 4 Lite 2ndGen</h3>
+              <p class="prod__price">€225<span class="prod__swatch" aria-hidden="true"></span></p>
+            </div>
+          </li>
+          <li class="prod">
+            <div class="prod__media">
+              <span class="prod__tag">New</span>
+              <img src="assets/opt/img-0b4ee9.png" alt="Xiaomi Electric Scooter 4 Lite 2ndGen" loading="lazy">
+            </div>
+            <div class="prod__body">
+              <p class="prod__brand">Xiaomi</p>
+              <h3 class="prod__name">Xiaomi Electric Scooter 4 Lite 2ndGen</h3>
+              <p class="prod__price">€225<span class="prod__swatch" aria-hidden="true"></span></p>
+            </div>
+          </li>
+          <li class="prod">
+            <div class="prod__media">
+              <img src="assets/opt/img-0b4ee9.png" alt="Xiaomi Electric Scooter 4 Lite 2ndGen" loading="lazy">
+            </div>
+            <div class="prod__body">
+              <p class="prod__brand">Xiaomi</p>
+              <h3 class="prod__name">Xiaomi Electric Scooter 4 Lite 2ndGen</h3>
+              <p class="prod__price">€225<span class="prod__swatch" aria-hidden="true"></span></p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <button class="carousel__arrow carousel__arrow--prev" type="button" data-carousel-prev aria-label="Previous products">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="carousel__arrow carousel__arrow--next" type="button" data-carousel-next aria-label="Next products">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="carousel__foot">
+        <ol class="dots" data-carousel-dots></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= MARCAS ============================= -->
+<section class="brands" id="brands">
+  <div class="container brands__top">
+    <div class="brands__copy">
+      <h2 class="display display--light">Discover our<br>best brands<br><span class="accent">Ricky Bikes</span></h2>
+      <p class="brands__lead">Power, design and technology.<br>This is the ICE range: built to master<br>the city without limits.</p>
+      <a class="btn btn--light" href="#">All categories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="brands__media">
+      <!-- Vídeo de la sección. El póster es la imagen del diseño, así que si el
+           vídeo no carga se ve exactamente lo mismo que antes. Está recortado a
+           la proporción del hueco (639×509), no a 16:9. -->
+      <video autoplay muted loop playsinline preload="metadata"
+             poster="assets/opt/frame-1410106428-b17ff0.webp"
+             aria-hidden="true" tabindex="-1">
+        <source src="assets/video/brands.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+
+  <div class="brands__row">
+    <h3 class="brands__title">Enjoy the best brands</h3>
+    <p class="brands__sub">Quality, performance and trust in every scooter.</p>
+    <ul class="brands__logos">
+      <!-- Logos ya pintados en amarillo por scripts/recolor-logos.py: en el
+           diseño van a un solo color, pero los originales de Figma traen los
+           colores de cada marca. Los tamaños son los del propio diseño. -->
+      <li><img src="assets/logos/segway-logo-svg-1.png" alt="Segway" loading="lazy"
+               style="width:calc(94px * var(--mark-scale,1)); height:calc(54px * var(--mark-scale,1))"></li>
+      <li><img src="assets/logos/mask-group-15076-5898.svg" alt="smartGyro" loading="lazy"
+               style="width:calc(189px * var(--mark-scale,1)); height:calc(31px * var(--mark-scale,1))"></li>
+      <li><img src="assets/logos/engwe-logo-03-logo-1.png" alt="Engwe" loading="lazy"
+               style="width:calc(137px * var(--mark-scale,1)); height:calc(72px * var(--mark-scale,1))"></li>
+      <li><img src="assets/logos/vector-15076-5915.svg" alt="Xiaomi" loading="lazy"
+               style="width:calc(97px * var(--mark-scale,1)); height:calc(16px * var(--mark-scale,1))"></li>
+      <li><img src="assets/logos/logo-1.png" alt="Aovo" loading="lazy"
+               style="width:calc(139px * var(--mark-scale,1)); height:calc(25px * var(--mark-scale,1))"></li>
+      <li><img src="assets/logos/mark-1.png" alt="Dualtron" loading="lazy"
+               style="width:calc(148px * var(--mark-scale,1)); height:calc(56px * var(--mark-scale,1))"></li>
+    </ul>
+    <a class="btn btn--ghost" href="#">More brands <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</section>
+
+<!-- ======================= ENCUENTRA TU BICI ======================= -->
+<section class="section" id="finder">
+  <div class="container">
+    <div class="section__head">
+      <h2 class="display display--dark">Find your<br>perfect bike</h2>
+      <p class="section__lead section__lead--right">The ideal scooter exists. Find yours by style, needs and how you like to move.</p>
+    </div>
+
+    <div class="finder-grid">
+      <a class="fcard fcard--plum" href="#">
+        <span class="fcard__badge" aria-hidden="true"><span></span></span>
+        <div>
+          <h3 class="fcard__title">DGT approved</h3>
+          <p class="fcard__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p>
+        </div>
+      </a>
+      <a class="fcard fcard--photo" href="#">
+        <img src="assets/opt/cat-ruedas-fc7916.webp" alt="" loading="lazy">
+        <span class="fcard__badge" aria-hidden="true"><span></span></span>
+        <div class="fcard__overlay">
+          <h3 class="fcard__title">Large wheels</h3>
+          <p class="fcard__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p>
+        </div>
+      </a>
+      <a class="fcard fcard--purple" href="#">
+        <span class="fcard__badge" aria-hidden="true"><span></span></span>
+        <div>
+          <h3 class="fcard__title">All-terrain 4x4</h3>
+          <p class="fcard__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p>
+        </div>
+      </a>
+      <a class="fcard fcard--photo" href="#">
+        <img src="assets/opt/cat-ruedas-8c2842.webp" alt="" loading="lazy">
+        <span class="fcard__badge" aria-hidden="true"><span></span></span>
+        <div class="fcard__overlay">
+          <h3 class="fcard__title">Dual-motor scooters</h3>
+          <p class="fcard__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="section__foot">
+      <a class="btn btn--outline-dark" href="#">See all categories</a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== OPINIONES =========================== -->
+<section class="section reviews" id="reviews">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <h2 class="display display--dark">What our<br>customers say</h2>
+        <p class="section__lead">Hear what our riders have to say</p>
+      </div>
+      <a class="btn btn--dark" href="#">All reviews <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+    <div class="reviews__panel">
+      <div class="score">
+        <p class="score__value">4’6/5</p>
+        <p class="score__label">excellent</p>
+        <p class="stars" aria-label="4,6 sobre 5 estrellas">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg>
+        </p>
+        <p class="score__meta">Based on 281 reviews</p>
+        <img class="score__google" src="assets/opt/google-logo-wine-1-0cc2f6.png" alt="Google" loading="lazy">
+      </div>
+
+      <div class="carousel reviews__carousel" data-carousel>
+        <div class="carousel__viewport">
+          <ul class="carousel__track" data-carousel-track>
+            <li class="review">
+              <div class="review__head">
+                <span class="review__avatar review__avatar--p">P</span>
+                <div><p class="review__name">Paula Pérez Ojeda</p><p class="review__date">September 14, 2023</p></div>
+                <img class="review__g" src="assets/opt/google-logo-wine-1-0cc2f6.png" alt="Google" loading="lazy">
+              </div>
+              <p class="stars stars--sm" aria-label="5 estrellas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg></p>
+              <p class="review__text">Asset library inspect figma figjam. Group frame share prototype frame inspect. Edit community scale rotate bullet layout overflow variant content. Export inspect move bullet create thumbnail flatten polygon create rectangle. Team star reesizing prototype pixel share library stroke outline.</p>
+            </li>
+            <li class="review">
+              <div class="review__head">
+                <span class="review__avatar review__avatar--n">N</span>
+                <div><p class="review__name">Nicolas S</p><p class="review__date">September 14, 2023</p></div>
+                <img class="review__g" src="assets/opt/google-logo-wine-1-0cc2f6.png" alt="Google" loading="lazy">
+              </div>
+              <p class="stars stars--sm" aria-label="5 estrellas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg></p>
+              <p class="review__text">Undo component flows list scrolling. Rectangle layer follower mask vector align variant prototype thumbnail bold. Arrow figjam share share hand. Vector outline underline component export hand. Font slice overflow auto thumbnail device comment.</p>
+            </li>
+            <li class="review">
+              <div class="review__head">
+                <span class="review__avatar review__avatar--p">P</span>
+                <div><p class="review__name">Paula Pérez Ojeda</p><p class="review__date">September 14, 2023</p></div>
+                <img class="review__g" src="assets/opt/google-logo-wine-1-0cc2f6.png" alt="Google" loading="lazy">
+              </div>
+              <p class="stars stars--sm" aria-label="5 estrellas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg></p>
+              <p class="review__text">Strikethrough create figma project hand arrange. Arrow editor duplicate hand ipsum object strikethrough. Variant clip project overflow scrolling. Arrange style strikethrough select bold align component polygon undo rectangle.</p>
+            </li>
+            <li class="review">
+              <div class="review__head">
+                <span class="review__avatar review__avatar--n">N</span>
+                <div><p class="review__name">Nicolas S</p><p class="review__date">September 14, 2023</p></div>
+                <img class="review__g" src="assets/opt/google-logo-wine-1-0cc2f6.png" alt="Google" loading="lazy">
+              </div>
+              <p class="stars stars--sm" aria-label="5 estrellas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 18l-6.2 3.2L7 14.2l-5-4.8 7-.9z"/></svg></p>
+              <p class="review__text">Main scale layout underline share blur polygon distribute hand opacity. Subtract italic horizontal device component layer. Clip layout blur rectangle arrow invite shadow.</p>
+            </li>
+          </ul>
+        </div>
+        <button class="carousel__arrow carousel__arrow--prev" type="button" data-carousel-prev aria-label="Previous reviews">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="carousel__arrow carousel__arrow--next" type="button" data-carousel-next aria-label="Next reviews">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="carousel__foot">
+          <ol class="dots" data-carousel-dots></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== ACCESORIOS ========================== -->
+<section class="section" id="accessories">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <h2 class="display display--dark"><span class="accent--grey">Accessories</span><br>for riders</h2>
+        <p class="section__lead">Safety, style and function for every ride. Gear up to the max.</p>
+      </div>
+      <a class="btn btn--dark" href="#">All accessories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+    <div class="acc-grid">
+      <a class="acc acc--photo" href="#">
+        <img src="assets/opt/cat-patinetes-957d76.webp" alt="" loading="lazy">
+        <span class="acc__badge" aria-hidden="true"><span></span></span>
+        <div class="acc__overlay"><h3 class="acc__title">Helmet</h3><p class="acc__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p></div>
+      </a>
+      <a class="acc acc--purple" href="#">
+        <span class="acc__badge" aria-hidden="true"><span></span></span>
+        <div><h3 class="acc__title">Storage and transport</h3><p class="acc__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p></div>
+      </a>
+      <a class="acc acc--photo" href="#">
+        <img src="assets/opt/cat-ruedas-191803.webp" alt="" loading="lazy">
+        <span class="acc__badge" aria-hidden="true"><span></span></span>
+        <div class="acc__overlay"><h3 class="acc__title">Lock, alarm, GPS</h3><p class="acc__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p></div>
+      </a>
+      <a class="acc acc--photo" href="#">
+        <img src="assets/opt/cat-ruedas-ba2960.webp" alt="" loading="lazy">
+        <span class="acc__badge" aria-hidden="true"><span></span></span>
+        <div class="acc__overlay"><h3 class="acc__title">Reflective vest</h3><p class="acc__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p></div>
+      </a>
+      <a class="acc acc--photo" href="#">
+        <img src="assets/opt/cat-ruedas-d71e75.webp" alt="" loading="lazy">
+        <span class="acc__badge" aria-hidden="true"><span></span></span>
+        <div class="acc__overlay"><h3 class="acc__title">Phone mount and mirror</h3><p class="acc__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p></div>
+      </a>
+      <a class="acc acc--photo" href="#">
+        <img src="assets/opt/cat-ruedas-989c57.webp" alt="" loading="lazy">
+        <span class="acc__badge" aria-hidden="true"><span></span></span>
+        <div class="acc__overlay"><h3 class="acc__title">Deck</h3><p class="acc__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p></div>
+      </a>
+      <a class="acc acc--plum" href="#">
+        <span class="acc__badge" aria-hidden="true"><span></span></span>
+        <div><h3 class="acc__title">Other accessories</h3><p class="acc__desc">Discover the freedom on wheels with our latest-generation electric scooters.</p></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ TALLER ============================ -->
+<section class="workshop">
+  <div class="container workshop__inner">
+    <h2 class="display display--italic display--light display--center">Our own workshop<br><span class="accent">at our</span><br><span class="accent">facilities</span></h2>
+    <p class="workshop__lead">Discover the freedom on wheels with our latest-generation electric scooters.</p>
+    <a class="btn btn--ghost" href="#">Book an appointment <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</section>
+
+<!-- =========================== NOTICIAS =========================== -->
+<section class="news">
+  <div class="container news__inner">
+    <div class="news__head">
+      <h2 class="display display--italic display--light">Latest<br><span class="accent">news</span></h2>
+      <p class="news__lead">News, launches and everything moving in the world of electric scooters</p>
+      <a class="btn btn--light" href="#">See all <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+    <div class="carousel carousel--dark news__carousel" data-carousel>
+      <div class="carousel__viewport">
+        <ul class="carousel__track" data-carousel-track>
+          <li class="post">
+            <img src="assets/opt/card-1-377841.webp" alt="" loading="lazy">
+            <p class="post__meta"><span>Category</span><span>11/10/2024</span></p>
+            <h3 class="post__title">Rotate draft rotate export editor.</h3>
+            <a class="post__link" href="#">Read more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </li>
+          <li class="post">
+            <img src="assets/opt/card-1-e86591.webp" alt="" loading="lazy">
+            <p class="post__meta"><span>Category</span><span>11/10/2024</span></p>
+            <h3 class="post__title">Rotate draft rotate export editor.</h3>
+            <a class="post__link" href="#">Read more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </li>
+          <li class="post">
+            <img src="assets/opt/card-1-ea4b67.webp" alt="" loading="lazy">
+            <p class="post__meta"><span>Category</span><span>11/10/2024</span></p>
+            <h3 class="post__title">Rotate draft rotate export editor.</h3>
+            <a class="post__link" href="#">Read more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </li>
+          <li class="post">
+            <img src="assets/opt/card-1-377841.webp" alt="" loading="lazy">
+            <p class="post__meta"><span>Category</span><span>11/10/2024</span></p>
+            <h3 class="post__title">Rotate draft rotate export editor.</h3>
+            <a class="post__link" href="#">Read more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </li>
+          <li class="post">
+            <img src="assets/opt/card-1-e86591.webp" alt="" loading="lazy">
+            <p class="post__meta"><span>Category</span><span>11/10/2024</span></p>
+            <h3 class="post__title">Rotate draft rotate export editor.</h3>
+            <a class="post__link" href="#">Read more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </li>
+          <li class="post">
+            <img src="assets/opt/card-1-ea4b67.webp" alt="" loading="lazy">
+            <p class="post__meta"><span>Category</span><span>11/10/2024</span></p>
+            <h3 class="post__title">Rotate draft rotate export editor.</h3>
+            <a class="post__link" href="#">Read more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </li>
+        </ul>
+      </div>
+      <button class="carousel__arrow carousel__arrow--prev" type="button" data-carousel-prev aria-label="Previous news">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="carousel__arrow carousel__arrow--next" type="button" data-carousel-next aria-label="Next news">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- El bloque SEO va aqui, sobre el fondo estampado, como en el diseno. -->
+  <div class="container">
+  <div class="seo">
+    <h2 class="seo__title">Online store <span class="accent">electric scooters</span></h2>
+    <p class="seo__text">Clip share layer connection strikethrough outline prototype. Text outline vertical auto variant undo move asset vector effect. Project team reesizing reesizing opacity main. Vector font variant asset background. Shadow pen outline selection clip strikethrough ipsum follower invite scrolling. Text ellipse subtract main plugin opacity hand pixel library union. Image select auto main image. Font layer pencil duplicate bullet bold layout export figjam variant.</p>
+    <p class="seo__text">Scrolling pencil underline rectangle boolean pixel figma fill. Edit ipsum follower follower star asset outline union overflow project. Subtract main edit connection edit project share device object auto. Outline device figma underline layer figma project. Inspect overflow font community export auto align. Boolean effect thumbnail move create scale editor selection italic opacity. Opacity arrange edit inspect ipsum.</p>
+    <a class="seo__more" href="#">Read more</a>
+  </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================= FOOTER ============================= -->
+<footer class="site-footer">
+  <div class="container">
+
+    <div class="news-letter">
+      <a class="news-letter__logo" href="#" aria-label="Rock Bikes, home">
+        <img src="assets/svg/frame-1410106506-I15076-6464;15048-25588.svg" alt="Rock Bikes" width="342" height="36">
+      </a>
+      <div class="news-letter__box">
+        <p class="news-letter__title">Subscribe to our <span class="accent">newsletter</span></p>
+        <p class="news-letter__sub">Discounts, news and much more.</p>
+        <form class="news-letter__form" action="#" method="post">
+          <label class="sr-only" for="email">Tu email</label>
+          <input class="news-letter__input" id="email" name="email" type="email" placeholder="Enter your email" required>
+          <button class="btn btn--outline-light" type="submit">Subscribe</button>
+        </form>
+        <label class="check">
+          <input type="checkbox" name="privacy" required>
+          <span>I expressly consent to the privacy policy</span>
+        </label>
+      </div>
+    </div>
+
+    <nav class="foot-links" aria-label="Enlaces del pie">
+      <div class="foot-col">
+        <h3>Most searched</h3>
+        <ul>
+          <li><a href="#">Xiaomi Pro 2</a></li>
+          <li><a href="#">Dualtron Mini</a></li>
+          <li><a href="#">Cecotec Bongo Serie A</a></li>
+          <li><a href="#">Ice Q5 Evolution</a></li>
+          <li><a href="#">Dualtron Victor Luxury Plus</a></li>
+          <li><a href="#">Dualtron Victor Limited</a></li>
+          <li><a href="#">Smartgyro crossover Max2</a></li>
+          <li><a href="#">Smartgyro K2 Pro</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3>Scooters</h3>
+        <ul>
+          <li><a href="#">Affordable</a></li>
+          <li><a href="#">Powerful</a></li>
+          <li><a href="#">Adult</a></li>
+          <li><a href="#">Off-road</a></li>
+          <li><a href="#">DGT approved</a></li>
+          <li><a href="#">Large wheels</a></li>
+          <li><a href="#">Foldable</a></li>
+          <li><a href="#">Dual motor</a></li>
+          <li><a href="#">With suspension</a></li>
+          <li><a href="#">Rear drive</a></li>
+          <li><a href="#">With indicators</a></li>
+          <li><a href="#">Refurbished</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3>About us</h3>
+        <ul>
+          <li><a href="#">Team</a></li>
+          <li><a href="#">Who we are</a></li>
+          <li><a href="#">Workshop</a></li>
+          <li><a href="#">Stores</a></li>
+          <li><a href="#">Community</a></li>
+          <li><a href="#">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3>Orders</h3>
+        <ul>
+          <li><a href="#">Shipping, delivery and payment</a></li>
+          <li><a href="#">Returns and exchanges</a></li>
+          <li><a href="#">Right of withdrawal</a></li>
+          <li><a href="#">Tax Free in our stores</a></li>
+          <li><a href="#">Instant financing</a></li>
+          <li><a href="#">Promotions and discounts</a></li>
+          <li><a href="#">Trade-in: we value your scooter</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3>Useful links</h3>
+        <ul>
+          <li><a href="#">Account access</a></li>
+          <li><a href="#">Privacy policy</a></li>
+          <li><a href="#">Cookie policy</a></li>
+          <li><a href="#">Legal notice</a></li>
+          <li><a href="#">Purchase terms</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="foot-bottom">
+      <div class="foot-contact">
+        <h3>Customer service</h3>
+        <ul>
+          <li><a href="mailto:info@rockbikes.com">info@rockbikes.com</a></li>
+          <li><strong>Las Palmas</strong> <a href="tel:928751075">928751075</a> | <a href="tel:828199476">828199476</a></li>
+          <li><strong>Logistics centre and wholesale</strong> <a href="tel:670615033">670615033</a></li>
+        </ul>
+      </div>
+
+      <ul class="social">
+        <li><a href="#" aria-label="YouTube"><img src="assets/svg/carbon-logo-youtube-15076-6424.svg" alt="" loading="lazy"></a></li>
+        <li><a href="#" aria-label="Twitter"><img src="assets/svg/mdi-twitter-15076-6426.svg" alt="" loading="lazy"></a></li>
+        <li><a href="#" aria-label="Facebook"><img src="assets/svg/ri-facebook-box-fill-15076-6428.svg" alt="" loading="lazy"></a></li>
+        <li><a href="#" aria-label="Instagram"><img src="assets/svg/ph-instagram-logo-fill-15076-6430.svg" alt="" loading="lazy"></a></li>
+        <li><a href="#" aria-label="TikTok"><img src="assets/svg/ic-baseline-tiktok-15076-6432.svg" alt="" loading="lazy"></a></li>
+      </ul>
+
+      <ul class="pay">
+        <li><img src="assets/svg/visa-inc-svg-15076-6436.svg" alt="Visa" loading="lazy"></li>
+        <li><img src="assets/svg/mastercard-svg-15076-6438.svg" alt="Mastercard" loading="lazy"></li>
+        <li><img src="assets/svg/paypal-svg-15076-6444.svg" alt="PayPal" loading="lazy"></li>
+        <li><img src="assets/svg/american-express-svg-15076-6451.svg" alt="American Express" loading="lazy"></li>
+        <li><img src="assets/svg/google-pay-logo-1-15076-6454.svg" alt="Google Pay" loading="lazy"></li>
+        <li><img src="assets/opt/2560px-apple-pay-logo-1-52b97a.png" alt="Apple Pay" loading="lazy"></li>
+      </ul>
+    </div>
+
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

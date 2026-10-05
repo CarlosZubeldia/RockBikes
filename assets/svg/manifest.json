@@ -1,0 +1,120 @@
+{
+  "file": "8mNr7UEzJA7LVwy7In9jlm",
+  "total": 19,
+  "svgs": [
+    {
+      "archivo": "arrow-right-I15076-5753;9177-15132.svg",
+      "id": "I15076:5753;9177:15132",
+      "nombre": "arrow-right",
+      "tipo": "INSTANCE"
+    },
+    {
+      "archivo": "mask-group-15076-5898.svg",
+      "id": "15076:5898",
+      "nombre": "Mask group",
+      "tipo": "GROUP"
+    },
+    {
+      "archivo": "vector-15076-5915.svg",
+      "id": "15076:5915",
+      "nombre": "Vector",
+      "tipo": "VECTOR"
+    },
+    {
+      "archivo": "clarity-star-solid-15076-5982.svg",
+      "id": "15076:5982",
+      "nombre": "clarity:star-solid",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "carbon-logo-youtube-15076-6424.svg",
+      "id": "15076:6424",
+      "nombre": "carbon:logo-youtube",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "mdi-twitter-15076-6426.svg",
+      "id": "15076:6426",
+      "nombre": "mdi:twitter",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "ri-facebook-box-fill-15076-6428.svg",
+      "id": "15076:6428",
+      "nombre": "ri:facebook-box-fill",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "ph-instagram-logo-fill-15076-6430.svg",
+      "id": "15076:6430",
+      "nombre": "ph:instagram-logo-fill",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "ic-baseline-tiktok-15076-6432.svg",
+      "id": "15076:6432",
+      "nombre": "ic:baseline-tiktok",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "visa-inc-svg-15076-6436.svg",
+      "id": "15076:6436",
+      "nombre": "Visa Inc. svg",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "mastercard-svg-15076-6438.svg",
+      "id": "15076:6438",
+      "nombre": "Mastercard svg",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "paypal-svg-15076-6444.svg",
+      "id": "15076:6444",
+      "nombre": "PayPal svg",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "american-express-svg-15076-6451.svg",
+      "id": "15076:6451",
+      "nombre": "American Express svg",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "google-pay-logo-1-15076-6454.svg",
+      "id": "15076:6454",
+      "nombre": "google-pay-logo 1",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "component-99-I15076-6464;15048-24540.svg",
+      "id": "I15076:6464;15048:24540",
+      "nombre": "Component 99",
+      "tipo": "INSTANCE"
+    },
+    {
+      "archivo": "frame-1410106506-I15076-6464;15048-25588.svg",
+      "id": "I15076:6464;15048:25588",
+      "nombre": "Frame 1410106506",
+      "tipo": "FRAME"
+    },
+    {
+      "archivo": "iconamoon-search-bold-I15076-6464;15048-24573.svg",
+      "id": "I15076:6464;15048:24573",
+      "nombre": "iconamoon:search-bold",
+      "tipo": "INSTANCE"
+    },
+    {
+      "archivo": "component-206-I15076-6464;15048-24574.svg",
+      "id": "I15076:6464;15048:24574",
+      "nombre": "Component 206",
+      "tipo": "INSTANCE"
+    },
+    {
+      "archivo": "component-205-I15076-6464;15048-24575.svg",
+      "id": "I15076:6464;15048:24575",
+      "nombre": "Component 205",
+      "tipo": "INSTANCE"
+    }
+  ]
+}
