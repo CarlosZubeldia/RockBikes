@@ -85,21 +85,67 @@ La página tiene **dos vídeos de fondo**, los dos a sangre, en bucle y silencia
 
 | Dónde | Archivo | Del original | Queda en |
 |---|---|---|---|
-| Hero | `assets/video/hero.mp4` | 131,87 MB · 1920×1080 · 59,94 fps · 47,8 Mbps | **5,73 MB** (−96 %) |
+| Hero | `assets/video/hero.mp4` | 131,87 MB · 1920×1080 · 59,94 fps · 47,8 Mbps | **12,64 MB** (−90 %) |
 | Sección de marcas | `assets/video/brands.mp4` | 58,16 MB · 1920×1080 · 59,94 fps · 69 Mbps | **4,06 MB** (−93 %) |
 
 Los dos venían a 60 fotogramas por segundo y con un bitrate enorme. Se recodificaron con
-ffmpeg a 25 fps, 720p (el del hero) y 1280×1020 (el de marcas, recortado ya a la
-proporción de su hueco para no codificar lo que no se ve):
+ffmpeg:
 
 ```powershell
+# Hero. 1600x900 porque es lo que mide en pantalla: el hero son 1366x768 y el
+# desplazamiento del vídeo lleva una escala de 1,15 -> 1572x884.
 ffmpeg -i original.mp4 -map 0:v:0 -an `
-  -vf "fps=25,scale=1280:-2" `
-  -c:v libx264 -preset slow -crf 33 -pix_fmt yuv420p `
+  -vf "fps=25,scale=1600:900:flags=lanczos,setsar=1" `
+  -c:v libx264 -preset slow -crf 31 -pix_fmt yuv420p `
   -movflags +faststart assets/video/hero.mp4
+
+# Sección de marcas, recortado ya a la proporción de su hueco (639x509) para no
+# codificar lo que no se ve.
+ffmpeg -i original.mp4 -map 0:v:0 -an `
+  -vf "fps=25,scale=1280:1020:flags=lanczos,setsar=1" `
+  -c:v libx264 -preset slow -crf 33 -pix_fmt yuv420p `
+  -movflags +faststart assets/video/brands.mp4
 ```
 
-El material es muy detallado —ramas, hojas, gravilla—, así que a 1080p no bajaba de 9 MB.
+El material es muy detallado —ramas, hojas, gravilla— y castiga mucho el bitrate: a
+1600×900 no baja de 12 MB sin que se note.
+
+### Por qué el hero pesa 12,64 MB y no 5,73
+
+La primera versión salió a 720p y CRF 33 para dejarla en 5,73 MB, y **se quedaba corta**.
+El motivo es que el vídeo del hero no se muestra a 1280 sino a 1572: el desplazamiento
+que saca al ciclista de debajo del titular lleva una escala de 1,15. O sea que el
+navegador estiraba un 23 % un archivo ya de por sí comprimido.
+
+Medido con SSIM contra el original llevado a la resolución de pantalla, en dos tramos
+distintos del vídeo y con búsqueda exacta al fotograma:
+
+| | Tamaño | SSIM |
+|---|---|---|
+| Original contra sí mismo (techo del método) | 131,87 MB | 0,995 |
+| 720p CRF 33 *(la versión anterior)* | 5,73 MB | **0,822** |
+| 1600×900 CRF 31 | 12,64 MB | **0,901** |
+
+Se probaron también 1440×810 y varios CRF; 1600×900 con CRF 31 es el punto donde el
+tamaño deja de comprar calidad de forma apreciable. Y **VP9 salió peor que x264** en este
+material —40 MB para un SSIM que x264 lograba con 30—, así que se descartó.
+
+### Un detalle de ffmpeg que cuesta un fotograma
+
+```powershell
+-vf "fps=25"     # descarta el PRIMER fotograma del original
+-r 25            # lo conserva, pero muestrea peor (SSIM 0,41) y duplica fotogramas
+```
+
+Con `fps=25` como filtro, el primer fotograma del resultado no es el primero del original
+—difiere en 23 sobre 255, y coincide con el *segundo*—, así que al arrancar hay un salto
+respecto al póster. Se comprobó que `-r 25` a la salida sí lo conserva, pero a cambio
+muestrea peor: comparado contra el original en el mismo instante da SSIM 0,41 frente a
+0,90, porque reparte los fotogramas duplicando y descartando.
+
+Se eligió `fps=25` porque **la precisión temporal se nota en todo el vídeo y el primer
+fotograma solo en el arranque**, y porque el póster es la imagen del diseño, que es la
+misma escena: la diferencia es de compresión, no de composición.
 
 El **póster** de cada uno es la imagen que ya estaba en el diseño, de modo que si el
 vídeo no carga la página se ve igual que antes. En el hero encaja perfectamente: el
