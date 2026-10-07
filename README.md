@@ -282,9 +282,22 @@ diseño móvil no encoge estos elementos respecto al escritorio, al contrario.
 
 ## Ver la página
 
+Abriendo el archivo directamente funciona casi todo, pero **conviene servirlo**, porque
+con `file://` el navegador aplica reglas más estrictas:
+
 ```powershell
-start index.html
+start index.html                          # rápido, sin servidor
+python scripts/serve.py                   # http://127.0.0.1:5500
+python scripts/serve.py 8000              # otro puerto
 ```
+
+`scripts/serve.py` es un `http.server` con dos detalles: **declara los tipos que Python
+no trae** —`.webp`, `.otf`, `.woff2`, `.webm`, `.avif`— y manda `Cache-Control: no-store`
+para que al recargar se vea siempre lo último.
+
+No es un capricho: `python -m http.server` a secas sirve las imágenes `.webp` como
+`application/octet-stream`. Los navegadores lo adivinan y se ven igual, pero es
+incorrecto, y al depurar conviene que la respuesta diga la verdad.
 
 ## Volver a extraer el diseño
 
