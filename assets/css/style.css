@@ -86,6 +86,12 @@
   --section-y: 100px;
   --radius: 8px;
   --radius-pill: 999px;
+
+  /* La flecha de los botones, como máscara. Sirve para pintar una segunda copia
+     en currentColor —la que entra por la izquierda al pasar el ratón— sin tener
+     que duplicar el <svg> en los nueve botones que la llevan. Es el mismo trazo
+     que el del marcado: M4 10h11M10.5 5.5L15 10l-4.5 4.5 sobre 20×20. */
+  --arrow-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 10h11M10.5 5.5L15 10l-4.5 4.5' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 /* --------------------------------------------------------------------------
@@ -202,6 +208,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    -------------------------------------------------------------------------- */
 
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -211,24 +218,71 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   font-weight: 500;
   line-height: 22px;
   white-space: nowrap;
+  /* Recorta la flecha que entra desde la izquierda mientras está fuera. */
+  overflow: hidden;
   transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
 }
 .btn:hover { transform: translateY(-1px); }
 
 .btn--light  { background: var(--c-white); color: var(--c-plum); }
-.btn--light:hover { background: var(--c-yellow); }
-
 .btn--dark   { background: var(--c-plum); color: var(--c-white); }
-.btn--dark:hover { background: var(--c-ink); }
-
 .btn--ghost  { border: 1px solid var(--c-yellow); color: var(--c-yellow); }
-.btn--ghost:hover { background: var(--c-yellow); color: var(--c-plum); }
-
 .btn--outline-light { border: 1px solid rgba(255,255,255,.45); color: var(--c-white); }
-.btn--outline-light:hover { background: var(--c-white); color: var(--c-plum); }
-
 .btn--outline-dark { border: 1px solid var(--c-plum); color: var(--c-plum); font-weight: 500; }
-.btn--outline-dark:hover { background: var(--c-plum); color: var(--c-white); }
+
+/* Al pasar el ratón, TODOS los botones van al amarillo corporativo con el texto
+   en negro puro, sea cual sea la variante. Va después de las de arriba a
+   propósito: así las anula sin tener que subir la especificidad.
+
+   El negro es #000, no --c-ink (#1E1F1F): sobre el amarillo el contraste es
+   mucho mayor y es lo que se pidió. */
+.btn:hover,
+.btn--light:hover,
+.btn--dark:hover,
+.btn--ghost:hover,
+.btn--outline-light:hover,
+.btn--outline-dark:hover {
+  background: var(--c-yellow);
+  border-color: var(--c-yellow);
+  color: #000;
+}
+
+/* La flecha del marcado sale hacia la derecha y se desvanece... */
+.btn .icon-arrow {
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
+}
+.btn:hover .icon-arrow {
+  transform: translateX(22px);
+  opacity: 0;
+}
+
+/* ...mientras otra igual entra por la izquierda del texto. Va como
+   pseudo-elemento con el mismo trazo recortado en máscara, para no tener que
+   duplicar el <svg> en los nueve botones que llevan flecha. Como la máscara se
+   pinta con currentColor, la flecha toma el color del texto sola.
+
+   Solo se aplica a botones CON flecha: «See all categories» y «Subscribe» no
+   la tienen y no deben ganarla al pasar por encima. */
+.btn:has(.icon-arrow)::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  background-color: currentColor;
+  opacity: 0;
+  transform: translateX(-20px);
+  pointer-events: none;
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
+  -webkit-mask: var(--arrow-mask) center / 20px 20px no-repeat;
+  mask: var(--arrow-mask) center / 20px 20px no-repeat;
+}
+.btn:has(.icon-arrow):hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
 
 .icon-arrow { width: 20px; height: 20px; flex: none; }
 .icon-caret { width: 16px; height: 16px; flex: none; }

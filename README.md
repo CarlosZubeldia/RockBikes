@@ -280,6 +280,30 @@ Dos decisiones que no vienen en la imagen:
 El círculo sube de 30 a 40 px y el logo de 118 a 150, que era lo que tenía antes: el
 diseño móvil no encoge estos elementos respecto al escritorio, al contrario.
 
+## Los botones
+
+Al pasar el ratón, **todos** van al amarillo corporativo con el texto en negro puro, sea
+cual sea su variante, y la flecha hace un relevo: la de la derecha sale deslizándose y
+otra idéntica entra por la izquierda del texto.
+
+Cuatro detalles de cómo está hecho:
+
+- **El negro es `#000`, no `--c-ink`** (que es `#1E1F1F`). Sobre el amarillo la
+  diferencia se nota, y es lo que se pidió.
+- **La flecha que entra no está en el HTML.** Va como `::before` con el mismo trazo
+  recortado en una máscara —`--arrow-mask`, un SVG en línea como data URI—, así que se
+  pinta sola con `currentColor` y no hay que duplicar el `<svg>` en los nueve botones que
+  la llevan. Al ser un data URI funciona también con `file://`, donde las máscaras que
+  apuntan a un archivo sí fallan.
+- **Solo se aplica a quien tiene flecha**, con `.btn:has(.icon-arrow)`. «See all
+  categories» y «Subscribe» no la llevan, y no deben ganarla al pasar por encima.
+- **El botón lleva `overflow: hidden`** para recortar la flecha mientras está fuera de
+  sitio. No afecta al foco: el contorno se dibuja por fuera y el overflow del propio
+  elemento no lo recorta.
+
+Las transiciones son de 0,3 s, y el bloque de `prefers-reduced-motion` ya las anula solo,
+porque alcanza también a los pseudo-elementos.
+
 ## Ver la página
 
 Abriendo el archivo directamente funciona casi todo, pero **conviene servirlo**, porque
