@@ -301,6 +301,18 @@ Cuatro detalles de cómo está hecho:
   sitio. No afecta al foco: el contorno se dibuja por fuera y el overflow del propio
   elemento no lo recorta.
 
+La flecha que entra tiene que caer donde caía el contenido en reposo: a **24 px del
+borde** y a **10 px del texto**. Como al irse deja libres sus 20 px más los 10 de
+separación, ese hueco se le pasa al relleno izquierdo y se le quita al derecho:
+
+```
+en reposo   24 + texto + 10 + 20 + 24                  = texto + 78
+con hover   24+20+10 + texto + 10 + 0  (relleno 14)    = texto + 78
+```
+
+Las dos suman lo mismo, así que **el ancho no cambia**: medido, 152,42 px en los dos
+estados. Si no se hiciera así, el botón crecería 30 px y empujaría a los de al lado.
+
 Las transiciones son de 0,3 s, y el bloque de `prefers-reduced-motion` ya las anula solo,
 porque alcanza también a los pseudo-elementos.
 

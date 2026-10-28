@@ -220,7 +220,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   white-space: nowrap;
   /* Recorta la flecha que entra desde la izquierda mientras está fuera. */
   overflow: hidden;
-  transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease,
+              transform .18s ease, padding .3s cubic-bezier(.4, 0, .2, 1);
 }
 .btn:hover { transform: translateY(-1px); }
 
@@ -247,33 +248,55 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   color: #000;
 }
 
-/* La flecha del marcado sale hacia la derecha y se desvanece... */
+/* La flecha del marcado sale hacia la derecha y se desvanece, y su ancho se
+   cierra a cero para que deje libre el hueco que necesita la que entra. */
 .btn .icon-arrow {
-  transition: transform .3s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1),
+              opacity .3s ease,
+              width .3s cubic-bezier(.4, 0, .2, 1);
 }
 .btn:hover .icon-arrow {
-  transform: translateX(22px);
+  width: 0;
+  transform: translateX(14px);
   opacity: 0;
 }
 
-/* ...mientras otra igual entra por la izquierda del texto. Va como
-   pseudo-elemento con el mismo trazo recortado en máscara, para no tener que
-   duplicar el <svg> en los nueve botones que llevan flecha. Como la máscara se
-   pinta con currentColor, la flecha toma el color del texto sola.
+/* Al pasar el ratón el contenido se corre a la derecha para dejar sitio a la
+   flecha que entra, y lo que se corre tiene que salir de algún lado: el hueco
+   que deja la flecha que se va.
 
-   Solo se aplica a botones CON flecha: «See all categories» y «Subscribe» no
-   la tienen y no deben ganarla al pasar por encima. */
+   En reposo  el botón mide 24 + texto + 10 + 20 + 24      = texto + 78
+   Al pasar   24+20+10 + texto + 10 + 0  + 14 (relleno)    = texto + 78
+
+   O sea que el relleno izquierdo crece 30 px —lo que ocupa la flecha más su
+   separación— y el derecho encoge 10. El ancho total NO cambia, así que el botón
+   no empuja a los de al lado.
+
+   Con eso la flecha queda a 24 px del borde y a 10 px del texto, los mismos
+   márgenes que tiene el contenido en reposo. */
+.btn:has(.icon-arrow):hover {
+  padding-left: 54px;
+  padding-right: 14px;
+}
+
+/* La que entra por la izquierda. Va como pseudo-elemento con el mismo trazo
+   recortado en máscara, para no tener que duplicar el <svg> en los nueve
+   botones que llevan flecha. Como la máscara se pinta con currentColor, la
+   flecha toma el color del texto sola.
+
+   Solo se aplica a botones CON flecha: «See all categories» y «Subscribe» no la
+   tienen y no deben ganarla al pasar por encima. */
 .btn:has(.icon-arrow)::before {
   content: '';
   position: absolute;
   top: 50%;
-  left: 2px;
+  left: 24px;
   width: 20px;
   height: 20px;
   margin-top: -10px;
   background-color: currentColor;
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateX(-28px);
   pointer-events: none;
   transition: transform .3s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
   -webkit-mask: var(--arrow-mask) center / 20px 20px no-repeat;
