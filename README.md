@@ -335,8 +335,8 @@ y no pasaba nada.
 Lo engañoso es que los puntos **sí** funcionaban —llaman a `go()`, no a `step()`—, así
 que parecía que el carrusel respondía. El número pasó a llamarse `pageWidth`.
 
-Las flechas laterales son píldoras blancas al **60 % de transparencia**. Va en el fondo
-(`rgba(255,255,255,.4)`) y no en la opacidad del botón a propósito: con `opacity` el
+Las flechas laterales son píldoras blancas al **30 % de opacidad**. Va en el fondo
+(`rgba(255,255,255,.3)`) y no en la opacidad del botón a propósito: con `opacity` el
 icono se desvanecería también y, como las flechas son blancas sobre secciones blancas,
 acabarían sin verse. Al pasar el ratón el fondo se pone amarillo y el botón se agranda
 un 6 %.
