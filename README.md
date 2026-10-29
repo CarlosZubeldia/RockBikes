@@ -316,6 +316,31 @@ estados. Si no se hiciera así, el botón crecería 30 px y empujaría a los de 
 Las transiciones son de 0,3 s, y el bloque de `prefers-reduced-motion` ya las anula solo,
 porque alcanza también a los pseudo-elementos.
 
+## Los carruseles
+
+El mismo componente sirve a los cuatro: los productos más buscados, las reseñas, las
+noticias y la tarjeta del hero. Se gobierna con `data-carousel` en el contenedor y cuatro
+atributos dentro —`data-carousel-track`, `-prev`, `-next` y `-dots`—, así que añadir uno
+nuevo no necesita tocar el JavaScript.
+
+El del hero usa `data-carousel-mode="fade"`: cambia de diapositiva con un fundido en vez
+de deslizar el track.
+
+Responden a las flechas, a las de teclado y al gesto táctil. **Y hasta hace poco no
+funcionaban.** El número de píxeles que avanza una página se guardaba en `this.step`,
+que es también el nombre del método que avanza. La propiedad de instancia tapaba al
+método del prototipo, así que el manejador del clic lanzaba `self.step is not a function`
+y no pasaba nada.
+
+Lo engañoso es que los puntos **sí** funcionaban —llaman a `go()`, no a `step()`—, así
+que parecía que el carrusel respondía. El número pasó a llamarse `pageWidth`.
+
+Las flechas laterales son píldoras blancas al **60 % de transparencia**. Va en el fondo
+(`rgba(255,255,255,.4)`) y no en la opacidad del botón a propósito: con `opacity` el
+icono se desvanecería también y, como las flechas son blancas sobre secciones blancas,
+acabarían sin verse. Al pasar el ratón el fondo se pone amarillo y el botón se agranda
+un 6 %.
+
 ## Ver la página
 
 Abriendo el archivo directamente funciona casi todo, pero **conviene servirlo**, porque

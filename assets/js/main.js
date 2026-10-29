@@ -151,8 +151,8 @@
     if (!slideWidth) return;
 
     this.gap = gap;
-    this.step = slideWidth + gap;
-    this.perView = Math.max(1, Math.floor((viewWidth + gap) / this.step));
+    this.pageWidth = slideWidth + gap;
+    this.perView = Math.max(1, Math.floor((viewWidth + gap) / this.pageWidth));
     this.pages = Math.max(1, this.slides.length - this.perView + 1);
     this.track.style.transform = 'translate3d(0,0,0)';
   };
@@ -244,8 +244,8 @@
       for (var i = 0; i < this.slides.length; i++) {
         this.slides[i].classList.toggle('is-active', i === this.index);
       }
-    } else if (this.step) {
-      this.track.style.transform = 'translate3d(' + (-this.index * this.step) + 'px,0,0)';
+    } else if (this.pageWidth) {
+      this.track.style.transform = 'translate3d(' + (-this.index * this.pageWidth) + 'px,0,0)';
     }
 
     for (var d = 0; d < this.dots.length; d++) {
