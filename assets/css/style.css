@@ -352,12 +352,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .site-header .nav__burger:hover .nav__burger-circle i { background: var(--c-yellow); }
 .site-header .nav__burger:hover .nav__burger-text { color: var(--c-yellow); }
 
-/* Con el menú abierto el botón va en negro; al pasar por encima sigue yendo al
-   amarillo. Se declara explícitamente para no depender del orden ni de empates. */
-.site-header.is-menu-open .nav__burger:hover .nav__burger-circle { border-color: var(--c-yellow); }
-.site-header.is-menu-open .nav__burger:hover .nav__burger-circle i { background: var(--c-yellow); }
-.site-header.is-menu-open .nav__burger:hover .nav__burger-text { color: var(--c-yellow); }
-
 /* Al pasar el ratón por la barra: fondo negro y contenido en blanco. */
 .site-header:hover .nav { background: #000; color: var(--c-white); }
 .site-header:hover .nav__logo img,
