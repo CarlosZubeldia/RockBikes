@@ -443,6 +443,33 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .nav__link:hover { color: var(--c-yellow); }
 .nav__chev { width: 20px; height: 20px; flex: none; opacity: .9; }
 
+/* Segundo nivel: panel pegado a la derecha del principal. Medidas del diseno:
+   320 px de ancho, arranca bajo la barra y llega al suelo. */
+.nav__sub {
+  position: absolute;
+  top: 60px;
+  left: 301px;
+  width: 320px;
+  height: calc(100vh - 60px);
+  display: none;
+  flex-direction: column;
+  padding: 24px 40px;
+  background: #000;
+  color: var(--c-white);
+}
+.site-header.is-menu-open .nav__sub[data-visible] { display: flex; }
+
+.nav__sub-title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.nav__sub-list { display: flex; flex-direction: column; gap: 10px; }
+.nav__sub-list a { display: block; font-size: 16px; font-weight: 400; padding: 6px 0; }
+.nav__sub-list a:hover { color: var(--c-yellow); }
+.nav__sub-list a.nav__sub-all { margin-top: 16px; color: var(--c-yellow); font-weight: 500; }
+
 /* Redes al pie del panel, en oro como el diseño. */
 .nav__social {
   margin-top: auto;

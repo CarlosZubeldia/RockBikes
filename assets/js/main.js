@@ -21,6 +21,13 @@
 
   /* --------------------------------------------------------------- menú -- */
 
+  // Segundo nivel del menu. Del diseno: el subtitulo va en mayusculas y los
+  // items en Outfit 400. No incluye el tercer nivel de fichas de producto.
+  var SUBMENUS = {
+    'Mountain Bikes': { titulo: 'Mountain bikes', items: ['Spectral', 'Neuron', 'Lux Trail', 'Lux World Cup', 'Torque'] },
+    'Brands':         { titulo: 'Brands',         items: ['Cycling', 'Evil', 'Lux Escape', 'The Radavist', 'Bike Travel'] }
+  };
+
   var header = document.querySelector('.site-header');
   var burger = document.querySelector('.nav__burger');
   var menu = document.getElementById('nav-menu');
@@ -52,6 +59,30 @@
         burger.setAttribute('aria-expanded', 'false');
       }
     });
+
+    // Submenú de segundo nivel: se rellena al pasar por encima de un enlace que
+    // lo tenga y se oculta al salir del menú.
+    var sub = document.querySelector('[data-sub]');
+    if (sub) {
+      var subTitulo = sub.querySelector('.nav__sub-title');
+      var subLista = sub.querySelector('.nav__sub-list');
+
+      menu.querySelectorAll('.nav__link').forEach(function (a) {
+        a.addEventListener('mouseenter', function () {
+          var datos = SUBMENUS[a.textContent.trim()];
+          if (!datos) { sub.removeAttribute('data-visible'); return; }
+          subTitulo.textContent = datos.titulo;
+          subLista.innerHTML = datos.items.map(function (t) {
+            return '<li><a href="#">' + t + '</a></li>';
+          }).join('') + '<li><a class="nav__sub-all" href="#">SEE ALL \u2192</a></li>';
+          sub.setAttribute('data-visible', '');
+        });
+      });
+
+      menu.addEventListener('mouseleave', function () {
+        sub.removeAttribute('data-visible');
+      });
+    }
 
     // Un clic fuera o la tecla Escape también lo cierran.
     document.addEventListener('click', function (e) {
