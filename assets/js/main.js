@@ -36,21 +36,13 @@
   }
 
   if (burger && menu) {
-    // El mismo botón hace dos cosas según el ancho: en escritorio las tres
-    // píldoras están siempre visibles y el botón las oculta; en pantallas
-    // pequeñas el menú no cabe y el botón lo despliega.
-    var esEscritorio = function () {
-      return window.matchMedia('(min-width: 1181px)').matches;
-    };
-
+    // El menú del diseño nuevo no lleva los enlaces en línea: a cualquier ancho
+    // viven dentro del desplegable que abre el círculo, así que el botón hace
+    // siempre lo mismo. Antes en escritorio se limitaba a ocultar y mostrar la
+    // píldora central.
     burger.addEventListener('click', function () {
-      if (esEscritorio()) {
-        var oculto = menu.classList.toggle('is-collapsed');
-        burger.setAttribute('aria-expanded', String(!oculto));
-      } else {
-        var abierto = menu.classList.toggle('is-open');
-        burger.setAttribute('aria-expanded', String(abierto));
-      }
+      var abierto = menu.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', String(abierto));
     });
 
     // Al elegir un enlace, el menú desplegado se cierra solo.
@@ -61,10 +53,18 @@
       }
     });
 
-    // Los estados de una disposición no valen para la otra.
-    window.addEventListener('resize', function () {
-      menu.classList.remove('is-open', 'is-collapsed');
+    // Un clic fuera o la tecla Escape también lo cierran.
+    document.addEventListener('click', function (e) {
+      if (!menu.classList.contains('is-open')) { return; }
+      if (e.target.closest('.nav__menu') || e.target.closest('.nav__burger')) { return; }
+      menu.classList.remove('is-open');
       burger.setAttribute('aria-expanded', 'false');
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.classList.contains('is-open')) {
+        menu.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 

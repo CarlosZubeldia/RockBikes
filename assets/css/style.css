@@ -313,102 +313,104 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    5. Cabecera
    -------------------------------------------------------------------------- */
 
-/* El menú acompaña toda la navegación: en vez de quedarse arriba del hero,
-   se fija a la ventana y flota sobre el contenido. */
+/* El menú acompaña toda la navegación: se fija a la ventana y flota sobre el
+   contenido. */
 .site-header {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 50;
 }
 
-/* Al bajar, las píldoras se acercan un poco al borde y ganan sombra. El fondo
-   se queda en el 74 % de negro que pide el diseño: lo que evita que se lea el
-   contenido de detrás es el desenfoque, no la opacidad. */
-.nav { transition: padding .25s ease; }
-.nav__brand,
-.nav__menu,
-.nav__actions { transition: box-shadow .25s ease; }
-
-.site-header.is-stuck .nav { padding: 10px 0; }
-.site-header.is-stuck .nav__brand,
-.site-header.is-stuck .nav__menu,
-.site-header.is-stuck .nav__actions {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, .38);
-}
-
-/* El menú son TRES píldoras separadas, no una barra continua.
-   Medidas tomadas del diseño: 84 px de alto total (16 arriba + 52 de píldora +
-   16 abajo), 35 px de margen a cada lado, 30 px de separación mínima entre
-   píldoras repartidas con space-between, y fondo negro al 74 %.
-
-   Detalle fácil de pasar por alto: la píldora de la derecha tiene radio 24, no
-   está redondeada del todo como las otras dos. */
+/* El menú del diseño nuevo es UNA barra de 60 px sin píldoras: el círculo con
+   la etiqueta «Menu» a la izquierda, el logo centrado y las tres acciones a la
+   derecha. Los enlaces ya no van en línea; viven en el desplegable. */
 .nav {
-  width: min(100% - 70px, var(--container));
-  margin-inline: auto;
-  padding: 16px 0;
+  position: relative;
+  width: 100%;
+  height: 60px;
+  padding: 0 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 30px;
+  gap: 24px;
   color: var(--c-white);
+  /* Velo de negro al 46 % arriba a transparente abajo, tal como viene en el
+     diseño: es lo que hace legible el menú sobre el vídeo. */
+  background: linear-gradient(180deg, rgba(0, 0, 0, .46) 0%, rgba(0, 0, 0, 0) 100%);
+  transition: background-color .25s ease;
 }
 
-.nav__brand,
-.nav__menu,
-.nav__actions {
+/* Al bajar, el velo se vuelve sólido: si no, el menú quedaría ilegible al pasar
+   por las secciones claras. */
+.site-header.is-stuck .nav {
+  background: var(--c-plum);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .38);
+}
+
+/* Círculo + «Menu». El círculo mide 32 px con borde blanco fino, y las tres
+   rayas 14 px, como el diseño. */
+.nav__burger {
   display: flex;
   align-items: center;
-  height: 52px;
+  gap: 10px;
   flex: none;
-  background: rgba(0, 0, 0, .74);
-  /* El desenfoque es lo que hace legible una barra translúcida sobre el
-     contenido que pasa por debajo. */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  color: var(--c-white);
 }
-
-.nav__brand {
-  gap: 16px;
-  padding: 10px 24px;
-  border-radius: 200px;
-}
-
-.nav__actions {
-  gap: 16px;
-  padding: 10px 24px;
-  border-radius: 24px;
-}
-
-.nav__burger {
-  width: 40px; height: 40px; flex: none;
-  border: 1px solid rgba(255,255,255,.35);
+.nav__burger-circle {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border: .8px solid var(--c-white);
   border-radius: 50%;
-  display: grid; place-content: center; gap: 4px;
+  display: grid;
+  place-content: center;
+  gap: 3px;
 }
-.nav__burger span { display: block; width: 16px; height: 1.5px; background: var(--c-white); }
+.nav__burger-circle i {
+  display: block;
+  width: 14px;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform .22s ease, opacity .22s ease;
+}
+.nav__burger-text { font-size: 16px; font-weight: 500; }
 
-.nav__logo img { width: 171px; height: 18px; }
+/* El logo va centrado en la barra, no pegado a la izquierda. */
+.nav__logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.nav__logo img { width: 228px; height: 24px; }
 
+/* Los enlaces viven en el desplegable que abre el círculo, a cualquier ancho. */
 .nav__menu {
-  padding: 0 16px;
-  border-radius: 200px;
-  justify-content: center;
-  min-width: 0;
+  position: absolute;
+  top: 60px;
+  left: 40px;
+  min-width: 260px;
+  display: none;
+  flex-direction: column;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--c-plum);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .4);
 }
+.nav__menu.is-open { display: flex; }
 
-/* En escritorio el menú está siempre visible; el botón de la hamburguesa lo
-   oculta y lo vuelve a mostrar. */
-.nav__menu.is-collapsed { display: none; }
-
-.nav__list { display: flex; align-items: center; gap: 8px; }
+.nav__list { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
 
 .nav__link {
-  display: inline-flex; align-items: center; gap: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
   height: 40px;
   padding: 8px 10px;
-  font-size: 16px; font-weight: 500;
-  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
   white-space: nowrap;
 }
 .nav__link:hover { background: rgba(255,255,255,.08); }
@@ -417,13 +419,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .nav__offer {
   display: inline-flex; align-items: center;
   height: 35px;
-  margin-left: 8px;
+  margin-top: 8px;
   padding: 0 16px;
   border-radius: 100px;
   background: var(--c-teal);
   color: var(--c-white);
   font-size: 16px; font-weight: 500;
-  white-space: nowrap;
+  justify-content: center;
 }
 .nav__offer:hover { filter: brightness(1.1); }
 
@@ -1404,28 +1406,28 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    él, al llegar a una sección clara el logo blanco desaparecería. */
 
   .nav {
-    width: 100%;
-    gap: 16px;
-    padding: 14px 24px 14px 16px;
+    height: 68px;
+    padding: 0 24px 0 16px;
+    /* En movil la barra va opaca: es fija y el contenido pasa por debajo, y sin
+       fondo el logo blanco desapareceria al llegar a una seccion clara. */
     background: var(--c-plum);
   }
-  .site-header.is-stuck .nav { padding: 10px 24px 10px 16px; }
 
-  .nav__brand,
-  .nav__actions {
-    height: 40px;
-    padding: 0;
-    background: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
+  /* El diseno movil no lleva la etiqueta «Menu»: solo el circulo. */
+  .nav__burger-text { display: none; }
+  .nav__burger-circle { width: 40px; height: 40px; }
+
+  /* Y el logo va pegado al circulo, no centrado: con 390 px de ancho, centrado
+     se montaba encima de los iconos. */
+  .nav { gap: 16px; }
+  .nav__logo {
+    position: static;
+    transform: none;
+    margin-right: auto;
   }
-  .nav__brand { gap: 16px; }
-  .nav__actions { gap: 20px; }
-
-  .nav__burger { width: 40px; height: 40px; }
   .nav__logo img { width: 150px; height: 16px; }
-  .nav__icon, .nav__icon img { width: 24px; height: 24px; }
+  .nav__actions { gap: 20px; }
+  .nav__menu { top: 68px; left: 16px; right: 16px; min-width: 0; }
 
   /* El desplegable va pegado a la barra, así que comparte su fondo sólido: uno
      opaco y otro translúcido justo debajo se notaría. */
