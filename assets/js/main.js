@@ -41,28 +41,28 @@
     // siempre lo mismo. Antes en escritorio se limitaba a ocultar y mostrar la
     // píldora central.
     burger.addEventListener('click', function () {
-      var abierto = menu.classList.toggle('is-open');
+      var abierto = header.classList.toggle('is-menu-open');
       burger.setAttribute('aria-expanded', String(abierto));
     });
 
     // Al elegir un enlace, el menú desplegado se cierra solo.
     menu.addEventListener('click', function (e) {
-      if (e.target.closest('a') && menu.classList.contains('is-open')) {
-        menu.classList.remove('is-open');
+      if (e.target.closest('a') && header.classList.contains('is-menu-open')) {
+        header.classList.remove('is-menu-open');
         burger.setAttribute('aria-expanded', 'false');
       }
     });
 
     // Un clic fuera o la tecla Escape también lo cierran.
     document.addEventListener('click', function (e) {
-      if (!menu.classList.contains('is-open')) { return; }
+      if (!header.classList.contains('is-menu-open')) { return; }
       if (e.target.closest('.nav__menu') || e.target.closest('.nav__burger')) { return; }
-      menu.classList.remove('is-open');
+      header.classList.remove('is-menu-open');
       burger.setAttribute('aria-expanded', 'false');
     });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && menu.classList.contains('is-open')) {
-        menu.classList.remove('is-open');
+      if (e.key === 'Escape' && header.classList.contains('is-menu-open')) {
+        header.classList.remove('is-menu-open');
         burger.setAttribute('aria-expanded', 'false');
       }
     });

@@ -385,49 +385,93 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .nav__logo img { width: 228px; height: 24px; }
 
 /* Los enlaces viven en el desplegable que abre el círculo, a cualquier ancho. */
+/* Panel del menú desplegado: negro, 301 px de ancho, pegado a la izquierda y
+   de la barra al suelo. Medidas del diseño. */
 .nav__menu {
   position: absolute;
   top: 60px;
-  left: 40px;
-  min-width: 260px;
+  left: 0;
+  width: 301px;
+  height: calc(100vh - 60px);
   display: none;
   flex-direction: column;
-  padding: 16px;
-  border-radius: 20px;
-  background: var(--c-plum);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, .4);
+  padding: 24px 40px;
+  background: #000;
+  color: var(--c-white);
 }
-.nav__menu.is-open { display: flex; }
+.site-header.is-menu-open .nav__menu { display: flex; }
 
-.nav__list { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
+/* Velo con desenfoque sobre el resto de la página mientras el menú está
+   abierto. Va por detrás de la barra y del panel. */
+.nav__scrim {
+  position: fixed;
+  inset: 60px 0 0 0;
+  z-index: -1;
+  display: none;
+  background: rgba(136, 136, 136, .2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.site-header.is-menu-open .nav__scrim { display: block; }
+
+.nav__menu-title {
+  margin: 0 0 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-white);
+  color: var(--c-yellow);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.nav__list { display: flex; flex-direction: column; }
 
 .nav__link {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  height: 40px;
-  padding: 8px 10px;
+  gap: 8px;
+  height: 44px;
+  padding: 12px 0;
   font-size: 16px;
   font-weight: 500;
-  border-radius: 8px;
+  color: var(--c-white);
   white-space: nowrap;
 }
-.nav__link:hover { background: rgba(255,255,255,.08); }
-.nav__link .icon-caret { width: 12px; height: 12px; opacity: .8; }
+.nav__link:hover { color: var(--c-yellow); }
+.nav__chev { width: 20px; height: 20px; flex: none; opacity: .9; }
 
-.nav__offer {
-  display: inline-flex; align-items: center;
-  height: 35px;
-  margin-top: 8px;
-  padding: 0 16px;
-  border-radius: 100px;
-  background: var(--c-teal);
-  color: var(--c-white);
-  font-size: 16px; font-weight: 500;
-  justify-content: center;
+/* Redes al pie del panel, en oro como el diseño. */
+.nav__social {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-white);
+  display: flex;
+  align-items: center;
+  gap: 13px;
 }
-.nav__offer:hover { filter: brightness(1.1); }
+.nav__social img { width: 24px; height: 24px; }
+
+/* Con el menú abierto la barra se vuelve amarilla y el contenido negro. Los
+   iconos y el logo son SVG blancos, así que se invierten con un filtro. */
+.site-header.is-menu-open .nav {
+  background: var(--c-yellow);
+  color: #000;
+}
+.site-header.is-menu-open .nav__logo img,
+.site-header.is-menu-open .nav__icon img { filter: brightness(0); }
+
+/* El círculo pasa a relleno negro con una X blanca dentro. */
+.site-header.is-menu-open .nav__burger-circle {
+  background: #000;
+  border-color: #000;
+}
+.site-header.is-menu-open .nav__burger-circle i { background: var(--c-white); }
+.site-header.is-menu-open .nav__burger-circle i:nth-child(1) { transform: translateY(4.5px) rotate(45deg); }
+.site-header.is-menu-open .nav__burger-circle i:nth-child(2) { opacity: 0; }
+.site-header.is-menu-open .nav__burger-circle i:nth-child(3) { transform: translateY(-4.5px) rotate(-45deg); }
 
 .nav__actions { display: flex; align-items: center; gap: 16px; flex: none; }
 .nav__icon { display: grid; place-items: center; width: 24px; height: 24px; opacity: .95; }
