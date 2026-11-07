@@ -525,7 +525,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* Los iconos de la barra son SVG blancos y pasan al amarillo corporativo al
    hacer hover. El filtro es una aproximación de #FFD900 sobre blanco. */
 .nav__icon { transition: filter .15s ease; }
-.nav__icon:hover img {
+/* La regla que pone los iconos en blanco al pasar por la barra tiene mas
+   especificidad, asi que hay que igualarla anadiendo el hover del header. */
+.nav__icon:hover img,
+.site-header:hover .nav__icon:hover img {
   filter: brightness(0) saturate(100%) invert(78%) sepia(93%)
           saturate(1400%) hue-rotate(2deg) brightness(105%) contrast(105%);
 }
