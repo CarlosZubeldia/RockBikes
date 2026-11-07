@@ -336,7 +336,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   color: var(--c-white);
   /* Degradado lineal VERTICAL: negro arriba y transparente abajo. Al pasar el
      ratón por la barra se rellena de negro sólido. */
-  background: linear-gradient(180deg, rgba(0, 0, 0, .52) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, .78) 0%, rgba(0, 0, 0, .12) 70%, rgba(0, 0, 0, 0) 100%);
   color: var(--c-white);
   transition: background .25s ease, color .25s ease;
 }
