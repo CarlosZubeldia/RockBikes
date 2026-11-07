@@ -488,7 +488,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* Con el menú abierto la barra se vuelve amarilla y el contenido negro. Los
    iconos y el logo son SVG blancos, así que se invierten con un filtro. */
-.site-header.is-menu-open .nav {
+/* Se incluye .is-stuck a proposito: la regla del menu fijo al hacer scroll pinta
+   el fondo en ciruela y, si el menu se abre con la pagina ya bajada, ganaba ella. */
+.site-header.is-menu-open .nav,
+.site-header.is-menu-open.is-stuck .nav {
   background: #FFD900;
   background-image: none;
   color: #000;
@@ -496,13 +499,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .site-header.is-menu-open .nav__logo img,
 .site-header.is-menu-open .nav__icon img { filter: brightness(0); }
 
-/* El círculo pasa a relleno negro con una X blanca dentro. */
+/* El círculo NO se rellena: conserva el amarillo de la barra y solo se le cambia
+   el borde a negro. La X va también en negro. */
 .site-header.is-menu-open .nav__burger-circle {
-  background: #000;
+  background: transparent;
   border-color: #000;
 }
 .site-header.is-menu-open .nav__burger { color: #000; }
-.site-header.is-menu-open .nav__burger-circle i { background: var(--c-white); }
+.site-header.is-menu-open .nav__burger-circle i { background: #000; }
 .site-header.is-menu-open .nav__burger-circle i:nth-child(1) { transform: translateY(4.5px) rotate(45deg); }
 .site-header.is-menu-open .nav__burger-circle i:nth-child(2) { opacity: 0; }
 .site-header.is-menu-open .nav__burger-circle i:nth-child(3) { transform: translateY(-4.5px) rotate(-45deg); }
