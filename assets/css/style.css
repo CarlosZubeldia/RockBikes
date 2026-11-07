@@ -426,7 +426,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   letter-spacing: .04em;
 }
 
-.nav__list { display: flex; flex-direction: column; }
+.nav__list { display: flex; flex-direction: column; gap: 10px; }
 
 .nav__link {
   display: flex;
@@ -457,7 +457,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* Con el menú abierto la barra se vuelve amarilla y el contenido negro. Los
    iconos y el logo son SVG blancos, así que se invierten con un filtro. */
 .site-header.is-menu-open .nav {
-  background: var(--c-yellow);
+  background: #FFD900;
+  background-image: none;
   color: #000;
 }
 .site-header.is-menu-open .nav__logo img,
