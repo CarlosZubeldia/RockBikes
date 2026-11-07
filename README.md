@@ -294,6 +294,50 @@ Dos decisiones que no vienen en la imagen:
 El círculo sube de 30 a 40 px y el logo de 118 a 150, que era lo que tenía antes: el
 diseño móvil no encoge estos elementos respecto al escritorio, al contrario.
 
+### El menú desplegado
+
+Al abrir el círculo, la barra pasa a amarilla y despliega un panel negro de 301 px pegado a
+la izquierda, con «LET'S ROCK !», diez enlaces y las cinco redes al pie en oro `#DFBE00`.
+
+**Los diez enlaces no son un error.** «Road Bikes» aparece dos veces en el diseño; se
+deduplicó en un primer momento y hubo que devolverlo, porque se pidió copiarlo tal cual.
+
+El componente completo vive en Figma en el set `menu_desktop`, nodo `15318:5361`, con
+**ocho variantes**: `Menu_default`, `Menu_hover`, `Menu_open`, `Mneu_search`,
+`Menu_mountain`, `Menu_spectral`, `Variante5` (Neuron) y `Variante6` (Brands). Todas se
+pueden pedir por la API con su identificador; no hace falta exportarlas a mano.
+
+#### El modo exclusión, y por qué no está
+
+En Figma el **contenido** del menú —logo, texto «Menu» e iconos— va en blanco con
+`blendMode: EXCLUSION`, mientras la barra solo lleva su degradado negro. Así el blanco se
+invierte según lo que tenga detrás y se lee sobre cualquier fondo sin necesidad de una
+barra opaca.
+
+**Eso no se puede reproducir en CSS con este montaje.** `mix-blend-mode` se mezcla con el
+fondo del **mismo contexto de apilado**, y el menú es `position: fixed`, que crea uno
+propio: el contenido no llega a ver el vídeo del hero. Se comprobó midiendo el fondo
+calculado con la clase puesta.
+
+Se compensa con el degradado del diseño (negro al 46 % arriba) más un fondo sólido al
+hacer scroll. Da la misma legibilidad —que es el objetivo del exclusión— por otro camino,
+aunque la transición no es idéntica.
+
+#### Lo que falta
+
+Los **desplegables de segundo nivel**, que abren un panel a la derecha del menú al pasar
+por encima de ciertos enlaces:
+
+| Variante | Contenido |
+|---|---|
+| `Mneu_search` | Buscador con «Popular Search: Gravel, City, Wheels, Accesories» |
+| `Menu_mountain` | Special, Neuron, Lux Trail, Lux World Cup, Torque + «SEE ALL» |
+| `Menu_spectral` | Fichas con imagen: «Spectral CF · From 2,999 €» |
+| `Variante5` | Igual, con «Neuron» |
+| `Variante6` | Marcas: Canyon, Cult, La Garoupe, The Robert's, Bike Town |
+
+Sus renders están en `design/menu/`, descargados de Figma.
+
 ## Los botones
 
 Al pasar el ratón, **todos** van al amarillo corporativo con el texto en negro puro, sea
