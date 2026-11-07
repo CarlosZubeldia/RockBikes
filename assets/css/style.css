@@ -327,25 +327,38 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .nav {
   position: relative;
   width: 100%;
-  height: 60px;
+  height: 70px;
   padding: 0 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   color: var(--c-white);
-  /* Velo de negro al 46 % arriba a transparente abajo, tal como viene en el
-     diseño: es lo que hace legible el menú sobre el vídeo. */
-  background: linear-gradient(180deg, rgba(0, 0, 0, .46) 0%, rgba(0, 0, 0, 0) 100%);
-  transition: background-color .25s ease;
+  /* Degradado lineal de negro transparente a blanco, tal como viene ahora en
+     Figma: a la izquierda se ve el fondo y a la derecha manda el blanco, así que
+     el contenido va en oscuro y se lee sobre cualquier sección. Al pasar el ratón
+     por la barra se rellena de negro sólido. */
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 20%, #FFFFFF 100%);
+  color: var(--c-ink);
+  transition: background .25s ease, color .25s ease;
 }
 
 /* Al bajar, el velo se vuelve sólido: si no, el menú quedaría ilegible al pasar
    por las secciones claras. */
-.site-header.is-stuck .nav {
-  background: var(--c-plum);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, .38);
-}
+/* Por defecto el contenido va en oscuro sobre el degradado claro. */
+.nav__logo img,
+.nav__icon img { filter: brightness(0); }
+.nav__burger-circle { border-color: var(--c-ink); }
+.nav__burger-circle i { background: var(--c-ink); }
+.nav__burger { color: var(--c-ink); }
+
+/* Al pasar el ratón por la barra: fondo negro y contenido en blanco. */
+.site-header:hover .nav { background: #000; color: var(--c-white); }
+.site-header:hover .nav__logo img,
+.site-header:hover .nav__icon img { filter: none; }
+.site-header:hover .nav__burger-circle { border-color: var(--c-white); }
+.site-header:hover .nav__burger-circle i { background: var(--c-white); }
+.site-header:hover .nav__burger { color: var(--c-white); }
 
 /* Círculo + «Menu». El círculo mide 32 px con borde blanco fino, y las tres
    rayas 14 px, como el diseño. */
@@ -389,10 +402,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    de la barra al suelo. Medidas del diseño. */
 .nav__menu {
   position: absolute;
-  top: 60px;
+  top: 70px;
   left: 0;
   width: 301px;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 70px);
   display: none;
   flex-direction: column;
   padding: 24px 40px;
@@ -405,7 +418,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    abierto. Va por detrás de la barra y del panel. */
 .nav__scrim {
   position: fixed;
-  inset: 60px 0 0 0;
+  inset: 70px 0 0 0;
   z-index: -1;
   display: none;
   background: rgba(136, 136, 136, .2);
@@ -453,10 +466,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    320 px de ancho, arranca bajo la barra y llega al suelo. */
 .nav__sub {
   position: absolute;
-  top: 60px;
+  top: 70px;
   left: 301px;
   width: 320px;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 70px);
   display: none;
   flex-direction: column;
   padding: 24px 40px;
