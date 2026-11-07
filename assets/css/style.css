@@ -441,10 +441,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   white-space: nowrap;
 }
 /* Hover de las secciones. El diseño lo define en el componente
-   Property 1=hover: texto y chevron pasan a #2B74FF. El chevron hereda el color
-   por currentColor, asi que cambia solo. */
-.nav__link { transition: color .15s ease; }
-.nav__link:hover,
+   Property 1=hover: texto y chevron pasan a #2B74FF. Además el texto se desplaza
+   8 px a la derecha; el chevron se queda donde está porque la fila reparte con
+   space-between. */
+.nav__link { transition: color .15s ease, padding-left .15s ease; }
+.nav__link:hover { color: #2B74FF; padding-left: 8px; }
 .nav__link:hover .nav__chev { color: #2B74FF; }
 .nav__chev { width: 20px; height: 20px; flex: none; opacity: .9; }
 
@@ -514,6 +515,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .nav__actions { display: flex; align-items: center; gap: 16px; flex: none; }
 .nav__icon { display: grid; place-items: center; width: 24px; height: 24px; opacity: .95; }
 .nav__icon:hover { opacity: 1; }
+/* Los iconos de la barra son SVG blancos y pasan al amarillo corporativo al
+   hacer hover. El filtro es una aproximación de #FFD900 sobre blanco. */
+.nav__icon { transition: filter .15s ease; }
+.nav__icon:hover img {
+  filter: brightness(0) saturate(100%) invert(78%) sepia(93%)
+          saturate(1400%) hue-rotate(2deg) brightness(105%) contrast(105%);
+}
 .nav__icon img { width: 24px; height: 24px; }
 
 /* --------------------------------------------------------------------------
