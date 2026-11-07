@@ -680,33 +680,94 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    8. Categorías
    -------------------------------------------------------------------------- */
 
+/* Tres tarjetas en una sola fila: una ancha y dos cuadradas. Del diseño nuevo:
+   656 + 306 + 306 con 24 px entre ellas, todas de 358 de alto. */
 .cat-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 300px 280px;
+  grid-template-columns: 656fr 306fr 306fr;
   gap: 24px;
 }
 
 .cat {
   position: relative;
+  height: 358px;
   border-radius: var(--radius);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 24px;
+  color: var(--c-white);
+  /* El degradado de la tarjeta ancha va en multiply. Sin aislar se mezclaría
+     con lo que hay detrás de la tarjeta, no solo con la foto. */
+  isolation: isolate;
   transition: transform .2s ease;
 }
 .cat:hover { transform: translateY(-3px); }
 
-.cat--wide { grid-column: span 2; }
-.cat--photo { padding: 0; }
-.cat--photo img { width: 100%; height: 100%; object-fit: cover; }
+/* La foto va de fondo; el texto y la insignia quedan por encima. Lleva clase
+   propia a proposito: en la tarjeta sin foto, la primera imagen es la insignia,
+   y con img:first-child se estiraba hasta llenar la tarjeta. */
+.cat__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
 
-.cat--plum   { background: var(--c-plum);   color: var(--c-white); }
-.cat--light  { background: #EFEEEE;         color: var(--c-text); }
+/* La capa de la tarjeta ancha, tal cual viene del diseño: degradado vertical de
+   #270A3A, del 32 % de opacidad arriba al 100 % abajo, en modo multiply. */
+.cat--shade::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(39, 10, 58, .32) 0%, rgb(39, 10, 58) 100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
 
-.cat__badge,
+.cat--plum { background: var(--c-plum); }
+
+/* La insignia es el SVG del diseño: una caja de 52×52 con el círculo de 28
+   dentro y 12 px de aire por lado para su sombra. Por eso se coloca 12 px
+   arriba y a la izquierda, y el círculo cae donde toca: en 24, 24. */
+.cat__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 52px;
+  height: 52px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cat__text {
+  position: relative;
+  z-index: 2;
+  max-width: 309px;
+}
+
+.cat__title {
+  font-family: var(--font-body);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 30px;
+}
+
+.cat__desc {
+  margin-top: 24px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+/* El diseño nuevo da a esta sección 60 px de relleno, no los 100 del resto. */
+#categories { padding: 60px 0; }
+
+/* Las otras dos insignias siguen siendo un círculo de CSS con el rayo dentro. */
 .fcard__badge,
 .acc__badge {
   width: 30px; height: 30px;
@@ -715,16 +776,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   display: grid; place-items: center;
   flex: none;
 }
-.cat__badge span,
 .fcard__badge span,
 .acc__badge span {
   width: 12px; height: 12px;
   background: var(--c-plum);
   clip-path: polygon(58% 0, 20% 52%, 46% 52%, 40% 100%, 80% 44%, 53% 44%);
 }
-
-.cat__title { font-size: 24px; font-weight: 600; line-height: 28px; }
-.cat__desc  { margin-top: 12px; font-size: 16px; font-weight: 400; line-height: 19px; max-width: 390px; }
 
 /* --------------------------------------------------------------------------
    9. Carrusel genérico
@@ -1314,8 +1371,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .section__lead--right { margin-top: 0; }
 
   /* En tableta, dos columnas aprovechan mucho mejor el ancho que una sola. */
-  .cat-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; grid-auto-rows: 260px; }
-  .cat--wide { grid-column: span 2; }
+  .cat-grid { grid-template-columns: 1fr 1fr; }
+  .cat:first-child { grid-column: span 2; }
+  .cat { height: 300px; }
 
   .brands__top { grid-template-columns: 1fr; padding-top: 72px; }
   .brands__logos { gap: 32px; --mark-scale: .72; }
@@ -1392,8 +1450,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .prod { flex-basis: 260px; }
   .review { flex-basis: 260px; }
   .post { flex-basis: 220px; }
-  .cat-grid { grid-template-columns: 1fr; grid-auto-rows: 240px; }
-  .cat--wide { grid-column: auto; }
+  .cat-grid { grid-template-columns: 1fr; }
+  .cat:first-child { grid-column: auto; }
+  .cat { height: 240px; }
   .finder-grid { grid-template-columns: 1fr; }
   .acc-grid { grid-template-columns: 1fr; }
   .foot-links { grid-template-columns: 1fr; }
