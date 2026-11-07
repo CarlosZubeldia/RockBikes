@@ -440,7 +440,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   color: var(--c-white);
   white-space: nowrap;
 }
-.nav__link:hover { color: var(--c-yellow); }
+/* Hover de las secciones. El diseño lo define en el componente
+   Property 1=hover: texto y chevron pasan a #2B74FF. El chevron hereda el color
+   por currentColor, asi que cambia solo. */
+.nav__link { transition: color .15s ease; }
+.nav__link:hover,
+.nav__link:hover .nav__chev { color: #2B74FF; }
 .nav__chev { width: 20px; height: 20px; flex: none; opacity: .9; }
 
 /* Segundo nivel: panel pegado a la derecha del principal. Medidas del diseno:
@@ -496,6 +501,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   background: #000;
   border-color: #000;
 }
+.site-header.is-menu-open .nav__burger { color: #000; }
 .site-header.is-menu-open .nav__burger-circle i { background: var(--c-white); }
 .site-header.is-menu-open .nav__burger-circle i:nth-child(1) { transform: translateY(4.5px) rotate(45deg); }
 .site-header.is-menu-open .nav__burger-circle i:nth-child(2) { opacity: 0; }
