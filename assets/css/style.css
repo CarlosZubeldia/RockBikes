@@ -348,9 +348,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* El botón del menú (círculo y rayas) pasa al amarillo corporativo al pasar por
    encima. Va después de las reglas de la barra para ganar la especificidad. */
-.site-header .nav__burger:hover .nav__burger-circle { border-color: var(--c-yellow); }
-.site-header .nav__burger:hover .nav__burger-circle i { background: var(--c-yellow); }
-.site-header .nav__burger:hover .nav__burger-text { color: var(--c-yellow); }
+/* Solo con el menu CERRADO. Con el menu abierto la barra ya es amarilla, asi que
+   el amarillo sobre amarillo haria desaparecer el boton: ahi se queda en negro. */
+.site-header:not(.is-menu-open) .nav__burger:hover .nav__burger-circle { border-color: var(--c-yellow); }
+.site-header:not(.is-menu-open) .nav__burger:hover .nav__burger-circle i { background: var(--c-yellow); }
+.site-header:not(.is-menu-open) .nav__burger:hover .nav__burger-text { color: var(--c-yellow); }
 
 /* Al pasar el ratón por la barra: fondo negro y contenido en blanco. */
 .site-header:hover .nav { background: #000; color: var(--c-white); }
