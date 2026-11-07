@@ -2,12 +2,32 @@
 
 Página de inicio construida a partir del diseño de Figma **rock-bikes**, como pieza de porfolio.
 
+> **Estado y por dónde seguir.** Actualizada la sección de categorías, la tipografía (Outfit en
+> el cuerpo, Obviously en los titulares) y todo el menú: barra a 70 px con degradado vertical
+> de negro a transparente, hover a negro sólido, desplegable amarillo con panel negro de 301 px
+> y segundo nivel para Mountain Bikes y Brands.
+>
+> **Lo siguiente es la pantalla de búsqueda** (`Mneu_search`, nodo `15342:5074`). Medidas ya
+> tomadas: barra amarilla `#FFD900` de 70 px; campo de búsqueda píldora blanca de 344×36 en
+> 932,17; «Close» en 1286,25 en Outfit 400 16 px; panel desplegable blanco de 394×215 en 932,70
+> con «Popular Search» en Outfit 600 16 px en 956,94 y cuatro entradas (Grail, Gloves, Wheels,
+> Accesories) cada 30 px desde 956,151. El render está en `design/menu/search.png`.
+>
+> Después: el **tercer nivel** del menú (`Menu_spectral` `15328:9037` y `Variante6`
+> `15332:6137`, fichas de producto), y luego logos de marca, footer y el resto de secciones.
+>
+> Dos trampas que han costado tiempo y conviene no repetir: en el CSS de este proyecto **las
+> reglas empatadas en especificidad dependen del orden del archivo** (el hover del botón del
+> menú chocaba con el del estado abierto), y el **amarillo sobre la barra amarilla es
+> invisible**, así que el hover del botón va limitado a `:not(.is-menu-open)`.
+
 Es **HTML, CSS y JavaScript sin frameworks**. No hace falta instalar nada ni compilar:
 abre `index.html` en el navegador y funciona. Para publicarla, sube la carpeta a
 GitHub Pages, Netlify o cualquier hosting estático.
 
 - Archivo de Figma: `8mNr7UEzJA7LVwy7In9jlm`
-- Frame de partida: nodo `15076:5746` — *Frame 1410106479*, 1366 × 8790 px
+- Frame de partida: nodo `9440:3975` — *desktop*, 1366 × 8107 px
+- El nodo antiguo (`15076:5746`) ya no existe: Figma reasigna identificadores.
 
 ```
 index.html              la página completa
