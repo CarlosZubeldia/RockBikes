@@ -76,9 +76,8 @@
 
   /* Tipografías. El diseño combina dos familias en los titulares: Obviously
      Demo en cinco de ellos y Work Sans 800 en los otros cinco. */
-  --font-body: 'Work Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Obviously Demo', 'Work Sans', system-ui, sans-serif;
-  --font-alt: 'Geologica', 'Work Sans', system-ui, sans-serif;
+  --font-body: 'Outfit', 'Work Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Obviously Demo', 'Outfit', system-ui, sans-serif;
 
   /* Medidas del diseño: 1366 px de ancho, 25 px de margen lateral */
   --container: 1316px;
@@ -192,10 +191,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* Dos titulares del diseño —Taller y Últimas noticias— van en Work Sans 800
    cursiva, no en Obviously. */
-.display--italic {
+.display--outfit {
   font-family: var(--font-body);
   font-weight: 800;
-  font-style: italic;
+  font-style: normal;
 }
 /* Todos los titulares de seccion miden lo mismo: 80 px. Antes el diseno
    separaba 96 en Categories y Most wanted y 60 en el resto. */
@@ -1072,7 +1071,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   display: grid; place-items: center;
   color: var(--c-white);
   font-size: 15px;
-  font-family: var(--font-alt);
+  font-family: var(--font-body);
 }
 .review__avatar--p { background: #4285F4; }
 .review__avatar--n { background: #7BA05B; }

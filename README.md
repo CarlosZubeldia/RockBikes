@@ -49,24 +49,38 @@ O sea: **solo el hero va en Wide**. El resto, en ancho normal.
 
 Y de ahí salieron tres correcciones que el estilo base escondía:
 
-- **«Categories», «Opiniones» y «Accesorios» no son Work Sans**, como parecía por el
-  estilo base de su nodo: sus caracteres llevan un override a Obviously. Al final
-  **solo dos titulares usan Work Sans**, y los dos en cursiva.
-- **«Taller propio en nuestras instalaciones» y «Últimas noticias» van en cursiva**
-  (Work Sans 800 italic). De ahí la clase `display--italic`.
+- **«Categories», «Opiniones» y «Accesorios» no eran Work Sans**, como parecía por el
+  estilo base de su nodo: sus caracteres llevan un override. Hoy los tres van en
+  Obviously.
 - **«Accesorios para riders» es un titular a dos colores**: «Accesorios» en gris
   `#929292` y «para riders» en el color normal del texto.
-
-Además, **«Categories» y «Most wanted» van a 96 px**, no a 60 como el resto. La clase
-`display--xl` estaba definida pero sin aplicar en ninguno de los dos.
+- En la revisión de noviembre, «Taller» y «Últimas noticias» pasaron a **Outfit 800 sin
+  cursiva** (antes eran Work Sans 800 en cursiva). La clase se llama ahora
+  `display--outfit`.
 
 Los saltos de línea de los titulares son los del diseño. El texto de Figma no lleva
 saltos explícitos —envuelve solo según el ancho de su caja—, así que están puestos a
 mano para reproducir dónde corta cada uno.
 
-> **Aviso de licencia.** Es la versión de demostración. Para publicar el sitio hace falta
-> comprar la licencia; si el repositorio va a ser público, estas fuentes no deberían
-> subirse. `--font-display` cae a Work Sans si no están.
+### El cuerpo va en Outfit
+
+Cuando se actualizó el diseño desde Figma, en noviembre, **el cuerpo pasó de Work Sans a
+Outfit**, una geométrica. Está medido: el texto más repetido del archivo pasó de «Work
+Sans 400 14px» a «Outfit 400 14px», y el resto de escalas acompañó.
+
+De ahí salieron dos limpiezas:
+
+- **Geologica salió del proyecto.** No aparece en el diseño nuevo; solo se usaba para las
+  iniciales de los avatares de las reseñas, que ahora usan la fuente del cuerpo.
+- **Work Sans se queda únicamente como respaldo** de Obviously, por si la fuente de
+  titulares no carga.
+
+Los titulares siguen en Obviously Demo: el diseño nuevo la conserva en ocho de los doce
+titulares grandes.
+
+> **Aviso de licencia.** Obviously Demo es la versión de demostración. Para publicar el
+> sitio hace falta comprar la licencia; si el repositorio va a ser público, estas fuentes
+> no deberían subirse. `--font-display` cae a Outfit si no están.
 
 **Los logos de marca van repintados.** En el diseño, la fila «Enjoy the best brands»
 muestra los seis logos en amarillo plano, pero los archivos originales de Figma traen
