@@ -334,23 +334,17 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   justify-content: space-between;
   gap: 24px;
   color: var(--c-white);
-  /* Degradado lineal de negro transparente a blanco, tal como viene ahora en
-     Figma: a la izquierda se ve el fondo y a la derecha manda el blanco, así que
-     el contenido va en oscuro y se lee sobre cualquier sección. Al pasar el ratón
-     por la barra se rellena de negro sólido. */
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 20%, #FFFFFF 100%);
-  color: var(--c-ink);
+  /* Degradado lineal VERTICAL: negro arriba y transparente abajo. Al pasar el
+     ratón por la barra se rellena de negro sólido. */
+  background: linear-gradient(180deg, rgba(0, 0, 0, .52) 0%, rgba(0, 0, 0, 0) 100%);
+  color: var(--c-white);
   transition: background .25s ease, color .25s ease;
 }
 
 /* Al bajar, el velo se vuelve sólido: si no, el menú quedaría ilegible al pasar
    por las secciones claras. */
-/* Por defecto el contenido va en oscuro sobre el degradado claro. */
-.nav__logo img,
-.nav__icon img { filter: brightness(0); }
-.nav__burger-circle { border-color: var(--c-ink); }
-.nav__burger-circle i { background: var(--c-ink); }
-.nav__burger { color: var(--c-ink); }
+/* Por defecto el contenido va en blanco: el velo oscurece la parte alta. */
+.nav__burger { color: var(--c-white); }
 
 /* Al pasar el ratón por la barra: fondo negro y contenido en blanco. */
 .site-header:hover .nav { background: #000; color: var(--c-white); }
