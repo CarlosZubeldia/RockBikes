@@ -95,7 +95,9 @@ const token = await loadToken();
 
 let json;
 try {
-  json = JSON.parse(await readFile(path.join(ROOT, opts.input), 'utf8'));
+  // Los JSON de Figma pueden venir con BOM; los de design/menu/ lo traen.
+  const raw = await readFile(path.join(ROOT, opts.input), 'utf8');
+  json = JSON.parse(raw.replace(/^\uFEFF/, ''));
 } catch (err) {
   console.error(`\n  Error al leer ${opts.input}: ${err.message}\n`);
   process.exit(1);

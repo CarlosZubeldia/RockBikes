@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rock Bikes — comprobación del buscador</title>
+<!-- Mete la página en un iframe del tamaño pedido y abre el buscador con un
+     clic real, para poder comparar la variante Mneu_search con
+     design/menu/search.png.
+
+       ?ancho=390&alto=844    tamaño del iframe (1366x768 por defecto)
+       &blur=1                quita el foco del campo (captura sin el cursor de texto)
+
+     Tiene que servirse por http: con file:// el padre no puede tocar el
+     documento del iframe. -->
+<style>
+  html, body { margin: 0; background: #fff; }
+  iframe { display: block; border: 0; }
+</style>
+</head>
+<body>
+<iframe id="frame" src="../index.html?search-check" title="Rock Bikes"></iframe>
+<script>
+  var q = new URLSearchParams(location.search);
+  var frame = document.getElementById('frame');
+
+  frame.style.width = (q.get('ancho') || 1366) + 'px';
+  frame.style.height = (q.get('alto') || 768) + 'px';
+
+  frame.addEventListener('load', function () {
+    var doc = frame.contentDocument;
+    var boton = doc.querySelector('[data-search-open]');
+    if (boton) { boton.click(); }
+
+    if (q.has('blur')) {
+      setTimeout(function () {
+        if (doc.activeElement && doc.activeElement.blur) { doc.activeElement.blur(); }
+      }, 200);
+    }
+  });
+</script>
+</body>
+</html>

@@ -39,11 +39,29 @@
   font-display: swap;
 }
 
+/* Black 900: los titulares de sección, como en el Figma. */
+@font-face {
+  font-family: 'Obviously Demo';
+  src: url('../fonts/ObviouslyDemo-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Ancho Wide: solo el titular del hero. */
 @font-face {
   font-family: 'Obviously Wide';
   src: url('../fonts/ObviouslyDemo-WideBold.otf') format('opentype');
   font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Wide Black 900: el titular del hero. */
+@font-face {
+  font-family: 'Obviously Wide';
+  src: url('../fonts/ObviouslyDemo-WideBlack.otf') format('opentype');
+  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
@@ -165,7 +183,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 .section { padding: var(--section-y) 0; }
-.section--surface { background: var(--c-surface); }
+.section--surface { background: var(--c-white); }
+/* «Most wanted» va en #FAFAFA para que la tarjeta blanca recorte y se vea su
+   sombra (la del componente del Figma: 0 12px 25px al 6 %). */
+#products { background: var(--c-surface); }
 
 .accent { color: var(--c-yellow); }
 
@@ -179,11 +200,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .display {
   font-family: var(--font-display);
-  /* El diseño usa pesos 580 y 670, que no existen como archivos sueltos: se
-     aproximan a Semibold y Bold. Las secciones van en Semibold. */
-  font-weight: 600;
-  font-size: 80px;
-  line-height: 1;
+  /* Todos los titulares de sección van en Obviously Demo Black (900). */
+  font-weight: 900;
+  font-size: 60px;
+  line-height: 60px;
   letter-spacing: 0;
   text-transform: uppercase;
   margin: 0;
@@ -196,8 +216,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   font-weight: 800;
   font-style: normal;
 }
-/* Todos los titulares de seccion miden lo mismo: 80 px. Antes el diseno
-   separaba 96 en Categories y Most wanted y 60 en el resto. */
+/* Todos los titulares de sección miden lo mismo: 60 px. */
 .display--dark  { color: var(--c-text); }
 .display--light { color: var(--c-white); }
 .display--center { text-align: center; }
@@ -349,10 +368,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* El botón del menú (círculo y rayas) pasa al amarillo corporativo al pasar por
    encima. Va después de las reglas de la barra para ganar la especificidad. */
 /* Solo con el menu CERRADO. Con el menu abierto la barra ya es amarilla, asi que
-   el amarillo sobre amarillo haria desaparecer el boton: ahi se queda en negro. */
-.site-header:not(.is-menu-open) .nav__burger:hover .nav__burger-circle { border-color: var(--c-yellow); }
-.site-header:not(.is-menu-open) .nav__burger:hover .nav__burger-circle i { background: var(--c-yellow); }
-.site-header:not(.is-menu-open) .nav__burger:hover .nav__burger-text { color: var(--c-yellow); }
+   el amarillo sobre amarillo haria desaparecer el boton: ahi se queda en negro.
+   Lo mismo vale para el buscador, que tambien pinta la barra de amarillo. */
+.site-header:not(.is-menu-open):not(.is-search-open) .nav__burger:hover .nav__burger-circle { border-color: var(--c-yellow); }
+.site-header:not(.is-menu-open):not(.is-search-open) .nav__burger:hover .nav__burger-circle i { background: var(--c-yellow); }
+.site-header:not(.is-menu-open):not(.is-search-open) .nav__burger:hover .nav__burger-text { color: var(--c-yellow); }
 
 /* Al pasar el ratón por la barra: fondo negro y contenido en blanco. */
 .site-header:hover .nav { background: #000; color: var(--c-white); }
@@ -390,18 +410,24 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .nav__burger-text { font-size: 16px; font-weight: 500; }
 
-/* El logo va centrado en la barra, no pegado a la izquierda. */
+/* El logo va centrado, pero no en el centro de la ventana: el diseño reparte la
+   barra con space-between y el bloque de acciones es 60 px más ancho que el del
+   círculo, así que el elemento de en medio queda 30 px a la izquierda del
+   centro. Despejado con los anchos del diseño (círculo 92, acciones 152, 40 de
+   margen), el centro sale siempre ancho/2 − 30, sea cual sea el ancho. */
 .nav__logo {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: calc(50% - 30px);
   transform: translate(-50%, -50%);
 }
 .nav__logo img { width: 228px; height: 24px; }
 
 /* Los enlaces viven en el desplegable que abre el círculo, a cualquier ancho. */
 /* Panel del menú desplegado: negro, 301 px de ancho, pegado a la izquierda y
-   de la barra al suelo. Medidas del diseño. */
+   de la barra al suelo. El diseño lo ancla 5 px por encima de la barra; aquí
+   empieza en 70, así que el relleno de arriba baja de 24 a 19 para que el
+   contenido caiga en el mismo sitio. */
 .nav__menu {
   position: absolute;
   top: 70px;
@@ -410,7 +436,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   height: calc(100vh - 70px);
   display: none;
   flex-direction: column;
-  padding: 24px 40px;
+  padding: 19px 40px 24px;
   background: #000;
   color: var(--c-white);
 }
@@ -429,19 +455,27 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .site-header.is-menu-open .nav__scrim { display: block; }
 
+/* Con un submenú abierto el velo sube al 30 %, como en Menu_mountain,
+   Menu_spectral, Variante5 y Variante6 (#888888 al 30 % sobre blanco da el
+   #DCDCDC del render). */
+.site-header.is-sub-open .nav__scrim { background: rgba(136, 136, 136, .3); }
+
+/* El título arranca en 89 (70 + 19) y mide 40: 1 de línea, 15 de relleno,
+   25,04 de caja y 15 de margen hasta la primera fila, en 145. */
 .nav__menu-title {
-  margin: 0 0 8px;
-  padding-top: 16px;
+  margin: 0 0 15px;
+  padding-top: 15px;
   border-top: 1px solid var(--c-white);
   color: var(--c-yellow);
   font-family: var(--font-display);
   font-size: 16px;
+  line-height: 25.04px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: .04em;
 }
 
-.nav__list { display: flex; flex-direction: column; gap: 10px; }
+/* Filas de 44 px sin separación, como el diseño. */
+.nav__list { display: flex; flex-direction: column; gap: 0; }
 
 .nav__link {
   display: flex;
@@ -462,43 +496,181 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .nav__link { transition: color .15s ease, padding-left .15s ease; }
 .nav__link:hover { color: #2B74FF; padding-left: 8px; }
 .nav__link:hover .nav__chev { color: #2B74FF; }
+
+/* El enlace cuyo submenú está abierto va en 600, como en las variantes del set;
+   los demás se quedan en 500. No se toca el hover: el diseño lo pinta azul. */
+.nav__link.is-active { font-weight: 600; }
+
 .nav__chev { width: 20px; height: 20px; flex: none; opacity: .9; }
 
-/* Segundo nivel: panel pegado a la derecha del principal. Medidas del diseno:
-   320 px de ancho, arranca bajo la barra y llega al suelo. */
+/* Segundo nivel: panel pegado a la derecha del principal. Del diseño: 320.5 de
+   ancho, 31 de relleno arriba y abajo, título de 18 px y filas de 44. Arranca
+   bajo la barra y llega al suelo. */
 .nav__sub {
   position: absolute;
   top: 70px;
   left: 301px;
-  width: 320px;
+  width: 320.5px;
   height: calc(100vh - 70px);
   display: none;
   flex-direction: column;
-  padding: 24px 40px;
+  padding: 31px 40px;
   background: #000;
   color: var(--c-white);
 }
 .site-header.is-menu-open .nav__sub[data-visible] { display: flex; }
 
+/* El título ocupa 47 px (12 arriba, 23 de línea y 12 abajo) y la lista arranca
+   4 px después: 101 + 47 + 4 = 152, que es donde la pone el diseño. */
 .nav__sub-title {
-  margin: 0 0 16px;
+  margin: 0;
+  padding: 12px 0;
   font-size: 18px;
+  line-height: 22.68px;
   font-weight: 600;
   text-transform: uppercase;
 }
-.nav__sub-list { display: flex; flex-direction: column; gap: 10px; }
-.nav__sub-list a { display: block; font-size: 16px; font-weight: 400; padding: 6px 0; }
-.nav__sub-list a:hover { color: var(--c-yellow); }
-.nav__sub-list a.nav__sub-all { margin-top: 16px; color: var(--c-yellow); font-weight: 500; }
 
-/* Redes al pie del panel, en oro como el diseño. */
-.nav__social {
-  margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid var(--c-white);
+.nav__sub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 4px;
+}
+.nav__sub-list a {
   display: flex;
   align-items: center;
-  gap: 13px;
+  height: 44px;
+  font-size: 16px;
+  line-height: 20.16px;
+  font-weight: 400;
+  color: var(--c-white);
+}
+.nav__sub-list a:hover { color: var(--c-yellow); }
+
+/* «SEE ALL» a 47 px de la lista, con la flecha a 8. */
+.nav__sub-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 47px;
+  height: 36px;
+  color: var(--c-yellow);
+  font-size: 16px;
+  font-weight: 500;
+}
+.nav__sub-arrow { width: 20px; height: 20px; flex: none; }
+
+/* Tercer nivel: las fichas. Del diseño: 429.5 de ancho pegadas al segundo
+   nivel (empiezan en 621.5), 24 de relleno lateral y 19 arriba. El diseño
+   ancla el panel en y=65 con 24 de relleno, o sea 89 en pantalla; aquí el
+   panel empieza en 70, así que el relleno de arriba son 19. */
+.nav__cards {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 429.5px;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  padding: 19px 40px 24px;
+  background: #000;
+  color: var(--c-white);
+}
+.site-header.is-menu-open .nav__cards[data-visible] { display: flex; }
+
+/* Foto 349.5×224, radio 8. La sombra es el degradado de ciruela del diseño,
+   multiplicado al 40 %; la variante de Neuron lo baja al 10 %. */
+.nav__cards-photo {
+  position: relative;
+  flex: none;
+  height: 224px;
+  margin: 0 0 24px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--c-plum-deep);
+}
+.nav__cards-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.nav__cards-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(39, 10, 58, .32) 0%, rgba(39, 10, 58, 1) 100%);
+  mix-blend-mode: multiply;
+  opacity: .4;
+}
+.nav__cards[data-ficha="neuron"] .nav__cards-photo::after { opacity: .1; }
+
+/* El diseño pide Obviously Demo Extended Semibold, que no está entre los dos
+   archivos de demostración del proyecto. Se usa Wide Bold y se estira un 27 %
+   en horizontal para clavar los 284 px de ancho que mide el render. */
+.nav__cards-label {
+  position: absolute;
+  left: 35px;
+  bottom: 11.68px;
+  z-index: 1;
+  font-family: 'Obviously Wide', var(--font-display);
+  font-weight: 700;
+  font-size: 33.652px;
+  line-height: 52.666px;
+  color: var(--c-yellow);
+  opacity: .8;
+  white-space: nowrap;
+  transform: scaleX(1.27);
+  transform-origin: left bottom;
+}
+
+.nav__cards-list { display: flex; flex-direction: column; }
+.nav__card { display: flex; flex-direction: column; }
+.nav__card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.nav__card-name {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20.16px;
+  text-transform: uppercase;
+}
+.nav__card-price { flex: none; font-size: 14px; font-weight: 400; line-height: 17.64px; }
+.nav__card-desc { margin: 12px 0 0; font-size: 14px; font-weight: 400; line-height: 17.64px; }
+
+/* Separador de 1 px con 24 arriba y 23 abajo: la línea de Figma no ocupa
+   altura, así que la ficha siguiente arranca 24 px después de la anterior. */
+.nav__cards-sep { flex: none; height: 1px; margin: 24px 0 23px; background: #8C8C8C; }
+
+/* «SEE ALL» a 30 px de las fichas. */
+.nav__cards-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 30px;
+  height: 36px;
+  color: var(--c-yellow);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Redes al pie del panel, en oro como el diseño. Van a 709, con la línea 15 px
+   por debajo: el marco del diseño mide 218 y reparte los cinco iconos a 24,5. */
+.nav__social {
+  position: relative;
+  margin-top: auto;
+  margin-bottom: 11px;
+  display: flex;
+  align-items: center;
+  gap: 24.5px;
+}
+.nav__social::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -15px;
+  height: 1px;
+  background: var(--c-white);
 }
 .nav__social img { width: 24px; height: 24px; }
 
@@ -526,6 +698,147 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .site-header.is-menu-open .nav__burger-circle i:nth-child(1) { transform: translateY(4.5px) rotate(45deg); }
 .site-header.is-menu-open .nav__burger-circle i:nth-child(2) { opacity: 0; }
 .site-header.is-menu-open .nav__burger-circle i:nth-child(3) { transform: translateY(-4.5px) rotate(-45deg); }
+
+/* --------------------------------------------------------------------------
+   Buscador (variante Mneu_search del menú)
+
+   El diseño no añade un panel: cambia la barra entera. La pinta de amarillo y
+   sustituye las tres acciones por un campo de búsqueda y el botón «Close»; el
+   círculo, «Menu» y el logo se quedan donde estaban, solo que en negro. El
+   conjunto se mide a 1366 px:
+
+     campo    344x36 en (932,17), píldora blanca de radio 100
+     icono    24x24 en (942,23), o sea 10 del borde y 6 de arriba
+     Close    40x20 en (1286,25), Outfit 400 16 px
+     panel    394x215 en (932,70), blanco con las esquinas de abajo de 24
+     título   «Popular Search» en (956,94), Outfit 600 16 px
+     entradas Grail, Gloves, Wheels y Accesories cada 30 px desde (956,151)
+
+   El panel arranca en el borde inferior de la barra, no bajo el campo: entre
+   los dos quedan los 17 px del relleno vertical del campo. Por eso se ancla al
+   formulario con top:calc(100% + 17px), que da 70 justo.
+   -------------------------------------------------------------------------- */
+
+.nav__search {
+  position: relative;
+  display: none;
+}
+
+.site-header.is-search-open .nav__search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 394px;
+}
+
+/* Las tres acciones dejan su sitio al campo de búsqueda. */
+.site-header.is-search-open .nav__icon { display: none; }
+
+.nav__search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 100px;
+  background: var(--c-white);
+}
+
+/* El icono de la acción es un SVG blanco; dentro de la píldora blanca va negro. */
+.nav__search-icon { width: 24px; height: 24px; flex: none; filter: brightness(0); }
+
+/* Sin borde ni anillo de foco: el diseño es una píldora blanca limpia y el
+   cursor de texto ya marca dónde está el foco. */
+.nav__search-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 400 16px/20px var(--font-body);
+  color: #000;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+.nav__search-input::-webkit-search-cancel-button,
+.nav__search-input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+
+.nav__search-close {
+  display: flex;
+  align-items: center;
+  flex: none;
+  width: 40px;
+  height: 36px;
+  padding: 0;
+  font: 400 16px/20px var(--font-body);
+  color: #000;
+  text-align: left;
+}
+.nav__search-close:hover { text-decoration: underline; }
+
+/* Panel de búsquedas populares. Alto fijo de 215 y space-between para que el
+   título quede arriba y la lista abajo, que es como lo reparte el diseño. */
+.nav__search-panel {
+  position: absolute;
+  top: calc(100% + 17px);
+  left: 0;
+  width: 100%;
+  height: 215px;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+  border-radius: 0 0 24px 24px;
+  background: var(--c-white);
+  color: #000;
+}
+.site-header.is-search-open .nav__search-panel { display: flex; }
+
+.nav__search-title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #000;
+}
+
+.nav__search-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav__search-list button {
+  display: block;
+  padding: 0;
+  font: 400 16px/20px var(--font-body);
+  color: #000;
+  text-align: left;
+}
+.nav__search-list button:hover { text-decoration: underline; }
+
+/* La barra del buscador es la de la variante: amarilla sólida y contenido
+   negro. Va después del hover de la barra para ganarle el empate. */
+.site-header.is-search-open .nav {
+  background-color: var(--c-yellow);
+  background-image: none;
+  color: #000;
+}
+.site-header.is-search-open .nav__logo img { filter: brightness(0); }
+.site-header.is-search-open .nav__burger-circle { background: transparent; border-color: #000; }
+.site-header.is-search-open .nav__burger { color: #000; }
+.site-header.is-search-open .nav__burger-circle i { background: #000; }
+
+/* El velo es el mismo que el del menú abierto. En el diseño el fondo del
+   componente es #888888 al 20 %, que sobre blanco da el #E7E7E7 del render. */
+.site-header.is-search-open .nav__scrim { display: block; }
 
 .nav__actions { display: flex; align-items: center; gap: 16px; flex: none; }
 .nav__icon { display: grid; place-items: center; width: 24px; height: 24px; opacity: .95; }
@@ -638,7 +951,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .hero__title {
   font-family: 'Obviously Wide', var(--font-display);
-  font-weight: 700;
+  font-weight: 900;
   /* A 1366 px el titular mide 94, pero por debajo no cabe: «SPECIALIST» ocupa
      9,36 veces el tamaño de fuente, y a su derecha hay que dejar sitio para la
      tarjeta (312 px) y su separación (48). Despejando, el tamaño máximo es
@@ -967,45 +1280,124 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    10. Tarjeta de producto (Most wanted)
    -------------------------------------------------------------------------- */
 
+/* Medidas del componente «Component 260» del Figma: 400×507, con la foto de
+   400×390, la ficha de 400×134 solapada 17 px sobre la foto y el contenido
+   entrando en blanco. */
 .prod {
-  flex: 0 0 349px;   /* ancho real de la tarjeta en el diseño */
+  position: relative;
+  flex: 0 0 400px;   /* ancho real de la tarjeta en el diseño */
+  display: flex;
+  flex-direction: column;
   background: var(--c-white);
-  border-radius: var(--radius);
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 4px 18px rgba(32,19,28,.06);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, .06), inset 0 0 0 1px #EDEDED;
 }
 
 .prod__media {
   position: relative;
-  aspect-ratio: 1 / 1;
-  background: #F4F3F3;
-  display: grid; place-items: center;
-  padding: 24px;
+  aspect-ratio: 400 / 390;
+  background: #F2F2F2;
 }
-.prod__media img { width: 88%; height: auto; }
+.prod__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity .35s ease;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.prod__img--fill { object-fit: cover; }
+.prod__img.is-active { z-index: 1; opacity: 1; }
 
 .prod__tag {
   position: absolute;
-  top: 14px; right: 14px;
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
-  background: var(--c-yellow);
-  color: #483E00;
-  font-size: 12px;
+  top: 16px; right: 16px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 83px;
+  min-height: 31px;
+  padding: 0 8px;
+  border: 1px solid #0057FF;
+  border-radius: 16px;
+  background: #F0F8FF;
+  color: #0057FF;
+  font-size: 14px;
   font-weight: 600;
-  text-transform: capitalize;
+  line-height: 17px;
+  white-space: nowrap;
 }
 
-.prod__body { padding: 18px 20px 22px; }
+/* Galería de miniaturas: aparece al pasar el ratón por la tarjeta. */
+.prod__thumbs {
+  position: absolute;
+  left: 16px; right: 16px;
+  bottom: 20px;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.prod:hover .prod__thumbs,
+.prod:focus-within .prod__thumbs { opacity: 1; }
+.prod__thumb {
+  width: 62px;
+  height: 62px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--c-white);
+  cursor: pointer;
+}
+.prod__thumb.is-active { border-color: var(--c-white); }
+.prod__thumb img { display: block; width: 100%; height: 100%; object-fit: cover; -webkit-user-drag: none; user-select: none; }
 
-.prod__brand { font-size: 14px; font-weight: 600; color: var(--c-black); }
-.prod__name  { margin-top: 6px; font-size: 18px; font-weight: 500; line-height: 21px; color: rgba(0,0,0,.8); }
+.prod__body {
+  position: relative;
+  z-index: 2;
+  margin-top: -17px;
+  padding: 14px 15px;
+  background: var(--c-white);
+}
+
+.prod__brand { font-size: 14px; font-weight: 600; line-height: 18px; color: var(--c-black); }
+.prod__name  { margin-top: 10px; font-size: 18px; font-weight: 500; line-height: 23px; color: var(--c-black); }
 .prod__price {
-  margin-top: 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  font-size: 16px; font-weight: 600;
+  margin-top: 35px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 16px; font-weight: 600; line-height: 20px;
+  color: var(--c-black);
 }
-.prod__swatch { width: 14px; height: 14px; border-radius: 50%; background: var(--c-plum); }
+.prod__swatch {
+  width: 13px; height: 14px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #DFDFDF;
+  border: .5px solid #878787;
+}
+.prod__colors { font-size: 14px; font-weight: 400; line-height: 20px; color: #595959; }
+
+/* «Most wanted» se mueve con el ratón: sin flechas, con arrastre y puntos. */
+#products .carousel__viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+}
+#products .carousel__viewport::-webkit-scrollbar { display: none; }
+#products .carousel__viewport.is-dragging { cursor: grabbing; }
+#products .carousel__track { transform: none; transition: none; }
+#products .prod { scroll-snap-align: start; }
 
 /* --------------------------------------------------------------------------
    11. Marcas
@@ -1069,25 +1461,27 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .brands__title {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 80px;
-  line-height: 1;
+  font-weight: 900;
+  font-size: 60px;
+  line-height: 60px;
   text-transform: uppercase;
   color: var(--c-yellow);
 }
 
-.brands__sub { margin-top: 16px; font-size: 18px; color: var(--c-white); }
+.brands__sub { margin-top: 24px; font-size: 18px; color: var(--c-white); }
 
+/* La fila de marcas del diseño actual: cinco logos con 81.6 px entre ellos y
+   centrados en vertical sobre el más alto (Cycling, 157.4). */
 .brands__logos {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 48px;
-  margin: 48px 0 56px;
+  gap: 81.6px;
+  margin: 42px 0 24px;
 }
-.brands__logos li { display: grid; place-items: center; height: 72px; }
+.brands__logos li { display: grid; place-items: center; }
 
 /* El tamaño de cada logo lo fija su atributo style, con los valores del
    diseño. --mark-scale permite reducirlos todos a la vez en pantallas
@@ -1248,184 +1642,346 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .acc__desc  { margin-top: 10px; font-size: 14px; line-height: 17px; }
 
 /* --------------------------------------------------------------------------
-   15. Taller
+   15. Noticias
    -------------------------------------------------------------------------- */
 
-.workshop {
-  background: var(--c-plum) url('../opt/frame-1410106426-f324a2.webp') center / cover no-repeat;
+/* Sección de noticias. La tarjeta es siempre 416×580 y la sección 700 (60 px de
+   margen arriba y abajo). Lo que cambia con el ancho es la columna y el titular:
+   de 556/60 a 1366 a 618/89 a 1473 (la captura de referencia), con el hueco de
+   22 px, la tarjeta en 640 y 101 px hasta la siguiente; los valores intermedios
+   se interpolan con calc/clamp. La tarjeta de la izquierda es la anterior: su
+   contenido baja al 50 % y su foto se funde con el fondo por el borde izquierdo,
+   sin deformarse. */
+.news {
+  display: flex;
+  align-items: center;
+  gap: clamp(0px, calc(35px + (100vw - 1366px) * -0.327), 35px);
+  height: 700px;
+  background: var(--c-plum);
   color: var(--c-white);
 }
-.workshop__inner {
-  min-height: 568px;
+.news__head {
+  flex: none;
+  width: clamp(556px, calc(556px + (100vw - 1366px) * 0.579), 618px);
+  padding: 213px 0 0 clamp(32px, calc(32px + (100vw - 1366px) * 0.364), 71px);
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: clamp(24px, calc(24px + (100vw - 1366px) * 0.196), 45px);
+  align-self: stretch;
+}
+.news__title {
+  margin: 0 0 clamp(12px, calc(12px + (100vw - 1366px) * 0.159), 29px);
+  font-family: var(--font-display);
+  font-size: 60px;
+  font-weight: 900;
+  line-height: 60px;
+  text-transform: uppercase;
+}
+.news__title span { color: var(--c-yellow); }
+.news__lead {
+  width: clamp(452px, calc(464px + (100vw - 1366px) * -0.112), 464px);
+  margin: 0;
+  font-size: clamp(18px, calc(18px + (100vw - 1366px) * 0.0187), 20px);
+  line-height: clamp(22.68px, calc(22.68px + (100vw - 1366px) * 0.031), 26px);
+  color: #F0F0F0;
+}
+.news__all {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 32px;
-}
-.workshop__lead { max-width: 798px; font-size: 18px; line-height: 21px; }
-.workshop .display { font-size: 80px; line-height: 1; }
-
-/* --------------------------------------------------------------------------
-   16. Noticias
-   -------------------------------------------------------------------------- */
-
-.news {
-  background: var(--c-plum) url('../opt/frame-1410106437-495947.png') center / cover no-repeat;
-  color: var(--c-white);
-  padding: 96px 0;
-}
-
-/* El bloque SEO vive dentro de la sección de noticias, sobre el fondo
-   estampado, no en el pie. */
-.news .seo { margin-top: 64px; }
-
-.news__inner { display: grid; grid-template-columns: 556px 1fr; gap: 60px; align-items: start; }
-
-.news__head { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
-.news__head .btn { margin-top: 12px; }
-.news__lead { max-width: 464px; font-size: 18px; line-height: 21px; }
-
-.news__carousel { position: relative; }
-
-.post {
-  flex: 0 0 261px;
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.post img { width: 100%; aspect-ratio: 16 / 15; object-fit: cover; border-radius: var(--radius); }
-
-.post__meta {
-  display: flex; gap: 18px;
-  margin-top: 16px;
-  font-size: 14px;
-  color: var(--c-text-pale);
-}
-.post__title { margin-top: 8px; font-size: 16px; font-weight: 600; line-height: 20px; }
-.post__link {
-  display: inline-flex; align-items: center; gap: 8px;
-  margin-top: 14px;
-  font-size: 14px;
+  gap: clamp(8px, calc(8px + (100vw - 1366px) * 0.0374), 12px);
+  height: clamp(48px, calc(48px + (100vw - 1366px) * 0.224), 72px);
+  padding: 0 clamp(18px, calc(18px + (100vw - 1366px) * 0.056), 24px);
+  border: 1px solid var(--c-white);
+  border-radius: var(--radius-pill);
+  font-size: clamp(16px, calc(16px + (100vw - 1366px) * 0.0748), 24px);
   font-weight: 500;
-  color: var(--c-yellow);
-}
-
-.news__nav { display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px; }
-.cbtn--line { border: 1px solid rgba(255,255,255,.4); }
-.cbtn--line:hover { background: var(--c-yellow); color: var(--c-plum); border-color: var(--c-yellow); }
-
-/* --------------------------------------------------------------------------
-   17. Footer
-   -------------------------------------------------------------------------- */
-
-.site-footer {
-  background: linear-gradient(180deg, #2A1A24 0%, #20131C 55%, #170D13 100%);
-  color: var(--c-white);
-  padding: 64px 0 40px;
-}
-
-.seo { max-width: 1090px; }
-.seo__title {
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 38px;
   color: var(--c-white);
 }
-.seo__text { margin-top: 20px; font-size: 16px; line-height: 22px; color: var(--c-text-pale); }
-.seo__more {
-  display: inline-block;
-  margin-top: 18px;
-  font-size: 16px;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.news__all .icon-arrow {
+  width: clamp(20px, calc(20px + (100vw - 1366px) * 0.0935), 30px);
+  height: clamp(20px, calc(20px + (100vw - 1366px) * 0.0935), 30px);
 }
 
-.news-letter {
-  display: grid;
-  grid-template-columns: 1fr 549px;
-  gap: 60px;
-  align-items: center;
-  margin: 0 0 32px;
-}
-.news-letter__logo img { width: 342px; height: 36px; }
-.news-letter__title { font-size: 24px; font-weight: 600; line-height: 28px; }
-.news-letter__sub   { margin-top: 8px; font-size: 18px; color: var(--c-text-pale); }
-
-.news-letter__form { display: flex; gap: 12px; margin-top: 20px; }
-.news-letter__input {
+/* La fila de artículos se desplaza en horizontal; la barra de scroll no se ve y
+   el arrastre con el ratón se resuelve en main.js. El degradado izquierdo es el
+   del Figma: la tarjeta anterior se va ocultando hacia el titular. */
+.news__carousel {
+  position: relative;
   flex: 1;
   min-width: 0;
-  padding: 14px 22px;
-  border-radius: var(--radius-pill);
-  border: 1px solid rgba(255,255,255,.25);
-  background: rgba(255,255,255,.06);
-  color: var(--c-white);
-  font: inherit;
+  align-self: center;
+  height: 580px;
 }
-.news-letter__input::placeholder { color: rgba(255,255,255,.6); }
-.news-letter__input:focus { outline: none; border-color: var(--c-yellow); }
-
-.check {
-  display: flex; align-items: flex-start; gap: 10px;
-  margin-top: 16px;
-  font-size: 14px;
-  color: var(--c-text-pale);
-  cursor: pointer;
+.news__carousel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--c-plum) 0%, rgba(32, 19, 28, 0) 100%);
 }
-.check input { margin: 2px 0 0; accent-color: var(--c-yellow); }
-
-.foot-links {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 32px;
-  padding-top: 40px;
-  border-top: 1px solid rgba(255,255,255,.14);
-}
-.foot-col h3 { font-size: 16px; font-weight: 600; margin-bottom: 18px; }
-.foot-col li + li { margin-top: 10px; }
-.foot-col a { font-size: 14px; color: var(--c-text-pale); }
-.foot-col a:hover { color: var(--c-yellow); }
-
-.foot-bottom {
+.news__cards {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 32px;
-  margin-top: 40px;
-  padding-top: 32px;
-  border-top: 1px solid rgba(255,255,255,.14);
+  gap: clamp(35px, calc(35px + (100vw - 1366px) * 0.617), 101px);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+}
+.news__cards::-webkit-scrollbar { display: none; }
+.news__cards.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+
+.article {
+  position: relative;
+  flex: none;
+  width: 416px;
+  height: 580px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--c-plum);
+  scroll-snap-align: start;
+}
+.article__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* El degradado de Figma: casi transparente arriba y opaco desde el 65 %. */
+.article::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(32, 19, 28, .08) 0%,
+    rgba(32, 19, 28, 0) 36%,
+    rgba(32, 19, 28, .92) 65%,
+    var(--c-plum) 100%);
+}
+.article__content {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  bottom: 28px;
+  z-index: 1;
+}
+.article__meta { display: flex; align-items: center; gap: 10px; }
+.article__cat {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 32px;
+  background: #2B74FF;
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.article__time { font-size: 14px; color: var(--c-white); }
+.article__title {
+  margin: 12px 0 0;
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 40px;
+  text-transform: uppercase;
+  color: var(--c-white);
+}
+.article__summary {
+  margin: 12px 0 0;
+  font-size: 16px;
+  line-height: 20px;
+  color: #D9D4D7;
+}
+.article__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 44px;
+  margin-top: 20px;
+  padding: 0 16px;
+  border-radius: 32px;
+  background: var(--c-yellow);
+  color: var(--c-plum);
+  font-size: 14px;
+  font-weight: 500;
+}
+.article__link .icon-arrow { width: 24px; height: 24px; }
+
+/* Los dos botones de la sección comparten el efecto del resto de la web (los
+   `.btn`): al pasar el ratón la flecha sale a la derecha y entra otra por la
+   izquierda, el fondo va al amarillo y el texto a negro, y el botón sube 1 px.
+   Cada uno conserva sus medidas, así que el ancho no cambia al pasar el cursor. */
+.news__all,
+.article__link {
+  position: relative;
+  overflow: hidden;
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease,
+              transform .18s ease, padding .3s cubic-bezier(.4, 0, .2, 1);
+}
+.news__all:hover,
+.article__link:hover {
+  background: var(--c-yellow);
+  border-color: var(--c-yellow);
+  color: #000;
+  transform: translateY(-1px);
+}
+.news__all .icon-arrow,
+.article__link .icon-arrow {
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1), opacity .3s ease,
+              width .3s cubic-bezier(.4, 0, .2, 1);
+}
+.news__all:hover .icon-arrow,
+.article__link:hover .icon-arrow {
+  width: 0;
+  transform: translateX(14px);
+  opacity: 0;
 }
 
-.foot-contact h3 { font-size: 16px; font-weight: 600; margin-bottom: 14px; }
-.foot-contact li { font-size: 14px; color: var(--c-text-pale); }
-.foot-contact li + li { margin-top: 8px; }
-.foot-contact a:hover { color: var(--c-yellow); }
-.foot-contact strong { color: var(--c-white); font-weight: 600; }
+/* La flecha que entra por la izquierda, recortada con la misma máscara. */
+.news__all::before,
+.article__link::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: clamp(18px, calc(18px + (100vw - 1366px) * 0.056), 24px);
+  width: clamp(20px, calc(20px + (100vw - 1366px) * 0.0935), 30px);
+  height: clamp(20px, calc(20px + (100vw - 1366px) * 0.0935), 30px);
+  margin-top: calc(clamp(20px, calc(20px + (100vw - 1366px) * 0.0935), 30px) / -2);
+  background-color: currentColor;
+  opacity: 0;
+  transform: translateX(-28px);
+  pointer-events: none;
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
+  -webkit-mask: var(--arrow-mask) center / 100% 100% no-repeat;
+  mask: var(--arrow-mask) center / 100% 100% no-repeat;
+}
+.article__link::before {
+  left: 16px;
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  transform: translateX(-36px);
+}
+.news__all:hover::before,
+.article__link:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+.news__all:hover {
+  padding-left: clamp(46px, calc(46px + (100vw - 1366px) * 0.187), 66px);
+  padding-right: clamp(10px, calc(10px + (100vw - 1366px) * 0.0187), 12px);
+}
+.article__link:hover {
+  padding-left: 52px;
+  padding-right: 4px;
+}
 
-.social { display: flex; gap: 16px; }
-.social img { width: 30px; height: 30px; }
-.social a { opacity: .9; }
-.social a:hover { opacity: 1; }
-
-.pay { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.pay img { height: 22px; width: auto; }
+/* A partir de 1400 la tarjeta de la izquierda es la anterior: el degradado ocupa
+   los 22 px del hueco entre la columna y las tarjetas (sin tocar la foto) y el
+   contenido baja al 50 %. Al desplazarse, la tarjeta entra en ese hueco. */
+@media (min-width: 1400px) {
+  .news { gap: 0; }
+  .news__cards { padding-left: 22px; }
+  .news__carousel::before { width: 22px; }
+  .article:first-child .article__content { opacity: .5; }
+}
 
 /* --------------------------------------------------------------------------
-   18. Adaptación a otros anchos
+   16. Footer
+   -------------------------------------------------------------------------- */
+
+/* Footer amarillo del diseño actual: logo grande, cinco columnas de enlaces y
+   una fila inferior con newsletter, redes y las tiendas de apps. */
+.site-footer {
+  background: var(--c-yellow);
+  color: #000;
+  padding: 72px 36px 72px;
+}
+.footer__inner { max-width: 1293px; margin: 0 auto; }
+
+.footer__logo { display: block; margin: 0 0 30px; }
+.footer__logo img { display: block; width: 100%; height: auto; }
+
+/* Las líneas blancas son el borde superior de cada bloque. */
+.foot-links {
+  display: flex;
+  justify-content: space-between;
+  padding: 34px 0 30px;
+  border-top: 1px solid rgba(255, 255, 255, .55);
+}
+.foot-col { flex: none; }
+.foot-col h3 { margin: 0; font-size: 16px; font-weight: 800; line-height: 20px; }
+.foot-col ul { margin: 16px 0 0; padding: 0; list-style: none; }
+.foot-col li + li { margin-top: 8px; }
+.foot-col a { display: block; font-size: 14px; line-height: 18px; color: #000; }
+.foot-col a:hover { text-decoration: underline; }
+
+/* La fila inferior va en tres columnas: newsletter a la izquierda, redes
+   centradas y tiendas a la derecha, con los bloques alineados por abajo. */
+.foot-bottom {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  padding-top: 42px;
+  border-top: 1px solid rgba(255, 255, 255, .55);
+}
+.foot-sub, .foot-follow, .foot-app { min-width: 0; }
+.foot-sub h3, .foot-follow h3, .foot-app h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 20px;
+}
+.foot-sub h3 { margin-bottom: 12px; }
+.foot-sub__btn {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 32px;
+  border-radius: var(--radius-pill);
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+.foot-sub__btn:hover { background: #20131C; }
+
+.foot-follow { justify-self: center; margin-bottom: 4px; }
+.foot-follow h3 { margin-bottom: 15px; }
+.foot-follow .social { display: flex; gap: 24px; }
+.foot-follow .social img { width: 24px; height: 24px; filter: brightness(0); }
+.foot-follow .social a { display: block; }
+
+.foot-app { justify-self: end; }
+.foot-app h3 { margin-bottom: 7px; }
+.foot-app__badges { display: flex; }
+.foot-app__badges a { display: block; }
+.foot-app__badges img { display: block; width: auto; height: 52px; }
+
+/* --------------------------------------------------------------------------
+   17. Adaptación a otros anchos
    -------------------------------------------------------------------------- */
 
 @media (max-width: 1200px) {
-  .display { font-size: 68px; }
-  .prod { flex-basis: 300px; }
+  .display { font-size: 60px; line-height: 60px; }
+  .prod { flex-basis: 340px; }
+  .prod__thumb { width: 54px; height: 54px; }
   .review { flex-basis: 280px; }
-  .post { flex-basis: 240px; }
   .acc-grid { grid-template-columns: repeat(3, 1fr); }
   .finder-grid { grid-template-columns: repeat(2, 1fr); }
-  .news__inner { grid-template-columns: 1fr; }
-  .news-letter { grid-template-columns: 1fr; }
-  .foot-links { grid-template-columns: repeat(3, 1fr); row-gap: 40px; }
+  .foot-links { flex-wrap: wrap; justify-content: flex-start; gap: 40px 80px; }
 }
 
 /* Las tres píldoras necesitan unos 1160 px para caber con sus separaciones, así
@@ -1446,13 +2002,17 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   }
 
   .nav__menu { display: none; }
-  .nav__menu.is-open {
+  /* El estado abierto lo marca .is-menu-open en la cabecera; el antiguo
+     .nav__menu.is-open no llegaba a aplicarse nunca. */
+  .site-header.is-menu-open .nav__menu {
     display: flex;
     flex-direction: column;
     position: absolute;
     left: 35px;
     right: 35px;
     top: 84px;
+    /* El ancho fijo de escritorio (301 px) se comía el right en móvil. */
+    width: auto;
     height: auto;
     padding: 16px;
     border-radius: 20px;
@@ -1463,18 +2023,55 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .nav__offer { margin: 8px 0 0; justify-content: center; }
 }
 
+/* El campo del buscador mide 394 px y va pegado al margen derecho, así que su
+   borde izquierdo está en ancho − 434. El logo termina en ancho/2 + 84 (va
+   centrado 30 px a la izquierda). Los dos chocan por debajo de 1036 px: ahí el
+   logo se retira y el campo se estira entre el círculo y el margen derecho. Se
+   corta en 1060 para que no queden a ras. */
+@media (max-width: 1060px) {
+  .site-header.is-search-open .nav__logo { display: none; }
+  .site-header.is-search-open .nav__actions { flex: 1; }
+  .site-header.is-search-open .nav__search { width: 100%; }
+
+  /* Los tres paneles del menú suman 1051 px (301 + 320.5 + 429.5). Por debajo
+     de 1060 las fichas ya no caben; el segundo nivel se queda solo. */
+  .site-header.is-menu-open .nav__cards[data-visible] { display: none; }
+}
+
+/* La columna de noticias necesita 556 px y la fila de tarjetas otros 775; por
+   debajo de 1100 se apilan y la fila se queda con todo el ancho. */
+@media (max-width: 1100px) {
+  .news {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    padding: 64px 24px;
+    gap: 40px;
+  }
+  .news__head { width: 100%; padding: 0; }
+  .news__lead { width: 100%; max-width: 464px; }
+  /* El align-self: center del escritorio dejaba la fila con su ancho máximo
+     (2760 px) y provocaba scroll horizontal en todo el documento. */
+  .news__carousel { align-self: stretch; height: 580px; }
+  .news__cards { width: 100%; max-width: 100%; }
+  .news__carousel::before { width: 0; }
+}
+
 @media (max-width: 980px) {
   :root { --section-y: 72px; }
 
   .hero { min-height: 0; padding-bottom: 32px; }
   .hero__inner { flex-direction: column; padding: 150px 24px 0; width: 100%; gap: 32px; }
+  /* El desplazamiento del vídeo es para el encuadre de escritorio; en móvil
+     dejaría al ciclista fuera de pantalla. */
+  .hero__video { transform: none; }
   .hero__title { font-size: 58px; line-height: 1; }
   .hero__card { margin-top: 0; width: 100%; max-width: 420px; }
   .pcard { width: 100%; max-width: 420px; }
   .usp { gap: 20px 32px; justify-content: flex-start; width: 100%; padding-inline: 24px; }
   .usp li + li::before { display: none; }
 
-  .display { font-size: 52px; }
+  .display { font-size: 52px; line-height: 52px; }
 
   .section__head { flex-direction: column; align-items: flex-start; }
   .section__lead--right { margin-top: 0; }
@@ -1493,11 +2090,27 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .acc-grid { grid-template-columns: repeat(2, 1fr); }
   .finder-grid { grid-template-columns: repeat(2, 1fr); }
 
-  .workshop .display { font-size: 52px; line-height: 1; }
-  .news { padding: 72px 0; }
-  .news-letter__logo img { width: 240px; height: auto; }
-  .foot-links { grid-template-columns: repeat(2, 1fr); }
-  .foot-bottom { flex-direction: column; align-items: flex-start; }
+  .news__title { font-size: 48px; line-height: 48px; }
+
+  /* Tarjetas de noticias más estrechas y sin alto fijo: en móvil 580 px de alto
+     con 327 de ancho dejaban el texto descolgado. */
+  .news__carousel { height: auto; }
+  .news__cards { height: auto; gap: 16px; }
+  .article { width: min(78vw, 340px); height: 420px; }
+  .article__content { left: 20px; right: 20px; bottom: 20px; }
+  .article__title { font-size: 30px; line-height: 34px; }
+  .article__summary { font-size: 14px; line-height: 18px; }
+
+  .site-footer { padding: 56px 24px; }
+  .foot-links { gap: 36px 64px; }
+  .foot-bottom {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 32px;
+    padding-top: 32px;
+  }
+  .foot-follow { justify-self: start; margin-bottom: 0; }
+  .foot-app { justify-self: start; }
 
 /* Menú según el diseño móvil: una barra limpia, sin píldoras. El círculo del
    menú va suelto y las tres acciones también, sin contenedor.
@@ -1535,14 +2148,26 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   }
   .nav__logo img { width: 150px; height: 16px; }
   .nav__actions { gap: 20px; }
-  .nav__menu { top: 68px; left: 16px; right: 16px; min-width: 0; }
+  .nav__menu {
+    top: 68px;
+    left: 16px;
+    right: 16px;
+    min-width: 0;
+  }
+
+  /* La barra baja a 68: el campo sigue en 36 y le quedan 16 por arriba, así que
+     el panel arranca en 36 + 16 = 68, igual que la barra. */
+  .nav__search-panel { top: calc(100% + 16px); }
 
   /* El desplegable va pegado a la barra, así que comparte su fondo sólido: uno
      opaco y otro translúcido justo debajo se notaría. */
-  .nav__menu.is-open {
+  .site-header.is-menu-open .nav__menu {
     left: 16px;
     right: 16px;
     top: 68px;
+    width: auto;
+    max-height: calc(100vh - 84px);
+    overflow-y: auto;
     background: var(--c-plum);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1551,23 +2176,100 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 
 @media (max-width: 620px) {
-  .hero__title { font-size: 38px; line-height: 1; }
-  .display { font-size: 34px; }
-  .brands__title { font-size: 34px; line-height: 1; }
-  .workshop .display { font-size: 34px; line-height: 1; }
+  :root { --section-y: 56px; }
 
-  .prod { flex-basis: 260px; }
+  .hero__title { font-size: 38px; line-height: 1; }
+  .display { font-size: 34px; line-height: 34px; }
+  .brands__title { font-size: 34px; line-height: 34px; }
+
+  .prod { flex-basis: 280px; }
+  .prod__tag { top: 12px; right: 12px; min-width: 68px; min-height: 26px; padding: 0 7px; border-radius: 13px; font-size: 12px; line-height: 15px; }
+  .prod__thumbs { left: 12px; right: 12px; bottom: 14px; gap: 6px; }
+  .prod__thumb { width: 46px; height: 46px; border-radius: 5px; }
+  .prod__body { margin-top: -12px; padding: 12px; }
+  .prod__brand { font-size: 13px; line-height: 17px; }
+  .prod__name { margin-top: 8px; font-size: 16px; line-height: 20px; }
+  .prod__price { margin-top: 24px; font-size: 14px; line-height: 18px; }
+  .prod__swatch { width: 12px; height: 12px; }
+  .prod__colors { font-size: 12px; line-height: 18px; }
   .review { flex-basis: 260px; }
-  .post { flex-basis: 220px; }
   .cat-grid { grid-template-columns: 1fr; }
   .cat:first-child { grid-column: auto; }
-  .cat { height: 240px; }
+  .cat { height: 200px; }
   .finder-grid { grid-template-columns: 1fr; }
   .acc-grid { grid-template-columns: 1fr; }
-  .foot-links { grid-template-columns: 1fr; }
-  .news-letter__form { flex-direction: column; }
+  /* Las tarjetas de accesorios miden 358 px de alto en escritorio; en una
+     columna de móvil eso deja la sección en más de 3000 px. */
+  .acc { min-height: 220px; padding: 20px; }
+  .acc__title { font-size: 18px; line-height: 22px; }
+
+  .hero__inner { padding: 116px 20px 0; }
+  .hero { padding-bottom: 24px; }
+  .reviews__panel { padding: 32px 16px; }
+
+  .news { padding: 56px 16px; }
+  .news__title { font-size: 40px; line-height: 40px; }
+  .news__cards { gap: 20px; }
+  .news__carousel::before { width: 0; }
+  .article { width: 84vw; }
+  .article__content { left: 20px; right: 20px; bottom: 20px; }
+  .article__title { font-size: 30px; line-height: 34px; }
+
+  .foot-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 20px;
+  }
+  .foot-app__badges { flex-wrap: wrap; gap: 8px; }
   .pcard { grid-template-columns: 130px 1fr; height: 160px; }
   .pcard__media img { width: 100px; }
+}
+
+/* --------------------------------------------------------------------------
+   Móvil según el frame «mobile_home» (15430:9963, 390 × 10931)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 620px) {
+  /* El diseño móvil deja accesorios, noticias y opiniones en ese orden. */
+  main { display: flex; flex-direction: column; }
+  #accessories { order: 1; }
+  #news { order: 2; }
+  #reviews { order: 3; }
+
+  /* Titulares de sección a 32 px, como el frame. */
+  .display,
+  .news__title { font-size: 32px; line-height: 32px; }
+
+  /* Hero: 52/54 en Obviously Demo de ancho normal, en tres líneas. */
+  .hero__title {
+    font-family: 'Obviously Demo', var(--font-display);
+    font-weight: 600;
+    font-size: 52px;
+    line-height: 54px;
+    letter-spacing: 0;
+  }
+
+  /* Categorías: tres tarjetas cuadradas de 358 px (margen de 16 px). */
+  #categories .container { width: calc(100% - 32px); }
+  .cat-grid { grid-template-columns: 1fr; gap: 24px; }
+  .cat { height: 358px; }
+  .cat:nth-child(n + 4) { display: none; }
+
+  /* Accesorios: dos tarjetas de 358 px. */
+  .acc-grid { grid-template-columns: 1fr; gap: 24px; }
+  .acc { min-height: 358px; }
+  .acc:nth-child(n + 3) { display: none; }
+
+  /* Noticias: tarjetas de 330 × 460. */
+  .article { width: 330px; height: 460px; }
+  .article__title { font-size: 30px; line-height: 34px; }
+
+  /* Reseñas compactas: panel de 342 px de ancho. */
+  .reviews__panel { padding: 20px; gap: 16px; }
+  .reviews__carousel { margin-top: 16px; }
+
+  /* Footer en una columna, como el frame. */
+  .foot-links { display: flex; flex-direction: column; gap: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

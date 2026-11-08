@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rock Bikes — comprobación del menú</title>
+<!-- Abre el menú en un iframe y simula el recorrido del ratón: primero el
+     enlace de primer nivel y luego la ficha del segundo, para poder comparar
+     Menu_mountain, Menu_spectral y Variante6 con los renders de design/menu/.
+
+       ?link=Mountain%20Bikes   enlace de primer nivel (por defecto Mountain Bikes)
+       ?ficha=spectral          abre las fichas de Spectral
+       ?ficha=neuron            abre las fichas de Neuron
+       ?ficha=0                 se queda en el segundo nivel
+       ?ancho=390&alto=844      tamaño del iframe (1366x768 por defecto)
+
+     Tiene que servirse por http: con file:// el padre no puede tocar el
+     documento del iframe. -->
+<style>
+  html, body { margin: 0; background: #fff; }
+  iframe { display: block; border: 0; }
+</style>
+</head>
+<body>
+<iframe id="frame" src="../index.html?menu-check" title="Rock Bikes"></iframe>
+<script>
+  var q = new URLSearchParams(location.search);
+  var frame = document.getElementById('frame');
+
+  frame.style.width = (q.get('ancho') || 1366) + 'px';
+  frame.style.height = (q.get('alto') || 768) + 'px';
+
+  frame.addEventListener('load', function () {
+    var doc = frame.contentDocument;
+    var burger = doc.querySelector('.nav__burger');
+    if (burger) { burger.click(); }
+
+    setTimeout(function () {
+      var enlace = q.get('link') || 'Mountain Bikes';
+      var objetivo = null;
+      doc.querySelectorAll('.nav__link').forEach(function (a) {
+        if (!objetivo && a.textContent.trim() === enlace) { objetivo = a; }
+      });
+      if (objetivo) { objetivo.dispatchEvent(new MouseEvent('mouseenter')); }
+
+      var ficha = q.get('ficha');
+      if (ficha && ficha !== '0') {
+        var item = doc.querySelector('.nav__sub-list a[data-ficha="' + ficha + '"]');
+        if (item) { item.dispatchEvent(new MouseEvent('mouseenter')); }
+      }
+
+      // La barra transiciona de negro a amarillo en 0,25 s; con el presupuesto
+      // de tiempo virtual la captura puede pillar el primer fotograma. Se
+      // anulan las transiciones para fotografiar el estado final.
+      var estilo = doc.createElement('style');
+      estilo.textContent = '*,*::before,*::after{transition:none!important;animation:none!important}';
+      doc.head.appendChild(estilo);
+      void doc.body.offsetHeight;
+    }, 250);
+  });
+</script>
+</body>
+</html>

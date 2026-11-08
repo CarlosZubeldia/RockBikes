@@ -3,41 +3,72 @@
 Página de inicio construida a partir del diseño de Figma **rock-bikes**, como pieza de porfolio.
 
 > **Estado y por dónde seguir.** Actualizada la sección de categorías, la tipografía (Outfit en
-> el cuerpo, Obviously en los titulares) y todo el menú: barra a 70 px con degradado vertical
-> de negro a transparente, hover a negro sólido, desplegable amarillo con panel negro de 301 px
-> y segundo nivel para Mountain Bikes y Brands.
+> el cuerpo, Obviously en los titulares) y **todo el menú**: barra a 70 px con degradado vertical
+> de negro a transparente, hover a negro sólido, desplegable amarillo con panel negro de 301 px,
+> segundo nivel para Mountain Bikes y Brands, tercer nivel con fichas de producto y **la
+> pantalla de búsqueda** (`Mneu_search`).
 >
-> **Lo siguiente es la pantalla de búsqueda** (`Mneu_search`, nodo `15342:5074`). Medidas ya
-> tomadas: barra amarilla `#FFD900` de 70 px; campo de búsqueda píldora blanca de 344×36 en
-> 932,17; «Close» en 1286,25 en Outfit 400 16 px; panel desplegable blanco de 394×215 en 932,70
-> con «Popular Search» en Outfit 600 16 px en 956,94 y cuatro entradas (Grail, Gloves, Wheels,
-> Accesories) cada 30 px desde 956,151. El render está en `design/menu/search.png`.
+> El tercer nivel es la parte que faltaba de `Menu_spectral` y `Variante6`: al pasar por
+> Spectral o por Neuron en el segundo nivel se abre un panel de 429.5 px con la foto
+> (349.5×224) y tres fichas, y el velo sube del 20 % al 30 %. El conjunto mide 1051 px
+> (301 + 320.5 + 429.5) y se comprueba con `scripts/menu-check.html`. Los cuatro renders de
+> `design/menu/` están cotejados: las bandas de texto quedan a 1–2 px.
 >
-> Después: el **tercer nivel** del menú (`Menu_spectral` `15328:9037` y `Variante6`
-> `15332:6137`, fichas de producto), y luego logos de marca, footer y el resto de secciones.
+> La búsqueda es la variante `Mneu_search` del menú (nodo `15342:5074`). Al pulsar la lupa la
+> barra pasa a amarilla `#FFD900` y las tres acciones dejan su sitio a una píldora blanca de
+> 344×36 en 932,17, «Close» en 1286,25 y un panel blanco de 394×215 en 932,70 con «Popular
+> Search» y cuatro entradas. Comparte el velo del menú (`#888888` al 20 %) y tiene su propia
+> adaptación por debajo de 1060 px. El render está en `design/menu/search.png` y se comprueba
+> con `scripts/search-check.html`.
 >
-> Dos trampas que han costado tiempo y conviene no repetir: en el CSS de este proyecto **las
+> Los logos de la sección de marcas ya son los cinco del diseño actual —Cycling, Evil, Lux
+> Escape, The Radavist y Bike Travel—, exportados como SVG en amarillo. Sustituyen a los seis
+> patinetes de la revisión anterior.
+>
+> El **footer** ya es el nuevo: fondo amarillo, logo grande y una fila inferior con newsletter,
+> redes y las tiendas de apps.
+>
+> La sección de **noticias** también es la del Figma actual: «LATEST NEWS» a la izquierda y
+> ocho tarjetas de 416×580 con 60 px de margen arriba y abajo (foto, categoría, tiempo de
+> lectura, titular en Obviously y botón amarillo). La primera tarjeta baja al 50 % de opacidad
+> y el degradado ocupa los 22 px del hueco antes de ella, **sin tocar la foto**; al
+> desplazarse, la tarjeta entra en ese hueco y queda más cerca del titular. Sustituye al
+> bloque anterior, que llevaba el texto SEO.
+>
+> La sección del **taller** («Our own workshop at our facilities») se ha retirado a petición;
+> las noticias van ahora justo después de accesorios.
+>
+> Con las dos, **la home queda completa**.
+>
+> Lo siguiente sería una pasada de QA: móvil, foco, contraste y las secciones que aún no se
+> hayan cotejado.
+>
+> Cuatro trampas que han costado tiempo y conviene no repetir: en el CSS de este proyecto **las
 > reglas empatadas en especificidad dependen del orden del archivo** (el hover del botón del
-> menú chocaba con el del estado abierto), y el **amarillo sobre la barra amarilla es
-> invisible**, así que el hover del botón va limitado a `:not(.is-menu-open)`.
+> menú chocaba con el del estado abierto); el **amarillo sobre la barra amarilla es
+> invisible**, así que el hover del botón va limitado a `:not(.is-menu-open):not(.is-search-open)`;
+> el logo **no va en el centro de la ventana**, sino 30 px a la izquierda, porque el diseño
+> reparte la barra con `space-between` y el bloque de acciones pesa 60 px más que el del círculo;
+> y el `mouseleave` del menú **no puede colgar del panel de 301 px**, porque al entrar en el
+> segundo nivel ya se cerraría: va en `.nav`, que contiene los tres paneles.
 
 Es **HTML, CSS y JavaScript sin frameworks**. No hace falta instalar nada ni compilar:
 abre `index.html` en el navegador y funciona. Para publicarla, sube la carpeta a
 GitHub Pages, Netlify o cualquier hosting estático.
 
 - Archivo de Figma: `8mNr7UEzJA7LVwy7In9jlm`
-- Frame de partida: nodo `9440:3975` — *desktop*, 1366 × 8107 px
+- Frame de partida: nodo `9440:3975` — *desktop*, 1366 × 7426 px (con el footer y las noticias nuevas)
 - El nodo antiguo (`15076:5746`) ya no existe: Figma reasigna identificadores.
 
 ```
 index.html              la página completa
 assets/
   css/style.css         estilos, con los tokens del diseño arriba del todo
-  js/main.js            menú adhesivo, menú móvil y carrusel reutilizable
+  js/main.js            menú adhesivo, menú móvil, carrusel y arrastre de filas
   fonts/                Obviously Demo (variante Wide), ver aviso de licencia
   video/                aquí va hero.mp4, el vídeo de fondo del hero
-  logos/                logos de marca ya pintados en amarillo (ver más abajo)
-  opt/                  fotos optimizadas para web (4,2 MB)
+  logos/                los cinco logos de marca en SVG, ya en amarillo
+  opt/                  fotos optimizadas para web (4,7 MB)
   svg/                  logos e iconos vectoriales exportados de Figma
   img/                  originales de Figma (110 MB, no se publican)
 scripts/                utilidades de extracción y verificación
@@ -76,7 +107,7 @@ Y de ahí salieron tres correcciones que el estilo base escondía:
   `#929292` y «para riders» en el color normal del texto.
 - En la revisión de noviembre, «Taller» y «Últimas noticias» pasaron a **Outfit 800 sin
   cursiva** (antes eran Work Sans 800 en cursiva). La clase se llama ahora
-  `display--outfit`.
+  `display--outfit`; el taller se ha retirado después.
 
 Los saltos de línea de los titulares son los del diseño. El texto de Figma no lleva
 saltos explícitos —envuelve solo según el ancho de su caja—, así que están puestos a
@@ -102,12 +133,16 @@ titulares grandes.
 > sitio hace falta comprar la licencia; si el repositorio va a ser público, estas fuentes
 > no deberían subirse. `--font-display` cae a Outfit si no están.
 
-**Los logos de marca van repintados.** En el diseño, la fila «Enjoy the best brands»
-muestra los seis logos en amarillo plano, pero los archivos originales de Figma traen
-los colores de cada marca. `scripts/recolor-logos.py` genera las versiones amarillas en
-`assets/logos/`. Se intentó antes con CSS (usar cada imagen como máscara sobre un fondo
-amarillo), pero al abrir la página con `file://` el navegador no carga las máscaras
-externas y los logos desaparecen.
+**Los logos de marca son SVG exportados de Figma.** La fila «Enjoy the best brands» del
+diseño actual trae cinco marcas de bici —Cycling, Evil, Lux Escape, The Radavist y Bike
+Travel— ya dibujadas en amarillo plano, así que se exportan como SVG con
+`scripts/figma-svg.mjs` y se colocan tal cual en `assets/logos/`. Sus tamaños son los del
+diseño y la fila los reparte con 81.6 px de separación.
+
+Los seis logos de patinetes de la revisión anterior (Segway, smartGyro, Engwe, Xiaomi, Aovo
+y Dualtron) eran imágenes con color y se repintaban con `scripts/recolor-logos.py`. Se
+retiraron al actualizar la sección; el script sigue en `scripts/` por si hace falta para
+otras imágenes.
 
 **El contenido es de relleno.** El diseño original trae *Lorem ipsum* en el hero, las
 categorías y «Most wanted», y las reseñas llevan texto generado por Figma. Se ha
@@ -249,45 +284,35 @@ aparecía cortado.
 
 ## El menú
 
-No es una barra continua sino **tres píldoras separadas**: marca, enlaces y acciones.
-Medidas tomadas del propio diseño (`Menu_desktop`, nodo `15076:6464`):
+Es **una barra de 70 px** a todo el ancho, no las tres píldoras del diseño anterior. Va
+fija a la ventana y lleva un degradado vertical de negro a transparente; al pasar el ratón
+se rellena de negro sólido.
 
 | | |
 |---|---|
-| Alto de cada píldora | 52 px |
-| Margen del conjunto | 35 px a los lados, 16 arriba y abajo (84 px en total) |
-| Fondo | negro al **74 %** |
-| Separación entre píldoras | repartida con `space-between`, salen 131 px |
-| Radios | 200 px en marca y enlaces, **24 px en la de acciones** |
-| Enlaces | 40 px de alto, relleno 8/10 |
-| «Ofertas» | 81×35, fondo `#0D7678` |
+| Barra | 70 px de alto, 40 de relleno a los lados, degradado negro → transparente |
+| Círculo + «Menu» | círculo de 32 px y texto Outfit 500 16 px, a la izquierda |
+| Logo | 228×24, centrado 30 px a la izquierda del centro |
+| Acciones | tres iconos de 24 px con 16 de separación, a la derecha |
+| Desplegable | panel negro de 301 px con 10 enlaces y 5 redes en oro `#DFBE00` |
+| Al abrir | el círculo pasa a X y la barra a amarilla `#FFD900` |
 
-El radio 24 de la píldora derecha es fácil de pasar por alto: las otras dos están
-redondeadas del todo y esa no. Y el color de «Ofertas» no es el `#009CDF` que aparecía en
-el resumen de colores —ese se usa en otro sitio—, sino `#0D7678`.
+El logo no va en el centro de la ventana: el diseño reparte la barra con `space-between`
+entre círculo, logo y acciones, y el bloque de acciones pesa 60 px más que el del círculo.
+Despejado, el centro del logo cae siempre en `ancho/2 − 30`.
 
-Las píldoras necesitan unos 1160 px para caber, así que **por debajo de 1180 px el menú
-pasa a desplegable**, y lo abre la hamburguesa. En escritorio ese mismo botón oculta y
-vuelve a mostrar la píldora central.
+Como la barra tapa 70 px, las secciones llevan `scroll-margin-top` para que al usar un
+enlace con `#` el titular no quede oculto debajo.
 
-El menú va **fijo a la ventana**, de modo que acompaña toda la navegación. Al bajar se
-acerca al borde y gana sombra. El fondo se queda en el 74 % que pide el diseño: lo que
-evita que se lea el contenido de detrás es el `backdrop-filter: blur(12px)`, no la
-opacidad.
-
-> **Sin verificar.** Chrome headless no arranca sin `--disable-gpu`, y con ese flag el
-> `backdrop-filter` no se aplica. En las capturas de comprobación el texto de debajo se
-> transparenta más de lo que debería; en un navegador normal el desenfoque sí se ve. Si
-> aun así molesta al pasar por las secciones claras, basta con subir ese 74 %.
-
-Como el menú tapa unos 84 px, las secciones llevan `scroll-margin-top` para que al usar
-un enlace con `#` el titular no quede oculto debajo.
+El velo que oscurece y desenfoca el contenido de debajo es el `.nav__scrim`; en headless el
+`backdrop-filter` no se aplica, así que en las capturas se transparenta más de lo que
+debería.
 
 ### El menú en móvil
 
 Por debajo de **980 px** —el mismo punto en el que el hero se apila en columna— el menú
-deja las píldoras y pasa a una **barra limpia**: el círculo suelto a la izquierda y las
-tres acciones sueltas a la derecha, sin contenedores.
+pasa a una **barra limpia**: el círculo suelto a la izquierda y las tres acciones sueltas
+a la derecha, sin contenedores.
 
 Medidas tomadas del diseño móvil, que viene a 390 px:
 
@@ -304,8 +329,8 @@ Se comprobó que el resultado clava las seis: 390×68 de barra, círculo en 16 d
 
 Dos decisiones que no vienen en la imagen:
 
-- **La barra lleva fondo sólido** (`#20131C`), no el negro al 74 % con desenfoque de las
-  píldoras. El diseño la muestra plana, pero sobre todo hace falta porque la barra es fija
+- **La barra lleva fondo sólido** (`#20131C`), no el velo translúcido con desenfoque del
+  escritorio. El diseño la muestra plana, pero sobre todo hace falta porque la barra es fija
   y el contenido pasa por debajo: sin fondo, al llegar a una sección clara el logo blanco
   desaparecería.
 - **El desplegable comparte ese fondo sólido.** Va pegado a la barra y uno opaco con otro
@@ -324,8 +349,9 @@ deduplicó en un primer momento y hubo que devolverlo, porque se pidió copiarlo
 
 El componente completo vive en Figma en el set `menu_desktop`, nodo `15318:5361`, con
 **ocho variantes**: `Menu_default`, `Menu_hover`, `Menu_open`, `Mneu_search`,
-`Menu_mountain`, `Menu_spectral`, `Variante5` (Neuron) y `Variante6` (Brands). Todas se
-pueden pedir por la API con su identificador; no hace falta exportarlas a mano.
+`Menu_mountain` (lista de Mountain Bikes), `Menu_spectral` (con las fichas de Spectral),
+`Variante5` (lista de Brands) y `Variante6` (con las fichas de Neuron). Todas se pueden pedir
+por la API con su identificador; no hace falta exportarlas a mano.
 
 #### El modo exclusión, y por qué no está
 
@@ -339,24 +365,126 @@ fondo del **mismo contexto de apilado**, y el menú es `position: fixed`, que cr
 propio: el contenido no llega a ver el vídeo del hero. Se comprobó midiendo el fondo
 calculado con la clase puesta.
 
-Se compensa con el degradado del diseño (negro al 46 % arriba) más un fondo sólido al
-hacer scroll. Da la misma legibilidad —que es el objetivo del exclusión— por otro camino,
+Se compensa con el degradado de la barra —negro al 78 % arriba— y con el negro sólido al
+pasar el ratón. Da la misma legibilidad —que es el objetivo del exclusión— por otro camino,
 aunque la transición no es idéntica.
 
-#### Lo que falta
+### El segundo y el tercer nivel
 
-Los **desplegables de segundo nivel**, que abren un panel a la derecha del menú al pasar
-por encima de ciertos enlaces:
+Cuatro paneles abren desde los enlaces del menú. El contenido real de Figma es este (la tabla
+que había antes tenía `Variante5` y `Variante6` cambiados):
 
-| Variante | Contenido |
+| Variante | Ancho | Contenido |
+|---|---|---|
+| `Menu_mountain` | 621.5 px | «MOUNTAIN BIKES» + Spectral, Neuron, Lux Trail, Lux World Cup, Torque + SEE ALL |
+| `Menu_spectral` | 1051 px | Lo anterior + foto y fichas de Spectral |
+| `Variante5` | 621.5 px | «BRANDS» + Cycling, Evil, Lux Escape, The Radavist, Bike Travel + SEE ALL |
+| `Variante6` | 1051 px | Lista de Mountain Bikes + foto y fichas de Neuron |
+
+Medidas del segundo nivel:
+
+| | |
 |---|---|
-| `Mneu_search` | Buscador con «Popular Search: Gravel, City, Wheels, Accesories» |
-| `Menu_mountain` | Special, Neuron, Lux Trail, Lux World Cup, Torque + «SEE ALL» |
-| `Menu_spectral` | Fichas con imagen: «Spectral CF · From 2,999 €» |
-| `Variante5` | Igual, con «Neuron» |
-| `Variante6` | Marcas: Canyon, Cult, La Garoupe, The Robert's, Bike Town |
+| Panel | 320.5×698 en (301, 70), negro, relleno 31/40 |
+| Título | Outfit 600 18 px en (341, 113) |
+| Filas | 44 px, texto 400 16 px, desde (341, 152) |
+| «SEE ALL» | 47 px bajo la lista, en (341, 419), 36 px de alto |
 
-Sus renders están en `design/menu/`, descargados de Figma.
+El panel del diseño empieza 5 px por encima de la barra (y=65). Aquí el menú y el tercer
+nivel empiezan en 70, así que sus rellenos superiores bajan de 24 a 19; el segundo nivel ya
+empezaba en 70 y conserva los 31. Con eso el contenido cae donde toca: el título del menú en
+105, la lista en 145 y la foto del tercer nivel en 89.
+
+El diseño no es consistente entre variantes: en `Menu_open` el panel de 301 va a y=60 y todo
+su contenido queda 5 px más arriba. Aquí se sigue la posición de las variantes con submenú,
+que son las que se cotejan.
+
+**El `mouseleave` va en `.nav`, no en el panel de 301.** Al pasar del menú al segundo nivel
+se sale del panel de 301; si el cierre colgara de ahí, el submenú desaparecería justo al
+intentar entrar. Como los tres paneles son descendientes de `.nav`, el leave de la barra sí
+distingue «salir del menú» de «entrar en el siguiente panel».
+
+El tercer nivel (429.5 px en 621.5):
+
+| | |
+|---|---|
+| Foto | 349.5×224 en (661.5, 89), radio 8 |
+| Rótulo | «Spectral» / «Neuron» Obviously, 33.65 px, a 35 de la izquierda y 11.68 del pie |
+| Fichas | 3, desde (661.5, 337); nombre 600 16 px y precio 400 14 px |
+| Descripción | Outfit 400 14 px, 12 px bajo el nombre |
+| Separadores | 1 px `#8C8C8C`, 24 arriba y 23 abajo |
+| «SEE ALL» | 30 px bajo las fichas, en (661.5, 613) |
+
+La foto lleva el degradado de ciruela del diseño (`#270A3A`, del 32 % al 100 %) con
+`mix-blend-mode: multiply` y opacidad 0.4; en Neuron baja a 0.1. El rótulo va por encima de
+la sombra. Los separadores llevan 23 px abajo y no 24 porque la línea de Figma no ocupa
+altura; así la ficha siguiente arranca 24 px después de la anterior.
+
+**El rótulo no tiene fuente exacta.** Figma pide `ObviouslyDemo-ExtdSemi` (Extended
+Semibold), que no está entre los dos archivos de demostración del proyecto. Se usa Wide Bold
+estirado un 27 % en horizontal: mide 277 px frente a los 275 del render. Sin estirar se
+quedaba en 226. El «LET'S ROCK !» del menú tiene el mismo problema: el diseño lo pide en
+`ObviouslyDemo-Blck` y aquí va con el Semibold, unos 4 px más ancho.
+
+Las fotos se bajaron con `scripts/figma-assets.mjs` y se optimizaron a
+`assets/opt/menu-spectral.webp` (800×450) y `assets/opt/menu-neuron.webp`. La de Neuron se
+recorta antes de escalar con el `imageTransform` del diseño (región de 1187×761), porque el
+original es cuadrado y con `object-fit: cover` se habría comido el casco.
+
+Con un submenú abierto el velo sube al **30 %** (`#888888` sobre blanco da `#DCDCDC`); el
+`Menu_open` sin submenú se queda en el 20 %. El enlace cuyo panel está abierto pasa a 600. En
+`Variante5` el diseño deja «Mountain Bikes» en 600 aunque el panel sea el de Brands —un
+override del componente—; aquí se marca el que corresponde.
+
+Por debajo de **1060 px** los tres paneles ya no caben (suman 1051) y las fichas se ocultan;
+el segundo nivel se queda solo. El diseño no trae una versión móvil de estos paneles.
+
+Comprobado con `scripts/menu-check.html` (`?ficha=spectral`, `?ficha=neuron`, `?ficha=0`,
+`?link=Brands`) a 1366×768: las bandas de texto quedan a 1–2 px del render y el rótulo, las
+fichas, los separadores y el «SEE ALL» también.
+
+### La pantalla de búsqueda
+
+La variante `Mneu_search` no es un desplegable del menú abierto: **sustituye la barra
+entera**. Al pulsar la lupa, el desplegable se cierra si estaba abierto y la barra pasa a
+amarilla sólida con el contenido en negro; el círculo y «Menu» siguen siendo una hamburguesa
+—no se convierten en la X del menú abierto— y el logo no se mueve.
+
+| | |
+|---|---|
+| Barra | `#FFD900`, 70 px, contenido negro |
+| Campo | píldora blanca 344×36 en (932, 17), radio 100 |
+| Icono | 24×24 en (942, 23), a 10 del borde y 6 de arriba |
+| «Close» | 40×20 en (1286, 25), Outfit 400 16 px |
+| Panel | 394×215 en (932, 70), blanco, esquinas de abajo de 24 |
+| Título | «Popular Search» en (956, 94), Outfit 600 16 px |
+| Entradas | Grail, Gloves, Wheels, Accesories, cada 30 px desde (956, 151) |
+
+Tres cosas que el JSON no dice a simple vista:
+
+- **El panel no cuelga del campo, sino de la barra.** El campo está centrado en la barra a
+  17 px, así que su borde inferior queda en 53 y el panel empieza en 70. Por eso se ancla al
+  formulario con `top: calc(100% + 17px)` en vez de `100%`.
+- **El hueco entre «Popular Search» y la lista son 37 px**, no los 10 del auto layout. El
+  panel mide 215 fijos y reparte título y lista con `space-between`; reproducirlo con un
+  margen de 37 px habría copiado el resultado en vez de la regla.
+- **El velo es el mismo del menú.** El fondo del componente es `#888888` al 20 %, que sobre
+  blanco da el `#E7E7E7` del render; es exactamente el `rgba(136,136,136,.2)` del
+  `.nav__scrim`, con el desenfoque de 10 px que el render no muestra.
+
+La búsqueda se abre con la lupa y se cierra con «Close», con Escape o con un clic fuera.
+Abrir el menú cierra la búsqueda y al revés, porque comparten la barra. Las entradas
+populares rellenan el campo; no hay backend, así que enviar el formulario solo devuelve el
+foco.
+
+Por debajo de **1060 px** el campo fijo de 394 px se montaría sobre el logo (el logo acaba en
+ancho/2 + 84 y el campo empieza en ancho − 434; chocan por debajo de 1036). Ahí el logo se
+retira y el campo se estira entre el círculo y el margen derecho.
+
+Se comprobó con `scripts/search-check.html` a 1366×768: las bandas de tinta del título y de
+las cuatro entradas caen en las mismas filas y columnas que en `design/menu/search.png`, y el
+campo, «Close», el icono y el logo también. La única diferencia es el rasterizado de la
+fuente (el render de Figma sale en escala de grises y el navegador con subpíxel).
 
 ## Los botones
 
@@ -396,13 +524,32 @@ porque alcanza también a los pseudo-elementos.
 
 ## Los carruseles
 
-El mismo componente sirve a los cuatro: los productos más buscados, las reseñas, las
-noticias y la tarjeta del hero. Se gobierna con `data-carousel` en el contenedor y cuatro
-atributos dentro —`data-carousel-track`, `-prev`, `-next` y `-dots`—, así que añadir uno
-nuevo no necesita tocar el JavaScript.
+El mismo componente sirve a tres: los productos más buscados, las reseñas y la tarjeta del
+hero. Se gobierna con `data-carousel` en el contenedor y cuatro atributos dentro
+—`data-carousel-track`, `-prev`, `-next` y `-dots`—, así que añadir uno nuevo no necesita
+tocar el JavaScript. La fila de noticias va aparte, con scroll nativo y arrastre (ver «Las
+noticias»).
 
 El del hero usa `data-carousel-mode="fade"`: cambia de diapositiva con un fundido en vez
 de deslizar el track.
+
+Cada tarjeta de «Most wanted» es, además, una galería de cinco fotos: las flechas de la
+foto y las miniaturas que aparecen al pasar el ratón cambian la imagen principal
+(`[data-prod-gallery]` en `main.js`). Las cinco de la galería van en
+`assets/opt/prod-special-*.webp`; las portadas de cada producto, en
+`assets/opt/prod-neuron.webp`, `prod-spectral.webp`, `prod-indiana.webp`, `prod-evil.webp`
+y `prod-escape.webp`. La tarjeta es el componente `Component 260` del Figma: 400×507, con
+la foto de 400×390 y la ficha blanca de 400×134 solapada 17 px.
+
+La fila de «Most wanted» no lleva flechas: se arrastra con el ratón (el mismo
+`[data-drag-scroll]` de «Las noticias») y los puntos del pie marcan y llevan a cada
+tarjeta. La foto de la bici va con `object-fit: contain` para que se vea entera y
+centrada; las cuatro de detalle, con `cover`. El pedal se guardó con el fondo
+transparente para que tome el mismo `#F2F2F2` que las demás.
+
+Las miniaturas de la tarjeta no arrastran la fila: el gesto se ignora cuando empieza
+sobre un `button`, para que su clic cambie la foto en vez de perderse en la captura del
+puntero. Las flechas de la galería se quitaron; la foto se cambia con las miniaturas.
 
 Responden a las flechas, a las de teclado y al gesto táctil. **Y hasta hace poco no
 funcionaban.** El número de píxeles que avanza una página se guardaba en `this.step`,
@@ -418,6 +565,55 @@ Las flechas laterales son píldoras blancas al **30 % de opacidad**. Va en el fo
 icono se desvanecería también y, como las flechas son blancas sobre secciones blancas,
 acabarían sin verse. Al pasar el ratón el fondo se pone amarillo y el botón se agranda
 un 6 %.
+
+## Las noticias
+
+La sección de noticias es la del Figma actual (nodo `15407:14819`). Mide **700 px en todos
+los anchos**: la tarjeta es siempre **416×580**, con 60 px de margen arriba y abajo, y no se
+deforma ni se estira. Lo que cambia con el ancho es la columna y el titular: de 556/60 a 1366
+a 618/89 a 1473 (la captura de referencia), con el hueco de 22 px, la tarjeta en 640 y 101 px
+hasta la siguiente. Los valores intermedios se interpolan con `calc()`/`clamp()`.
+
+A la izquierda va «LATEST NEWS» (Outfit 800, «NEWS» en amarillo), el subtítulo y el botón
+«Ver todas». A la derecha, la fila de tarjetas con la foto a sangre y el scrim del Figma
+(transparente al 36 %, opaco desde el 65 %), la píldora azul `#2B74FF`, el tiempo de lectura,
+el titular en Obviously 36/40, el resumen y el botón amarillo «Read the story». Son ocho, con
+cuatro fotos y cuatro textos que se repiten.
+
+**La primera tarjeta es la anterior**: su contenido baja al 50 % de opacidad; el degradado
+ocupa los 22 px del hueco entre la columna y las tarjetas, **sin tocar la foto**; al
+desplazarse, la tarjeta entra en ese hueco y queda más cerca del titular. La fila se desplaza
+en horizontal de forma nativa y se puede arrastrar con el ratón (`data-drag-scroll` en
+`main.js`); no usa el carrusel de diapositivas. Las fotos son 896×1200 del Figma, recortadas a
+832×1160 WebP en `assets/opt/news-*.webp`.
+
+Los dos botones de la sección («Ver todas» y «Read the story») comparten el efecto del resto
+de la web: al pasar el ratón la flecha sale a la derecha y entra otra por la izquierda, el
+fondo va al amarillo, el texto a negro y el botón sube 1 px, conservando su ancho.
+
+## El footer
+
+El footer nuevo es **amarillo `#FFD900` con el texto en negro**, al revés que el anterior
+oscuro. Mide 837 px a 1366 y tiene tres partes:
+
+| | |
+|---|---|
+| Logo | «ROCK⚡BIKES» de 1293×136 en (36, 72) |
+| Columnas | cinco, de 16 px en negrita y enlaces de 14 px, a 149 px |
+| Fila inferior | newsletter a la izquierda, redes centradas y tiendas a la derecha |
+
+El logo es **el SVG del logo de la barra recoloreado**: las letras pasan de blanco a negro y
+el rayo de amarillo a blanco (`assets/svg/rock-bikes-footer.svg`). Las cinco redes son los
+mismos SVG del footer anterior, ennegrecidos con `filter: brightness(0)`. Las insignias de
+App Store y Google Play están recortadas de la imagen del diseño a su tamaño (160×52 y
+180×52) en `assets/opt/`.
+
+Las columnas se reparten con `justify-content: space-between`: con los anchos que salen de
+Outfit 14, las separaciones quedan en los 149 px del diseño. La fila inferior es una rejilla
+de tres columnas (`1fr auto 1fr`) con las redes centradas.
+
+El Figma actual ya incluye este footer en la página (contenedor `15366:30491`, 837 px). Se
+montó primero desde la imagen que se pasó y las medidas coinciden con el frame.
 
 ## Ver la página
 
@@ -467,8 +663,22 @@ node scripts/figma-outline.mjs --flat --out design/outline-all.txt
 node scripts/figma-node.mjs --texts --out design/text-styles.txt
 node scripts/figma-node.mjs --frames --out design/frame-styles.txt
 python scripts/optimize-images.py # reescala a 1600 px y pasa a WebP
-python scripts/recolor-logos.py   # logos de marca en amarillo plano
+
+# Los cinco logos de la sección de marcas; luego se copian a assets/logos con
+# nombres legibles (cycling.svg, evil.svg, lux-escape.svg…).
+node scripts/figma-svg.mjs --input design/9440-3975.json --ids "15300:32030,15300:32073,15300:32056,15300:31975,15300:32599" --out design/logos
 ```
+
+Las dos fotos del tercer nivel del menú no están en el JSON principal y se bajan aparte:
+
+```powershell
+node scripts/figma-assets.mjs --input design/menu/spectral.json --out design/menu/assets/spectral
+node scripts/figma-assets.mjs --input design/menu/brands.json   --out design/menu/assets/neuron
+```
+
+De ahí salen los dos PNG de `design/menu/assets/`; los WebP publicados
+(`assets/opt/menu-spectral.webp` y `menu-neuron.webp`) se recortan y escalan a mano con el
+`imageTransform` de Neuron que se explica en «El segundo y el tercer nivel».
 
 ## Por qué no se usa el MCP de Figma
 
@@ -487,9 +697,11 @@ aparece. La API REST, en cambio, **funciona con cualquier plan**.
 | `figma-node.mjs` | Detalle fino por nodo: `--texts` (fuente, tamaño, color de cada texto) y `--frames` (relleno, radios, auto layout) |
 | `slice-render.py` | Parte un render muy alto en trozos legibles, o recorta una zona con `--crop` |
 | `optimize-images.py` | Reescala y convierte a WebP; deja PNG solo donde hay transparencia real |
-| `recolor-logos.py` | Pinta los logos de marca en un color plano |
+| `recolor-logos.py` | Pinta una imagen en un color plano (se usó con los logos de la revisión anterior) |
 | `mobile-check.html` | Herramienta de revisión: mete la página en un iframe del ancho que pidas |
 | `scroll-check.html` | Herramienta de revisión: carga la página en un iframe y lo desplaza a la altura que pidas |
+| `menu-check.html` | Herramienta de revisión: abre el menú y recorre el segundo y tercer nivel (`?ficha=`, `?link=`, `?ancho=`) |
+| `search-check.html` | Herramienta de revisión: abre el buscador en un iframe del tamaño pedido (`?ancho=`, `?alto=`, `?blur=1`) |
 | `video-check.html` | Herramienta de revisión: escribe sobre la página el estado real del `<video>` del hero (error, pausa, tiempo, fuente elegida) |
 
 ### Opciones
@@ -566,12 +778,15 @@ E-commerce de bicicletas y patinetes eléctricos, tema oscuro con amarillo `#FFD
 como acento. Ocho secciones más la barra de navegación:
 
 1. **Hero** — «MOUNTAIN BIKES SPECIALIST» sobre foto de bosque, con tarjeta de producto
-2. **Categories** — rejilla de categorías sobre `#FAFAFA`
-3. **Most wanted** — carrusel de productos
+2. **Categories** — rejilla de categorías sobre `#FFFFFF`
+3. **Most wanted** — carrusel de tarjetas de producto sobre `#FAFAFA`: foto de 400×390 con cinco imágenes
+   (flechas y galería de miniaturas al pasar el ratón), insignia «New bike», categoría,
+   nombre, precio y colores
 4. **Best brands** — logos en amarillo sobre `#101010`, con un resplandor
 5. **Find your perfect bike** — cuatro tarjetas de categoría
 6. **Opiniones** — reseñas de Google y rejilla de accesorios
-7. **Taller y noticias** — llamada a la acción sobre foto y carrusel de blog
-8. **Footer** — texto SEO, newsletter, cinco columnas de enlaces, contacto y medios de pago
+7. **Noticias** — la nueva sección «LATEST NEWS» con ocho tarjetas y la primera oculta en el degradado
+8. **Footer** — logo grande, cinco columnas de enlaces, newsletter, redes y tiendas de apps sobre amarillo
 
-La página resultante mide 9266 px de alto frente a los 8790 px del diseño, un 5,4 % más.
+La página resultante mide 8134 px de alto. El frame de Figma (7426 px) todavía incluye el
+taller, que se ha retirado de la web a petición.

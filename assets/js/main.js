@@ -21,16 +21,86 @@
 
   /* --------------------------------------------------------------- menú -- */
 
-  // Segundo nivel del menu. Del diseno: el subtitulo va en mayusculas y los
-  // items en Outfit 400. No incluye el tercer nivel de fichas de producto.
+  // Segundo nivel del menú. El subtítulo va en mayúsculas y los ítems en
+  // Outfit 400; los que llevan `ficha` abren además el tercer nivel.
   var SUBMENUS = {
-    'Mountain Bikes': { titulo: 'Mountain bikes', items: ['Spectral', 'Neuron', 'Lux Trail', 'Lux World Cup', 'Torque'] },
-    'Brands':         { titulo: 'Brands',         items: ['Cycling', 'Evil', 'Lux Escape', 'The Radavist', 'Bike Travel'] }
+    'Mountain Bikes': {
+      titulo: 'Mountain bikes',
+      items: [
+        { nombre: 'Spectral', ficha: 'spectral' },
+        { nombre: 'Neuron', ficha: 'neuron' },
+        { nombre: 'Lux Trail' },
+        { nombre: 'Lux World Cup' },
+        { nombre: 'Torque' }
+      ]
+    },
+    'Brands': {
+      titulo: 'Brands',
+      items: [
+        { nombre: 'Cycling' },
+        { nombre: 'Evil' },
+        { nombre: 'Lux Escape' },
+        { nombre: 'The Radavist' },
+        { nombre: 'Bike Travel' }
+      ]
+    }
+  };
+
+  // Tercer nivel: fichas de producto de Menu_spectral y Variante6. Los nombres
+  // van como en Figma; la caja los pone en mayúsculas con text-transform.
+  var FICHAS = {
+    spectral: {
+      imagen: 'assets/opt/menu-spectral.webp',
+      nombre: 'Spectral',
+      productos: [
+        { nombre: 'Spectral CF', precio: 'From 2.999€', desc: 'Carbon frame, killer components' },
+        { nombre: 'Spectral al', precio: 'From 2.999€', desc: 'Carbon frame, killer components' },
+        { nombre: 'Spectral on', precio: 'From 2.999€', desc: 'Carbon frame, killer components' }
+      ]
+    },
+    neuron: {
+      imagen: 'assets/opt/menu-neuron.webp',
+      nombre: 'Neuron',
+      productos: [
+        { nombre: 'Neuron oil', precio: 'From 2.999€', desc: 'Carbon frame, killer components' },
+        { nombre: 'neuron above', precio: 'From 2.999€', desc: 'Carbon frame, killer components' },
+        { nombre: 'neuron fx', precio: 'From 2.999€', desc: 'Carbon frame, killer components' }
+      ]
+    }
   };
 
   var header = document.querySelector('.site-header');
   var burger = document.querySelector('.nav__burger');
   var menu = document.getElementById('nav-menu');
+
+  // Piezas del segundo y tercer nivel. Van fuera del bloque del menú para que
+  // el buscador pueda cerrarlas al abrirse, igual que cierra el menú.
+  var sub = document.querySelector('[data-sub]');
+  var subTitulo = sub && sub.querySelector('.nav__sub-title');
+  var subLista = sub && sub.querySelector('.nav__sub-list');
+  var cards = sub && sub.querySelector('[data-cards]');
+  var cardsImg = cards && cards.querySelector('[data-cards-img]');
+  var cardsLabel = cards && cards.querySelector('[data-cards-label]');
+  var cardsList = cards && cards.querySelector('[data-cards-list]');
+  var enlaceActivo = null;
+
+  var cerrarSub = function () {
+    if (!sub) { return; }
+    sub.removeAttribute('data-visible');
+    if (cards) { cards.removeAttribute('data-visible'); }
+    if (header) { header.classList.remove('is-sub-open'); }
+    if (enlaceActivo) {
+      enlaceActivo.classList.remove('is-active');
+      enlaceActivo = null;
+    }
+  };
+
+  var cerrarMenu = function () {
+    if (!header) { return; }
+    header.classList.remove('is-menu-open');
+    if (burger) { burger.setAttribute('aria-expanded', 'false'); }
+    cerrarSub();
+  };
 
   // El menú va fijo: al bajar se marca para que gane sombra y se lea bien
   // sobre las secciones claras.
@@ -50,51 +120,176 @@
     burger.addEventListener('click', function () {
       var abierto = header.classList.toggle('is-menu-open');
       burger.setAttribute('aria-expanded', String(abierto));
+      if (!abierto) { cerrarSub(); }
     });
 
     // Al elegir un enlace, el menú desplegado se cierra solo.
     menu.addEventListener('click', function (e) {
       if (e.target.closest('a') && header.classList.contains('is-menu-open')) {
-        header.classList.remove('is-menu-open');
-        burger.setAttribute('aria-expanded', 'false');
+        cerrarMenu();
       }
     });
 
-    // Submenú de segundo nivel: se rellena al pasar por encima de un enlace que
-    // lo tenga y se oculta al salir del menú.
-    var sub = document.querySelector('[data-sub]');
+    // Segundo nivel: se rellena al pasar por encima de un enlace que lo tenga.
     if (sub) {
-      var subTitulo = sub.querySelector('.nav__sub-title');
-      var subLista = sub.querySelector('.nav__sub-list');
+      var renderCards = function (ficha) {
+        var datos = FICHAS[ficha];
+        if (!datos || !cards) { return; }
+        if (cardsImg) { cardsImg.src = datos.imagen; }
+        if (cardsLabel) { cardsLabel.textContent = datos.nombre; }
+        if (cardsList) {
+          cardsList.innerHTML = datos.productos.map(function (p, i) {
+            return (i ? '<div class="nav__cards-sep"></div>' : '') +
+              '<div class="nav__card">' +
+                '<div class="nav__card-head">' +
+                  '<span class="nav__card-name">' + p.nombre + '</span>' +
+                  '<span class="nav__card-price">' + p.precio + '</span>' +
+                '</div>' +
+                '<p class="nav__card-desc">' + p.desc + '</p>' +
+              '</div>';
+          }).join('');
+        }
+        cards.setAttribute('data-ficha', ficha);
+        cards.setAttribute('data-visible', '');
+      };
+
+      var conectarFichas = function () {
+        if (!subLista) { return; }
+        subLista.querySelectorAll('a').forEach(function (a) {
+          var mostrar = function () {
+            var ficha = a.getAttribute('data-ficha');
+            if (ficha) { renderCards(ficha); }
+            else if (cards) { cards.removeAttribute('data-visible'); }
+          };
+          a.addEventListener('mouseenter', mostrar);
+          a.addEventListener('focus', mostrar);
+        });
+      };
+
+      var abrirSub = function (enlace) {
+        var datos = SUBMENUS[enlace.textContent.trim()];
+        if (!datos) { cerrarSub(); return; }
+        if (subTitulo) { subTitulo.textContent = datos.titulo; }
+        if (subLista) {
+          subLista.innerHTML = datos.items.map(function (item) {
+            var ficha = item.ficha ? ' data-ficha="' + item.ficha + '"' : '';
+            return '<li><a href="#"' + ficha + '>' + item.nombre + '</a></li>';
+          }).join('');
+          conectarFichas();
+        }
+        if (cards) { cards.removeAttribute('data-visible'); }
+        sub.setAttribute('data-visible', '');
+        header.classList.add('is-sub-open');
+        if (enlaceActivo && enlaceActivo !== enlace) { enlaceActivo.classList.remove('is-active'); }
+        enlaceActivo = enlace;
+        enlace.classList.add('is-active');
+      };
 
       menu.querySelectorAll('.nav__link').forEach(function (a) {
-        a.addEventListener('mouseenter', function () {
-          var datos = SUBMENUS[a.textContent.trim()];
-          if (!datos) { sub.removeAttribute('data-visible'); return; }
-          subTitulo.textContent = datos.titulo;
-          subLista.innerHTML = datos.items.map(function (t) {
-            return '<li><a href="#">' + t + '</a></li>';
-          }).join('') + '<li><a class="nav__sub-all" href="#">SEE ALL \u2192</a></li>';
-          sub.setAttribute('data-visible', '');
-        });
+        a.addEventListener('mouseenter', function () { abrirSub(a); });
+        a.addEventListener('focus', function () { abrirSub(a); });
       });
 
-      menu.addEventListener('mouseleave', function () {
-        sub.removeAttribute('data-visible');
+      // El segundo y el tercer nivel son descendientes de .nav, así que el
+      // leave que vale es el de la barra entera: si se cuelga del menú de
+      // 301 px, entrar en el segundo nivel ya lo cerraría.
+      var nav = document.querySelector('.nav');
+      if (nav) { nav.addEventListener('mouseleave', cerrarSub); }
+
+      // Un enlace del submenú o de las fichas también cierra el menú.
+      sub.addEventListener('click', function (e) {
+        if (e.target.closest('a') && header.classList.contains('is-menu-open')) {
+          cerrarMenu();
+        }
       });
     }
 
     // Un clic fuera o la tecla Escape también lo cierran.
     document.addEventListener('click', function (e) {
       if (!header.classList.contains('is-menu-open')) { return; }
-      if (e.target.closest('.nav__menu') || e.target.closest('.nav__burger')) { return; }
-      header.classList.remove('is-menu-open');
-      burger.setAttribute('aria-expanded', 'false');
+      if (e.target.closest('.nav__menu') || e.target.closest('.nav__sub') ||
+          e.target.closest('.nav__burger')) { return; }
+      cerrarMenu();
     });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && header.classList.contains('is-menu-open')) {
-        header.classList.remove('is-menu-open');
-        burger.setAttribute('aria-expanded', 'false');
+        cerrarMenu();
+      }
+    });
+  }
+
+  /* ----------------------------------------------------------- buscador -- */
+
+  // Variante Mneu_search del mismo menú. Comparte barra con el desplegable, así
+  // que los dos estados son excluyentes: abrir uno cierra el otro.
+  var searchBtn = document.querySelector('[data-search-open]');
+  var searchForm = document.querySelector('[data-search]');
+
+  if (header && searchBtn && searchForm) {
+    var searchInput = searchForm.querySelector('[data-search-input]');
+    var searchClose = searchForm.querySelector('[data-search-close]');
+
+    var cerrarBuscador = function () {
+      if (!header.classList.contains('is-search-open')) { return; }
+      header.classList.remove('is-search-open');
+      searchBtn.setAttribute('aria-expanded', 'false');
+    };
+
+    var abrirBuscador = function () {
+      // Cierra el menú (y sus dos niveles) si estaba abierto.
+      cerrarMenu();
+      header.classList.add('is-search-open');
+      searchBtn.setAttribute('aria-expanded', 'true');
+      // El campo acaba de pasar de display:none a flex; hasta el siguiente
+      // fotograma el navegador no lo deja enfocar.
+      if (searchInput) {
+        window.requestAnimationFrame(function () { searchInput.focus(); });
+      }
+    };
+
+    searchBtn.addEventListener('click', function () {
+      if (header.classList.contains('is-search-open')) { cerrarBuscador(); }
+      else { abrirBuscador(); }
+    });
+
+    if (searchClose) {
+      searchClose.addEventListener('click', function () {
+        cerrarBuscador();
+        searchBtn.focus();
+      });
+    }
+
+    // El menú desplegable y el buscador no pueden estar abiertos a la vez.
+    if (burger) {
+      burger.addEventListener('click', function () { cerrarBuscador(); });
+    }
+
+    // Las búsquedas populares del diseño rellenan el campo.
+    searchForm.querySelectorAll('[data-search-term]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!searchInput) { return; }
+        searchInput.value = btn.getAttribute('data-search-term');
+        searchInput.focus();
+      });
+    });
+
+    // Sin backend: enviar el formulario solo devuelve el foco al campo.
+    searchForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (searchInput) { searchInput.focus(); }
+    });
+
+    // Un clic fuera de la cabecera lo cierra.
+    document.addEventListener('click', function (e) {
+      if (!header.classList.contains('is-search-open')) { return; }
+      if (e.target.closest('.site-header')) { return; }
+      cerrarBuscador();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && header.classList.contains('is-search-open')) {
+        cerrarBuscador();
+        searchBtn.focus();
       }
     });
   }
@@ -292,5 +487,140 @@
   var roots = document.querySelectorAll('[data-carousel]');
   for (var i = 0; i < roots.length; i++) {
     new Carousel(roots[i]);
+  }
+
+  /* ------------------------------------------------------ arrastrar filas -- */
+
+  /* La fila de noticias se arrastra con el ratón. El scroll nativo sigue
+     funcionando con rueda, trackpad y teclado; aquí solo se añade el arrastre y
+     se evita que un arrastre termine abriendo el enlace de una tarjeta. */
+  var dragRows = document.querySelectorAll('[data-drag-scroll]');
+  for (var j = 0; j < dragRows.length; j++) {
+    (function (row) {
+      var down = false;
+      var startX = 0;
+      var startLeft = 0;
+      var moved = 0;
+
+      // Que el ratón arrastre la fila y no la imagen: sin esto el navegador
+      // inicia su propio arrastre de imagen y aparece la miniatura fantasma.
+      row.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+      row.addEventListener('pointerdown', function (e) {
+        if (e.pointerType !== 'mouse' || e.button !== 0) { return; }
+        // Los botones (flechas y miniaturas) no arrastran la fila: si se captura
+        // el puntero, su clic se pierde y la galería deja de cambiar.
+        if (e.target.closest('button')) { return; }
+        down = true;
+        startX = e.clientX;
+        startLeft = row.scrollLeft;
+        moved = 0;
+        row.classList.add('is-dragging');
+        if (row.setPointerCapture) { row.setPointerCapture(e.pointerId); }
+      });
+
+      row.addEventListener('pointermove', function (e) {
+        if (!down) { return; }
+        var dx = e.clientX - startX;
+        if (Math.abs(dx) > moved) { moved = Math.abs(dx); }
+        row.scrollLeft = startLeft - dx;
+      });
+
+      function endDrag(e) {
+        if (!down) { return; }
+        down = false;
+        row.classList.remove('is-dragging');
+        if (row.hasPointerCapture && row.hasPointerCapture(e.pointerId)) {
+          row.releasePointerCapture(e.pointerId);
+        }
+      }
+
+      row.addEventListener('pointerup', endDrag);
+      row.addEventListener('pointercancel', endDrag);
+
+      /* Un arrastre no debe abrir la tarjeta; un clic normal sí. */
+      row.addEventListener('click', function (e) {
+        if (moved > 6) {
+          e.preventDefault();
+          e.stopPropagation();
+          moved = 0;
+        }
+      }, true);
+    })(dragRows[j]);
+  }
+
+  /* ------------------------------------- galería de la tarjeta de producto -- */
+
+  // Cada tarjeta de «Most wanted» lleva cinco fotos. Las flechas pasan de una a
+  // otra y las miniaturas (visibles al pasar el ratón) saltan a la que se pulse.
+  var productGalleries = document.querySelectorAll('[data-prod-gallery]');
+  for (var p = 0; p < productGalleries.length; p++) {
+    (function (gallery) {
+      var images = gallery.querySelectorAll('.prod__img');
+      var thumbs = gallery.querySelectorAll('.prod__thumb');
+      var index = 0;
+
+      function show(i) {
+        index = (i + images.length) % images.length;
+        for (var n = 0; n < images.length; n++) {
+          images[n].classList.toggle('is-active', n === index);
+        }
+        for (var t = 0; t < thumbs.length; t++) {
+          thumbs[t].classList.toggle('is-active', t === index);
+        }
+      }
+
+      for (var t = 0; t < thumbs.length; t++) {
+        (function (thumb, position) {
+          thumb.addEventListener('click', function () { show(position); });
+        })(thumbs[t], t);
+      }
+    })(productGalleries[p]);
+  }
+
+  /* --------------------------------- «Most wanted»: arrastre y puntos -- */
+
+  // La fila de productos se arrastra con el ratón (el mismo comportamiento que
+  // «Las noticias») y los puntos marcan y llevan a cada tarjeta.
+  var mostWanted = document.getElementById('products');
+  if (mostWanted) {
+    var scroller = mostWanted.querySelector('[data-drag-scroll]');
+    var dotsList = mostWanted.querySelector('.dots');
+    var productCards = mostWanted.querySelectorAll('.prod');
+
+    if (scroller && dotsList && productCards.length) {
+      var gap = 24;
+
+      for (var i = 0; i < productCards.length; i++) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.setAttribute('aria-label', 'Ir a la tarjeta ' + (i + 1));
+        if (i === 0) { dot.setAttribute('aria-current', 'true'); }
+        dotsList.appendChild(dot);
+      }
+
+      var dotButtons = dotsList.querySelectorAll('button');
+
+      function paintDots() {
+        var step = productCards[0].offsetWidth + gap;
+        var index = Math.round(scroller.scrollLeft / step);
+        if (index < 0) { index = 0; }
+        if (index > dotButtons.length - 1) { index = dotButtons.length - 1; }
+        for (var n = 0; n < dotButtons.length; n++) {
+          if (n === index) { dotButtons[n].setAttribute('aria-current', 'true'); }
+          else { dotButtons[n].removeAttribute('aria-current'); }
+        }
+      }
+
+      for (var d = 0; d < dotButtons.length; d++) {
+        (function (button, position) {
+          button.addEventListener('click', function () {
+            scroller.scrollTo({ left: position * (productCards[0].offsetWidth + gap), behavior: 'smooth' });
+          });
+        })(dotButtons[d], d);
+      }
+
+      scroller.addEventListener('scroll', paintDots, { passive: true });
+    }
   }
 })();
