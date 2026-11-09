@@ -2,16 +2,17 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Comprobación del vídeo del hero</title>
+<title>Comprobación de los vídeos</title>
 <!--
   Herramienta de revisión temporal, no forma parte de la web.
 
   Carga la página en un iframe, espera unos segundos y escribe encima el estado
-  real del elemento <video>: si hay error, si está pausado, el tiempo que lleva
-  reproducido y qué fuente eligió el navegador. Una captura normal no lo dice.
+  real de cada <video>: si hay error, si está pausado, el tiempo que lleva
+  reproducido, qué fuente eligió el navegador y si existe el botón de socorro.
+  También dice cuántos vídeos hay dentro del menú.
 
   Tiene que servirse por http (mismo origen) para que el padre pueda leer el DOM
-  del iframe. Se captura y se lee el texto de la imagen.
+  del iframe.
 -->
 <style>
   html, body { margin: 0; background: #6b6b6b; }
@@ -32,21 +33,34 @@
   var segundos = parseFloat(new URLSearchParams(location.search).get('t') || '3');
 
   f.addEventListener('load', function () {
-    var vs = f.contentDocument.querySelectorAll('video');
+    var d = f.contentDocument;
+    var w = f.contentWindow;
+    var vs = d.querySelectorAll('video');
     setTimeout(function () {
-      var lineas = ['vídeos encontrados: ' + vs.length, ''];
+      var lineas = ['vídeos en la página: ' + vs.length, ''];
       Array.prototype.forEach.call(vs, function (v, i) {
+        var btn = v.parentNode.querySelector('.video-play');
         lineas.push('--- vídeo ' + (i + 1) + '  (' + (v.className || 'sin clase') + ') ---');
         lineas.push('  error         : ' + (v.error ? v.error.code + ' - ' + (v.error.message || 'sin detalle') : 'ninguno'));
         lineas.push('  readyState    : ' + v.readyState + '   (4 = hay datos para reproducir)');
+        lineas.push('  networkState  : ' + v.networkState + '   (2 = cargando, 3 = sin fuente)');
         lineas.push('  paused        : ' + v.paused);
         lineas.push('  currentTime   : ' + v.currentTime.toFixed(2) + ' s');
         lineas.push('  duración      : ' + (isFinite(v.duration) ? v.duration.toFixed(2) : '-') + ' s');
         lineas.push('  resolución    : ' + (v.videoWidth ? v.videoWidth + 'x' + v.videoHeight : '-'));
         lineas.push('  tamaño en caja: ' + Math.round(v.getBoundingClientRect().width) + 'x' + Math.round(v.getBoundingClientRect().height));
         lineas.push('  fuente        : ' + (v.currentSrc ? v.currentSrc.split('/').pop() : 'ninguna'));
+        lineas.push('  botón socorro : ' + (btn ? (btn.hidden ? 'existe, oculto' : 'VISIBLE') : 'no creado'));
         lineas.push('');
       });
+
+      var menuVideos = d.querySelectorAll('.site-header video');
+      var cardsImg = d.querySelector('[data-cards-img]');
+      lineas.push('--- menú ---');
+      lineas.push('  <video> dentro de la cabecera: ' + menuVideos.length);
+      lineas.push('  imagen de la ficha del menú  : ' + (cardsImg ? (cardsImg.getAttribute('src') || 'sin src') : 'no encontrada'));
+      lineas.push('  prefers-reduced-motion       : ' + w.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
       document.getElementById('out').textContent = lineas.join('\n');
     }, segundos * 1000);
   });
