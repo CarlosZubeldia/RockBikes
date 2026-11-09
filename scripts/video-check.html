@@ -23,10 +23,18 @@
     background: #fff; color: #000;
     font: 13px/17px monospace; white-space: pre-wrap;
   }
+  #volver {
+    position: fixed; right: 12px; bottom: 12px; z-index: 100;
+    padding: 10px 18px; border-radius: 999px;
+    background: #FFD900; color: #000;
+    font: 600 14px/1 Outfit, Arial, sans-serif; text-decoration: none;
+  }
+  #volver:hover { background: #000; color: #FFD900; }
 </style>
 </head>
 <body>
 <iframe id="f" src="../index.html" title="Rock Bikes"></iframe>
+<a id="volver" href="../index.html">← Volver a la web</a>
 <pre id="out">esperando…</pre>
 <script>
   var f = document.getElementById('f');
