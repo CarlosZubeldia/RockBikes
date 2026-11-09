@@ -1672,15 +1672,19 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .acc--photo .acc__badge { position: relative; z-index: 2; }
 .acc--photo > div:last-child { margin-top: auto; }
 
-.acc__title { font-size: 20px; font-weight: 600; line-height: 24px; }
-.acc__desc  { margin-top: 10px; font-size: 14px; line-height: 17px; }
+/* Medidas del componente de tarjeta de accesorios (15455:1433): titular 24/30,
+   descripción 16/20 a 309 px de ancho y bloque de texto separado 24 px. */
+.acc__title { font-size: 24px; font-weight: 600; line-height: 30px; max-width: 309px; }
+.acc__desc  { margin-top: 24px; font-size: 16px; line-height: 20px; max-width: 309px; }
+.acc--photo .acc__badge { width: 28px; height: 28px; }
+.acc--photo .acc__badge span { background: var(--c-white); }
 
 /* Botón «See more» dentro de la tarjeta; el diseño lo pinta con borde amarillo. */
 .acc__more {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: 22px;
+  margin-top: 32px;
   padding: 12px 22px;
   border: 1px solid var(--c-yellow);
   border-radius: var(--radius-pill);
