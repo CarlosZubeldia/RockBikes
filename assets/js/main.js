@@ -80,12 +80,24 @@
   var subLista = sub && sub.querySelector('.nav__sub-list');
   var cards = sub && sub.querySelector('[data-cards]');
   var cardsImg = cards && cards.querySelector('[data-cards-img]');
+  var cardsVideo = cards && cards.querySelector('[data-cards-video]');
   var cardsLabel = cards && cards.querySelector('[data-cards-label]');
   var cardsList = cards && cards.querySelector('[data-cards-list]');
   var enlaceActivo = null;
 
+  // El vídeo de la ficha solo suena con el menú abierto y una ficha a la vista.
+  var arrancarFicha = function () {
+    if (!cardsVideo) { return; }
+    var intento = cardsVideo.play();
+    if (intento && typeof intento.catch === 'function') { intento.catch(function () {}); }
+  };
+  var pararFicha = function () {
+    if (cardsVideo) { cardsVideo.pause(); }
+  };
+
   var cerrarSub = function () {
     if (!sub) { return; }
+    pararFicha();
     sub.removeAttribute('data-visible');
     if (cards) { cards.removeAttribute('data-visible'); }
     if (header) { header.classList.remove('is-sub-open'); }
@@ -121,6 +133,8 @@
       var abierto = header.classList.toggle('is-menu-open');
       burger.setAttribute('aria-expanded', String(abierto));
       if (!abierto) { cerrarSub(); }
+      // Al reabrir con una ficha ya cargada, el vídeo vuelve a arrancar.
+      if (abierto && cards && cards.hasAttribute('data-visible')) { arrancarFicha(); }
     });
 
     // Al elegir un enlace, el menú desplegado se cierra solo.
@@ -136,6 +150,7 @@
         var datos = FICHAS[ficha];
         if (!datos || !cards) { return; }
         if (cardsImg) { cardsImg.src = datos.imagen; }
+        if (cardsVideo) { cardsVideo.poster = datos.imagen; }
         if (cardsLabel) { cardsLabel.textContent = datos.nombre; }
         if (cardsList) {
           cardsList.innerHTML = datos.productos.map(function (p, i) {
@@ -151,6 +166,7 @@
         }
         cards.setAttribute('data-ficha', ficha);
         cards.setAttribute('data-visible', '');
+        arrancarFicha();
       };
 
       var conectarFichas = function () {
@@ -299,7 +315,9 @@
   // La página tiene dos vídeos de fondo: el del hero y el de la sección de
   // marcas. El mismo tratamiento sirve para los dos.
 
-  var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
+  // El vídeo del menú se gestiona aparte (solo con el menú abierto), así que
+  // aquí se cogen los de fondo de la página.
+  var videos = Array.prototype.slice.call(document.querySelectorAll('video:not([data-cards-video])'));
 
   if (videos.length) {
     // Botón de socorro: si el navegador no deja arrancar solo el vídeo, queda
