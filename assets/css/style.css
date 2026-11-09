@@ -1634,7 +1634,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .acc-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* El diseño de esta sección son dos tarjetas grandes. */
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
 
@@ -1673,6 +1674,21 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .acc__title { font-size: 20px; font-weight: 600; line-height: 24px; }
 .acc__desc  { margin-top: 10px; font-size: 14px; line-height: 17px; }
+
+/* Botón «See more» dentro de la tarjeta; el diseño lo pinta con borde amarillo. */
+.acc__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 12px 22px;
+  border: 1px solid var(--c-yellow);
+  border-radius: var(--radius-pill);
+  color: var(--c-yellow);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+}
 
 /* --------------------------------------------------------------------------
    15. Noticias
@@ -2012,7 +2028,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .prod { flex-basis: 340px; }
   .prod__thumb { width: 54px; height: 54px; }
   .review { flex-basis: 280px; }
-  .acc-grid { grid-template-columns: repeat(3, 1fr); }
+  .acc-grid { grid-template-columns: repeat(2, 1fr); }
   .finder-grid { grid-template-columns: repeat(2, 1fr); }
   .foot-links { flex-wrap: wrap; justify-content: flex-start; gap: 40px 80px; }
 }
