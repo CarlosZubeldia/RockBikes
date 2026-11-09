@@ -51,6 +51,7 @@
   var FICHAS = {
     spectral: {
       imagen: 'assets/opt/menu-spectral.webp',
+      video: 'assets/video/menu-spectral.mp4',
       nombre: 'Spectral',
       productos: [
         { nombre: 'Spectral CF', precio: 'From 2.999€', desc: 'Carbon frame, killer components' },
@@ -90,6 +91,15 @@
     if (!cardsVideo) { return; }
     var intento = cardsVideo.play();
     if (intento && typeof intento.catch === 'function') { intento.catch(function () {}); }
+    // Al cambiar el src el archivo aún no está cargado; en cuanto haya datos
+    // para reproducir se vuelve a intentar (el primer play() puede quedarse
+    // esperando y el navegador no siempre lo reanuda solo).
+    cardsVideo.addEventListener('canplay', function () {
+      if (cardsVideo.paused) {
+        var otro = cardsVideo.play();
+        if (otro && typeof otro.catch === 'function') { otro.catch(function () {}); }
+      }
+    }, { once: true });
   };
   var pararFicha = function () {
     if (cardsVideo) { cardsVideo.pause(); }
@@ -150,7 +160,6 @@
         var datos = FICHAS[ficha];
         if (!datos || !cards) { return; }
         if (cardsImg) { cardsImg.src = datos.imagen; }
-        if (cardsVideo) { cardsVideo.poster = datos.imagen; }
         if (cardsLabel) { cardsLabel.textContent = datos.nombre; }
         if (cardsList) {
           cardsList.innerHTML = datos.productos.map(function (p, i) {
@@ -166,7 +175,20 @@
         }
         cards.setAttribute('data-ficha', ficha);
         cards.setAttribute('data-visible', '');
-        arrancarFicha();
+
+        // El vídeo se carga con la página; aquí solo se muestra u oculta y se
+        // reproduce. No se toca el src: recargarlo con el menú abierto dejaba la
+        // descarga a medias.
+        if (cardsVideo) {
+          if (datos.video) {
+            cardsVideo.hidden = false;
+            cardsVideo.poster = datos.imagen;
+            arrancarFicha();
+          } else {
+            cardsVideo.hidden = true;
+            cardsVideo.pause();
+          }
+        }
       };
 
       var conectarFichas = function () {

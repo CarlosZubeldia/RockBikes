@@ -69,18 +69,16 @@
       <div class="nav__cards" data-cards>
         <figure class="nav__cards-photo">
           <img class="nav__cards-img" data-cards-img alt="" width="700" height="448">
-          <!-- El hueco de la ficha es un vídeo, como en el diseño. El póster se
-               rellena desde main.js con la imagen de cada ficha, así que si el
-               archivo no está se sigue viendo la foto. Si dejas el vídeo bueno
-               en assets/video/menu.mp4, se usa ese; mientras no exista, cae en
-               el del hero. -->
+          <!-- El hueco de la ficha es un vídeo, como en el diseño. Se carga con
+               la página (oculto tras la foto) porque cargarlo al abrir el menú
+               dejaba el archivo a medias: Chrome descargaba los metadatos y
+               suspendía el resto. Spectral lo reproduce; el resto de fichas se
+               quedan con su imagen. -->
           <video class="nav__cards-video" data-cards-video
-                 muted loop playsinline preload="none"
+                 src="assets/video/menu-spectral.mp4"
+                 muted loop playsinline preload="auto"
                  poster="assets/opt/menu-spectral.webp"
-                 aria-hidden="true" tabindex="-1">
-            <source src="assets/video/menu.mp4" type="video/mp4">
-            <source src="assets/video/hero.mp4" type="video/mp4">
-          </video>
+                 aria-hidden="true" tabindex="-1"></video>
           <span class="nav__cards-label" data-cards-label></span>
         </figure>
         <div class="nav__cards-list" data-cards-list></div>
