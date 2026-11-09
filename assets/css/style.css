@@ -1661,14 +1661,19 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   object-fit: cover;
   z-index: 0;
 }
-/* El degradado del componente (relleno del Variant2) queda siempre puesto: sin
-   él el texto blanco no se lee sobre fotos claras. El hover solo añade el CTA. */
+/* Degradado de la tarjeta: transparente en la mitad de arriba y oscureciendo
+   poco a poco desde el bloque de texto, para que la foto respire arriba y el
+   texto blanco se lea abajo. */
 .acc--photo::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(33, 48, 139, .32) 0%, #0A0C17 100%);
+  background: linear-gradient(180deg,
+    rgba(33, 48, 139, 0) 42%,
+    rgba(10, 12, 23, .30) 66%,
+    rgba(10, 12, 23, .72) 86%,
+    rgba(10, 12, 23, .92) 100%);
   mix-blend-mode: multiply;
-  opacity: .9;
+  opacity: 1;
   z-index: 1;
 }
 .acc__overlay { position: relative; z-index: 2; }
