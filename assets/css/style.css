@@ -1691,25 +1691,43 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .acc--photo .acc__badge span { width: 16px; height: 16px; background: var(--c-white); }
 
 /* CTA del estado hover. En el componente es un Secondary CTA de 127 × 48 con el
-   texto en amarillo y la flecha en blanco. */
+   texto en amarillo y la flecha en blanco. En reposo está plegado (alto y margen
+   a cero) para no mover el texto; al entrar se despliega poco a poco y el bloque
+   sube con él, en vez de pegar el salto. */
 .acc__more {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 8px;
+  width: fit-content;
   height: 48px;
-  margin-top: 24px;
+  max-height: 0;
+  margin-top: 0;
   padding: 0 16px;
-  border: 1px solid var(--c-yellow);
+  /* El borde va como sombra interior para que en reposo no ocupe alto. */
+  box-shadow: inset 0 0 0 1px var(--c-yellow);
   border-radius: var(--radius-pill);
   color: var(--c-yellow);
   font-size: 16px;
   font-weight: 500;
   line-height: 1;
-  width: fit-content;
+  opacity: 0;
+  transform: translateY(22px);
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height .45s cubic-bezier(.22, .61, .36, 1),
+              margin-top .45s cubic-bezier(.22, .61, .36, 1),
+              opacity .35s ease,
+              transform .45s cubic-bezier(.22, .61, .36, 1);
 }
 .acc__more svg { color: var(--c-white); }
 .acc--photo:hover .acc__more,
-.acc--photo:focus-within .acc__more { display: inline-flex; }
+.acc--photo:focus-within .acc__more {
+  max-height: 48px;
+  margin-top: 24px;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
 
 /* --------------------------------------------------------------------------
    15. Noticias
