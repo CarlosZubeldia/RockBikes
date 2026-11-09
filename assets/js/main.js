@@ -302,14 +302,67 @@
   var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
 
   if (videos.length) {
-    var reproducir = function (v) {
+    // Botón de socorro: si el navegador no deja arrancar solo el vídeo, queda
+    // un botón visible para hacerlo con un clic.
+    var botones = new WeakMap();
+
+    function crearBoton(v) {
+      var boton = document.createElement('button');
+      boton.type = 'button';
+      boton.className = 'video-play';
+      boton.textContent = 'Reproducir vídeo';
+      boton.hidden = true;
+      boton.addEventListener('click', function () {
+        reproducir(v);
+        boton.hidden = true;
+      });
+      v.parentNode.insertBefore(boton, v.nextSibling);
+      botones.set(v, boton);
+    }
+
+    function mostrarBoton(v) {
+      var boton = botones.get(v);
+      if (boton) { boton.hidden = false; }
+    }
+
+    function ocultarBoton(v) {
+      var boton = botones.get(v);
+      if (boton) { boton.hidden = true; }
+    }
+
+    function reproducir(v) {
+      // Se fuerza por propiedad, no solo por atributo: algunos navegadores
+      // ignoran el atributo y sin muted la política de autoplay lo rechaza.
+      v.muted = true;
+      v.defaultMuted = true;
+      v.playsInline = true;
       var intento = v.play();
       // El navegador puede rechazar la reproducción; no es un fallo que deba
-      // romper nada, porque el póster sigue viéndose.
+      // romper nada, porque el póster sigue viéndose y queda el botón.
       if (intento && typeof intento.catch === 'function') {
-        intento.catch(function () {});
+        intento.catch(function () { mostrarBoton(v); });
       }
-    };
+    }
+
+    // Quien pide menos movimiento no debería tener vídeos en bucle delante.
+    var quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    videos.forEach(function (v) {
+      crearBoton(v);
+
+      v.addEventListener('playing', function () { ocultarBoton(v); });
+
+      // Con archivos grandes el primer play() puede adelantarse a los datos;
+      // en cuanto el navegador tiene suficiente para reproducir, se reintenta.
+      v.addEventListener('canplay', function () {
+        if (v.paused && !quieto.matches) { reproducir(v); }
+      });
+
+      // Si a los 1,6 s sigue parado, se ofrece el botón.
+      setTimeout(function () {
+        if (v.paused && !quieto.matches) { mostrarBoton(v); }
+      }, 1600);
+    });
 
     // Si el navegador bloqueó el autoplay, se reintenta al primer gesto. En
     // móvil el primer gesto suele ser touchstart, no pointerdown.
@@ -323,8 +376,6 @@
     document.addEventListener('touchstart', desbloquear, { passive: true });
     document.addEventListener('keydown', desbloquear);
 
-    // Quien pide menos movimiento no debería tener vídeos en bucle delante.
-    var quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
     var aplicarPreferencia = function () {
       videos.forEach(function (v) {
         if (quieto.matches) { v.pause(); } else { reproducir(v); }
@@ -332,14 +383,6 @@
     };
     aplicarPreferencia();
     if (quieto.addEventListener) { quieto.addEventListener('change', aplicarPreferencia); }
-
-    // Con archivos grandes el primer play() puede adelantarse a los datos; en
-    // cuanto el navegador tiene suficiente para reproducir, se reintenta.
-    videos.forEach(function (v) {
-      v.addEventListener('canplay', function () {
-        if (v.paused && !quieto.matches) { reproducir(v); }
-      });
-    });
   }
 
   /* ----------------------------------------------------------- carrusel -- */
