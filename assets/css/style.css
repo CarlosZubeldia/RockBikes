@@ -1676,8 +1676,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    descripción 16/20 a 309 px de ancho y bloque de texto separado 24 px. */
 .acc__title { font-size: 24px; font-weight: 600; line-height: 30px; max-width: 309px; }
 .acc__desc  { margin-top: 24px; font-size: 16px; line-height: 20px; max-width: 309px; }
-.acc--photo .acc__badge { width: 28px; height: 28px; }
-.acc--photo .acc__badge span { background: var(--c-white); }
+.acc--photo .acc__badge {
+  width: 28px;
+  height: 28px;
+  /* El componente lleva un resplandor amarillo (0 0 12, #FFD900 al 70 %). */
+  box-shadow: 0 0 12px rgba(255, 217, 0, .7);
+}
+.acc--photo .acc__badge span { width: 16px; height: 16px; background: var(--c-white); }
 
 /* Botón «See more» dentro de la tarjeta; el diseño lo pinta con borde amarillo. */
 .acc__more {
