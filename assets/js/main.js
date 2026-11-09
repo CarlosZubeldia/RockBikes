@@ -311,12 +311,17 @@
       }
     };
 
-    // Si el navegador bloqueó el autoplay, se reintenta al primer toque.
+    // Si el navegador bloqueó el autoplay, se reintenta al primer gesto. En
+    // móvil el primer gesto suele ser touchstart, no pointerdown.
     var desbloquear = function () {
       videos.forEach(function (v) { if (v.paused) { reproducir(v); } });
       document.removeEventListener('pointerdown', desbloquear);
+      document.removeEventListener('touchstart', desbloquear);
+      document.removeEventListener('keydown', desbloquear);
     };
     document.addEventListener('pointerdown', desbloquear);
+    document.addEventListener('touchstart', desbloquear, { passive: true });
+    document.addEventListener('keydown', desbloquear);
 
     // Quien pide menos movimiento no debería tener vídeos en bucle delante.
     var quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -327,6 +332,14 @@
     };
     aplicarPreferencia();
     if (quieto.addEventListener) { quieto.addEventListener('change', aplicarPreferencia); }
+
+    // Con archivos grandes el primer play() puede adelantarse a los datos; en
+    // cuanto el navegador tiene suficiente para reproducir, se reintenta.
+    videos.forEach(function (v) {
+      v.addEventListener('canplay', function () {
+        if (v.paused && !quieto.matches) { reproducir(v); }
+      });
+    });
   }
 
   /* ----------------------------------------------------------- carrusel -- */
