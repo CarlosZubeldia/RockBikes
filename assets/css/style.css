@@ -1500,6 +1500,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .brands__sub { margin-top: 24px; font-size: 18px; color: var(--c-white); }
 
+/* Segundo bloque de marcas: titular propio sobre la fila de logos. */
+.brands__row .brands__title { margin: 0 0 16px; color: var(--c-white); }
+
 /* La fila de marcas del diseño actual: cinco logos con 81.6 px entre ellos y
    centrados en vertical sobre el más alto (Cycling, 157.4). */
 .brands__logos {
