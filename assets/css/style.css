@@ -1810,6 +1810,51 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   pointer-events: auto;
 }
 
+/* Mismo efecto de flecha que el resto de botones de la web: la que hay sale
+   hacia la derecha y se desvanece, y otra entra desde la izquierda. El ancho
+   total no cambia porque el relleno izquierdo crece lo que la flecha deja. */
+.cat__more,
+.acc__more { position: relative; }
+.cat__more .icon-arrow,
+.acc__more .icon-arrow {
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1),
+              opacity .3s ease,
+              width .3s cubic-bezier(.4, 0, .2, 1);
+}
+.cat__more:hover .icon-arrow,
+.acc__more:hover .icon-arrow,
+.cat__more:focus-visible .icon-arrow,
+.acc__more:focus-visible .icon-arrow {
+  width: 0;
+  transform: translateX(14px);
+  opacity: 0;
+}
+.cat__more::before,
+.acc__more::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  background-color: currentColor;
+  opacity: 0;
+  transform: translateX(-28px);
+  pointer-events: none;
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
+  -webkit-mask: var(--arrow-mask) center / 20px 20px no-repeat;
+  mask: var(--arrow-mask) center / 20px 20px no-repeat;
+}
+.cat__more:hover::before,
+.acc__more:hover::before,
+.cat__more:focus-visible::before,
+.acc__more:focus-visible::before { opacity: 1; transform: translateX(0); }
+.cat__more:hover,
+.acc__more:hover,
+.cat__more:focus-visible,
+.acc__more:focus-visible { padding-left: 44px; padding-right: 8px; }
+
 /* --------------------------------------------------------------------------
    15. Noticias
    -------------------------------------------------------------------------- */
