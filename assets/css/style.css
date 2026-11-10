@@ -1158,9 +1158,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   /* El degradado de la tarjeta ancha va en multiply. Sin aislar se mezclaría
      con lo que hay detrás de la tarjeta, no solo con la foto. */
   isolation: isolate;
-  transition: transform .2s ease;
 }
-.cat:hover { transform: translateY(-3px); }
 
 /* La foto va de fondo; el texto y la insignia quedan por encima. Lleva clase
    propia a proposito: en la tarjeta sin foto, la primera imagen es la insignia,
@@ -1707,7 +1705,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   justify-content: space-between;
   overflow: hidden;
   color: var(--c-white);
-  transition: transform .2s ease;
 }
 
 .acc--plum   { background: var(--c-plum); }
