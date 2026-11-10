@@ -1209,6 +1209,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .cat--wide .cat__text { max-width: 309px; }
 
+/* «Find your perfect complement»: misma tarjeta que categorías, cuatro
+   columnas de 306/326/306/306 en el frame 9440:4111. */
+#finder {
+  background: var(--c-surface);
+  padding: 100px 0;
+}
+#finder .container { width: min(100% - 50px, 1316px); }
+#finder .display { font-size: 64px; line-height: 60px; }
+#finder .section__lead { font-weight: 600; line-height: 22.7px; max-width: 516px; }
+.cat-grid--finder { grid-template-columns: 306fr 326fr 306fr 306fr; }
+.cat-grid--finder .cat:nth-child(2) .cat__text { max-width: 278px; }
+
 .cat__title {
   font-family: var(--font-body);
   font-size: 24px;
