@@ -1174,18 +1174,21 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   z-index: 0;
 }
 
-/* La capa de la tarjeta ancha, tal cual viene del diseño: degradado vertical de
-   #270A3A, del 32 % de opacidad arriba al 100 % abajo, en modo multiply. */
+/* El relleno del componente cat_ruedas: degradado vertical #21308B al 32 % →
+   #0A0C17, en multiply, al 60 % de opacidad en reposo y al 80 % en hover. */
 .cat--shade::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(180deg, rgba(39, 10, 58, .32) 0%, rgb(39, 10, 58) 100%);
+  background: linear-gradient(180deg, rgba(33, 48, 139, .32) 0%, #0A0C17 100%);
   mix-blend-mode: multiply;
+  opacity: .6;
+  transition: opacity .25s ease;
   pointer-events: none;
 }
-
+.cat--shade:hover::after,
+.cat--shade:focus-within::after { opacity: .8; }
 .cat--plum { background: var(--c-plum); }
 
 /* La insignia es el SVG del diseño: una caja de 52×52 con el círculo de 28
@@ -1220,6 +1223,42 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
+}
+
+/* CTA del estado hover del componente (Variant2): mismo comportamiento que en
+   las tarjetas de accesorios, plegado en reposo y desplegándose al entrar. */
+.cat__more {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  height: 48px;
+  max-height: 0;
+  margin-top: 0;
+  padding: 0 16px;
+  box-shadow: inset 0 0 0 1px var(--c-yellow);
+  border-radius: var(--radius-pill);
+  color: var(--c-yellow);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(22px);
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height .45s cubic-bezier(.22, .61, .36, 1),
+              margin-top .45s cubic-bezier(.22, .61, .36, 1),
+              opacity .35s ease,
+              transform .45s cubic-bezier(.22, .61, .36, 1);
+}
+.cat__more svg { color: var(--c-white); }
+.cat:hover .cat__more,
+.cat:focus-within .cat__more {
+  max-height: 48px;
+  margin-top: 24px;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
 }
 
 /* El diseño nuevo da a esta sección 60 px de relleno, no los 100 del resto. */
