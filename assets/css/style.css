@@ -1260,9 +1260,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
               margin-top .45s cubic-bezier(.22, .61, .36, 1),
               opacity .35s ease,
               transform .45s cubic-bezier(.22, .61, .36, 1),
-              background-color .25s ease,
-              color .25s ease,
-              box-shadow .25s ease;
+              /* Mismos tiempos que .btn: el relleno y el color. */
+              padding .3s cubic-bezier(.4, 0, .2, 1),
+              background-color .18s ease,
+              color .18s ease,
+              box-shadow .18s ease;
 }
 .cat__more svg { color: var(--c-yellow); }
 /* Estado hover del componente Secondary CTA (9177:13672): relleno blanco y
@@ -1787,9 +1789,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
               margin-top .45s cubic-bezier(.22, .61, .36, 1),
               opacity .35s ease,
               transform .45s cubic-bezier(.22, .61, .36, 1),
-              background-color .25s ease,
-              color .25s ease,
-              box-shadow .25s ease;
+              /* Mismos tiempos que .btn: el relleno y el color. */
+              padding .3s cubic-bezier(.4, 0, .2, 1),
+              background-color .18s ease,
+              color .18s ease,
+              box-shadow .18s ease;
 }
 .acc__more svg { color: var(--c-yellow); }
 /* Mismo estado hover del Secondary CTA que en categorías. */
