@@ -1132,13 +1132,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    8. Categorías
    -------------------------------------------------------------------------- */
 
-/* Tres tarjetas en una sola fila: una ancha y dos cuadradas. Del diseño nuevo:
-   656 + 306 + 306 con 24 px entre ellas, todas de 358 de alto. */
+/* Tres tarjetas en una sola fila: dos cuadradas y una ancha al final. Del
+   diseño (9440:3976): 306 + 306 + 656 con 24 px entre ellas, 358 de alto. */
 .cat-grid {
   display: grid;
-  grid-template-columns: 656fr 306fr 306fr;
+  grid-template-columns: 306fr 306fr 656fr;
   gap: 24px;
 }
+
+/* Esta sección usa 25 px de margen lateral y 1316 de ancho en el frame. */
+#categories .container { width: min(100% - 50px, 1316px); }
+#categories .display { font-size: 64px; line-height: 70px; }
+#categories .section__lead { font-weight: 500; line-height: 22.7px; }
 
 .cat {
   position: relative;
@@ -1199,8 +1204,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .cat__text {
   position: relative;
   z-index: 2;
-  max-width: 309px;
+  max-width: 258px;
 }
+.cat--wide .cat__text { max-width: 309px; }
 
 .cat__title {
   font-family: var(--font-body);
@@ -2166,10 +2172,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .section__head { flex-direction: column; align-items: flex-start; }
   .section__lead--right { margin-top: 0; }
 
-  /* En tableta, dos columnas aprovechan mucho mejor el ancho que una sola. */
+  /* En tableta, dos columnas; la ancha ocupa la fila entera. */
   .cat-grid { grid-template-columns: 1fr 1fr; }
-  .cat:first-child { grid-column: span 2; }
+  .cat--wide { grid-column: span 2; }
+  .cat:first-child { grid-column: auto; }
   .cat { height: 300px; }
+  #categories .display { font-size: 52px; line-height: 52px; }
 
   .brands__top { grid-template-columns: 1fr; padding-top: 72px; }
   .brands__logos { gap: 32px; --mark-scale: .72; }
@@ -2284,8 +2292,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .prod__colors { font-size: 12px; line-height: 18px; }
   .review { flex-basis: 260px; }
   .cat-grid { grid-template-columns: 1fr; }
+  .cat--wide { grid-column: auto; }
   .cat:first-child { grid-column: auto; }
   .cat { height: 200px; }
+  #categories .display { font-size: 32px; line-height: 32px; }
   .finder-grid { grid-template-columns: 1fr; }
   .acc-grid { grid-template-columns: 1fr; }
   /* Las tarjetas de accesorios miden 358 px de alto en escritorio; en una
