@@ -125,20 +125,22 @@
   };
 
   // El menú va fijo: al bajar se marca para que gane sombra y se lea bien
-  // sobre las secciones claras. Además se calcula dónde empieza el pie para
-  // cortar el desplegable justo ahí: si no, el panel negro se monta encima del
-  // footer amarillo cuando ya se ha llegado abajo.
-  var recalcularCorte = null;
+  // sobre las secciones claras. Cuando el pie llega a la barra, la barra se
+  // retira: así nunca se superpone al footer (ni la barra ni el desplegable).
+  var recalcularPie = null;
   if (header) {
     var pie = document.querySelector('.site-footer');
     var onScroll = function () {
       header.classList.toggle('is-stuck', window.scrollY > 24);
-      if (pie) {
-        var corte = Math.max(70, Math.min(window.innerHeight, pie.getBoundingClientRect().top));
-        header.style.setProperty('--menu-cut', corte + 'px');
-      }
+      if (!pie) { return; }
+      var alto = header.offsetHeight || 70;
+      var llegada = pie.getBoundingClientRect().top <= alto;
+      header.classList.toggle('is-pie', llegada);
+      // Si llega el pie con el menú abierto, se cierra: no debe verse sobre el
+      // footer.
+      if (llegada && header.classList.contains('is-menu-open')) { cerrarMenu(); }
     };
-    recalcularCorte = onScroll;
+    recalcularPie = onScroll;
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
@@ -151,23 +153,13 @@
     // siempre lo mismo. Antes en escritorio se limitaba a ocultar y mostrar la
     // píldora central.
     burger.addEventListener('click', function () {
-      // Se recalcula el corte antes de abrir: si se llega al pie sin haber
-      // movido el ratón, el panel se abriría con la medida anterior.
-      if (recalcularCorte) { recalcularCorte(); }
+      // Se recalcula antes de abrir por si se llegó al pie sin mover el ratón.
+      if (recalcularPie) { recalcularPie(); }
+      // Sobre el footer el menú no se abre: la barra está retirada.
+      if (header.classList.contains('is-pie')) { return; }
       var abierto = header.classList.toggle('is-menu-open');
       burger.setAttribute('aria-expanded', String(abierto));
       if (!abierto) { cerrarSub(); }
-      // Si se abre estando sobre el pie no queda sitio para el panel; se sube la
-      // página lo justo para que quepa, y el corte sigue siendo el borde del
-      // footer.
-      if (abierto && recalcularCorte) {
-        var corte = parseFloat(header.style.getPropertyValue('--menu-cut')) || window.innerHeight;
-        var sitio = corte - 70;
-        if (sitio < 240) {
-          window.scrollBy({ top: -(Math.min(240 - sitio, window.scrollY)), behavior: 'auto' });
-          recalcularCorte();
-        }
-      }
       // Al reabrir con una ficha ya cargada, el vídeo vuelve a arrancar.
       if (abierto && cards && cards.hasAttribute('data-visible')) { arrancarFicha(); }
     });
