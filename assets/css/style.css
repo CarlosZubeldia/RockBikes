@@ -2129,17 +2129,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   color: #0E090D;
   padding: 40px 36px;
 }
-/* Textura de ruido del frame: efecto NOISE (#8E8585 al 25 %, densidad 0,68).
-   En Figma el efecto va al 0,3, pero sobre el amarillo casi no se aprecia; aquí
-   sube a 0,62 con el alfa al 55 % para que se vea. */
+/* Textura de ruido del frame: efecto NOISE (#8E8585). En Figma va al 0,3 y
+   sobre el amarillo casi no se aprecia, así que aquí va a plena intensidad
+   (alfa 100 % y opacidad 0,9) para comprobar que la capa se pinta; después se
+   puede bajar. */
 .site-footer::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: .62;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.55'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .9;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 140px 140px;
 }
 .site-footer > * { position: relative; z-index: 1; }
