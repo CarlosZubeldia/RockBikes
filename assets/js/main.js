@@ -125,13 +125,24 @@
   };
 
   // El menú va fijo: al bajar se marca para que gane sombra y se lea bien
-  // sobre las secciones claras.
+  // sobre las secciones claras. Además se calcula dónde empieza el pie para
+  // cortar el desplegable justo ahí: si no, el panel negro se monta encima del
+  // footer amarillo cuando ya se ha llegado abajo.
+  var recalcularCorte = null;
   if (header) {
+    var pie = document.querySelector('.site-footer');
     var onScroll = function () {
       header.classList.toggle('is-stuck', window.scrollY > 24);
+      if (pie) {
+        var corte = Math.max(70, Math.min(window.innerHeight, pie.getBoundingClientRect().top));
+        header.style.setProperty('--menu-cut', corte + 'px');
+      }
     };
+    recalcularCorte = onScroll;
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('load', onScroll);
   }
 
   if (burger && menu) {
@@ -140,9 +151,23 @@
     // siempre lo mismo. Antes en escritorio se limitaba a ocultar y mostrar la
     // píldora central.
     burger.addEventListener('click', function () {
+      // Se recalcula el corte antes de abrir: si se llega al pie sin haber
+      // movido el ratón, el panel se abriría con la medida anterior.
+      if (recalcularCorte) { recalcularCorte(); }
       var abierto = header.classList.toggle('is-menu-open');
       burger.setAttribute('aria-expanded', String(abierto));
       if (!abierto) { cerrarSub(); }
+      // Si se abre estando sobre el pie no queda sitio para el panel; se sube la
+      // página lo justo para que quepa, y el corte sigue siendo el borde del
+      // footer.
+      if (abierto && recalcularCorte) {
+        var corte = parseFloat(header.style.getPropertyValue('--menu-cut')) || window.innerHeight;
+        var sitio = corte - 70;
+        if (sitio < 240) {
+          window.scrollBy({ top: -(Math.min(240 - sitio, window.scrollY)), behavior: 'auto' });
+          recalcularCorte();
+        }
+      }
       // Al reabrir con una ficha ya cargada, el vídeo vuelve a arrancar.
       if (abierto && cards && cards.hasAttribute('data-visible')) { arrancarFicha(); }
     });

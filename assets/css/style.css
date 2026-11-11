@@ -433,7 +433,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   top: 70px;
   left: 0;
   width: 301px;
-  height: calc(100vh - 70px);
+  /* --menu-cut lo pone main.js con la posición del pie: el panel se corta al
+     llegar al footer en vez de montarse encima. */
+  height: calc(var(--menu-cut, 100vh) - 70px);
+  overflow-y: auto;
   display: none;
   flex-direction: column;
   padding: 19px 40px 24px;
@@ -2429,7 +2432,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     right: 16px;
     top: 68px;
     width: auto;
-    max-height: calc(100vh - 84px);
+    /* Se corta al llegar al pie, igual que en escritorio. */
+    height: auto;
+    max-height: calc(var(--menu-cut, 100vh) - 84px);
     overflow-y: auto;
     background: var(--c-plum);
     backdrop-filter: none;
