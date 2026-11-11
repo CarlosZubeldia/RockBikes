@@ -2123,10 +2123,26 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* Footer amarillo del diseño 15280:6813: 36 px de margen lateral y 40 arriba y
    abajo, con líneas blancas de 1 px separando los bloques. */
 .site-footer {
+  position: relative;
+  isolation: isolate;
   background: var(--c-yellow);
   color: #0E090D;
   padding: 40px 36px;
 }
+/* Textura de ruido del frame: efecto NOISE (#8E8585 al 25 %, densidad 0,68,
+   opacidad 0,3). Se genera con feTurbulence para no añadir un PNG y se queda
+   en un 7,5 % efectivo, como en Figma. */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.25'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+.site-footer > * { position: relative; z-index: 1; }
 .footer__inner {
   max-width: 1294px;
   margin: 0 auto;
