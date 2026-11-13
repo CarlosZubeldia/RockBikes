@@ -513,6 +513,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    los demás se quedan en 500. No se toca el hover: el diseño lo pinta azul. */
 .nav__link.is-active { font-weight: 600; }
 
+/* Outlet: enlace directo, sin flecha y en amarillo corporativo. */
+.nav__link--outlet { color: var(--c-yellow); }
+.nav__link--outlet:hover { color: var(--c-yellow); }
+
 .nav__chev { width: 20px; height: 20px; flex: none; opacity: .9; }
 
 /* Segundo nivel: panel pegado a la derecha del principal. Del diseño: 320.5 de
@@ -559,6 +563,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   color: var(--c-white);
 }
 .nav__sub-list a:hover { color: var(--c-yellow); }
+.nav__sub-list a.is-hot { color: #2B74FF; }
+.nav__sub-list em { font-style: italic; font-weight: 400; }
 
 /* «SEE ALL» a 47 px de la lista, con la flecha a 8. */
 .nav__sub-all {
@@ -1401,9 +1407,11 @@ main > :not(.hero),
 /* El número se enciende en amarillo al abrirse el panel; en reposo va en blanco. */
 .is-active .terrain__num { color: var(--c-yellow); }
 
-/* En los paneles plegados no cabe el recorrido: se quita la píldora y queda
-   solo el número, que ya va a 24 px como en el activo. */
+/* En los paneles plegados no cabe el recorrido: se quita la píldora.
+   Tipografía de reposo +5 px respecto al tamaño base compartido. */
 .terrain__item:not(.is-active) .terrain__travel { display: none; }
+.terrain__item:not(.is-active) .terrain__num { font-size: 29px; }
+.terrain__item:not(.is-active) .terrain__name { font-size: 41px; }
 
 .terrain__travel {
   padding: 6px 12px;
@@ -1560,18 +1568,6 @@ main > :not(.hero),
   max-width: 258px;
 }
 .cat--wide .cat__text { max-width: 309px; }
-
-/* «Find your perfect complement»: misma tarjeta que categorías, cuatro
-   columnas de 306/326/306/306 en el frame 9440:4111. */
-#finder {
-  background: var(--c-surface);
-  padding: 100px 0;
-}
-#finder .container { width: min(100% - 50px, 1316px); }
-#finder .display { font-size: 64px; line-height: 60px; }
-#finder .section__lead { font-weight: 600; line-height: 22.7px; max-width: 516px; }
-.cat-grid--finder { grid-template-columns: 306fr 326fr 306fr 306fr; }
-.cat-grid--finder .cat:nth-child(2) .cat__text { max-width: 278px; }
 
 .cat__title {
   font-family: var(--font-body);
@@ -1962,42 +1958,43 @@ main > :not(.hero),
    11.b Accesorios para riders (scroll largo con panel pegado)
 
    Componente de Figma Make (React + Tailwind) pasado a HTML, CSS y JS. La
-   sección mide 7 × 80vh: dentro, el bloque se queda pegado a la ventana y la
+   sección mide 7 × 40vh: dentro, el bloque se queda pegado a la ventana y la
    categoría activa se calcula con el progreso de scroll sobre ese recorrido.
    -------------------------------------------------------------------------- */
 
 .riders {
   position: relative;
-  background: #1F1F1F;
+  background: #FFFFFF;
   color: var(--c-white);
-  height: 420vh;          /* 7 categorías × 60vh */
+  height: 280vh;          /* 7 categorías × 40vh (antes 60vh: scroll más ágil) */
 }
 
 .riders__sticky {
   position: sticky;
   top: 0;
   display: flex;
-  /* Pegado arriba, como en la referencia: 90 px de aire arriba (los 70 de la
-     barra más 20) y 120 abajo. La caja ocupa lo que queda, así que el hueco de
-     abajo es siempre el mismo y no se acumula en pantallas altas. */
+  /* Arriba 90 px (cajas bloqueadas como ahora). Abajo 60 px, igual que
+     #categories, para que se vea un trozo de la sección siguiente. El alto
+     de las cajas no cambia: sigue siendo ventana − 270. */
   align-items: flex-start;
   justify-content: center;
-  height: 100vh;
-  padding: 90px 24px 120px;
+  height: auto;
+  padding: 90px 24px 60px;
 }
 
 .riders__cols {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
   width: 100%;
   max-width: 1320px;
-  height: 100%;
+  /* 90 + 180 era el recorte anterior; mantenemos ese alto de caja. */
+  height: calc(100vh - 270px);
   min-height: 0;
 }
 
 /* Panel amarillo: titular, descripción, lista de categorías y botón. */
 .riders__panel {
-  flex: 1 1 0;
   min-width: 0;
   min-height: 0;
   display: flex;
@@ -2009,6 +2006,11 @@ main > :not(.hero),
   background: #FFD800;
   color: #000;
   overflow-y: auto;
+}
+
+/* Solo en el panel amarillo: el antetítulo va en negro puro (#000). */
+.riders__eyebrow {
+  color: #000;
 }
 
 .riders__title {
@@ -2066,7 +2068,6 @@ main > :not(.hero),
 /* Panel derecho: pista vertical que se desplaza una pantalla por categoría. */
 .riders__stage {
   position: relative;
-  flex: 1 1 0;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
@@ -2193,18 +2194,17 @@ main > :not(.hero),
 
 /* Por debajo de 900 se apilan: el panel arriba y la foto abajo. */
 @media (max-width: 900px) {
-  .riders { height: 420vh; }
+  .riders { height: 280vh; }
 
   .riders__sticky { padding: 24px 16px; }
 
   .riders__cols {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 12px;
     max-height: none;
   }
 
   .riders__panel {
-    flex: 0 0 auto;
     padding: 28px 24px 20px;
     gap: 16px;
     overflow: visible;
@@ -2214,7 +2214,7 @@ main > :not(.hero),
 
   .riders__cat { font-size: 18px; }
 
-  .riders__stage { flex: 1 1 auto; min-height: 260px; }
+  .riders__stage { min-height: 260px; }
 }
 
 /* --------------------------------------------------------------------------

@@ -21,53 +21,125 @@
 
   /* --------------------------------------------------------------- menú -- */
 
+  // Tres productos de ejemplo para el tercer nivel (misma estructura que Spectral).
+  var tresProductos = function (base, desc) {
+    desc = desc || 'Carbon frame, killer components';
+    return [
+      { nombre: base + ' CF', precio: 'From 2.999€', desc: desc },
+      { nombre: base + ' AL', precio: 'From 2.999€', desc: desc },
+      { nombre: base + ' ON', precio: 'From 2.999€', desc: desc }
+    ];
+  };
+
   // Segundo nivel del menú. El subtítulo va en mayúsculas y los ítems en
   // Outfit 400; los que llevan `ficha` abren además el tercer nivel.
+  // `em: true` marca los destacados en cursiva (Find your bike, Trail starter kit).
   var SUBMENUS = {
     'Mountain Bikes': {
       titulo: 'Mountain bikes',
       items: [
-        { nombre: 'Spectral', ficha: 'spectral' },
-        { nombre: 'Neuron', ficha: 'neuron' },
-        { nombre: 'Lux Trail' },
-        { nombre: 'Lux World Cup' },
-        { nombre: 'Torque' }
+        { nombre: 'XC', href: '#terrain', ficha: 'xc' },
+        { nombre: 'Trail', href: '#terrain', ficha: 'trail' },
+        { nombre: 'Enduro', href: '#terrain', ficha: 'enduro' },
+        { nombre: 'Downhill', href: '#terrain', ficha: 'downhill' },
+        { nombre: 'E-MTB', href: '#terrain', ficha: 'emtb' },
+        { nombre: 'Find your bike', href: '#products', em: true, ficha: 'find-bike' },
+        { nombre: 'All mountain bikes', href: '#products', ficha: 'all-mtb' }
+      ]
+    },
+    'Accessories': {
+      titulo: 'Accessories',
+      items: [
+        { nombre: 'Protection', href: '#riders', ficha: 'protection' },
+        { nombre: 'Tools & repair', href: '#riders', ficha: 'tools' },
+        { nombre: 'Hydration', href: '#riders', ficha: 'hydration' },
+        { nombre: 'Helmets', href: '#riders', ficha: 'helmets' },
+        { nombre: 'Gloves & eyewear', href: '#riders', ficha: 'gloves' },
+        { nombre: 'Lights & GPS', href: '#riders', ficha: 'lights' },
+        { nombre: 'Shoes & pedals', href: '#riders', ficha: 'shoes' },
+        { nombre: 'Trail starter kit', href: '#accessories', em: true, ficha: 'starter' }
+      ]
+    },
+    'Parts': {
+      titulo: 'Parts',
+      items: [
+        { nombre: 'Wheels & tyres', ficha: 'wheels' },
+        { nombre: 'Suspension', ficha: 'suspension' },
+        { nombre: 'Drivetrain', ficha: 'drivetrain' },
+        { nombre: 'Brakes', ficha: 'brakes' },
+        { nombre: 'Cockpit', ficha: 'cockpit' },
+        { nombre: 'Saddles & seatposts', ficha: 'saddles' }
+      ]
+    },
+    'Clothing': {
+      titulo: 'Clothing',
+      items: [
+        { nombre: 'Jerseys', href: '#accessories', ficha: 'jerseys' },
+        { nombre: 'Shorts', href: '#accessories', ficha: 'shorts' },
+        { nombre: 'Jackets', href: '#accessories', ficha: 'jackets' },
+        { nombre: 'Base layers & socks', href: '#accessories', ficha: 'baselayers' }
+      ]
+    },
+    'Other bikes': {
+      titulo: 'Other bikes',
+      items: [
+        { nombre: 'Road', href: '#products', ficha: 'road' },
+        { nombre: 'Gravel', href: '#products', ficha: 'gravel' },
+        { nombre: 'City & touring', href: '#products', ficha: 'city' }
       ]
     },
     'Brands': {
       titulo: 'Brands',
       items: [
-        { nombre: 'Cycling' },
-        { nombre: 'Evil' },
-        { nombre: 'Lux Escape' },
-        { nombre: 'The Radavist' },
-        { nombre: 'Bike Travel' }
+        { nombre: 'Cycling', href: '#brands', ficha: 'brand-cycling' },
+        { nombre: 'Evil', href: '#brands', ficha: 'brand-evil' },
+        { nombre: 'Lux Escape', href: '#brands', ficha: 'brand-escape' },
+        { nombre: 'The Radavist', href: '#brands', ficha: 'brand-radavist' },
+        { nombre: 'Bike Travel', href: '#brands', ficha: 'brand-travel' }
       ]
     }
   };
 
-  // Tercer nivel: fichas de producto de Menu_spectral y Variante6. Los nombres
-  // van como en Figma; la caja los pone en mayúsculas con text-transform.
+  // Tercer nivel: foto + lista de productos. Spectral mantiene el vídeo del diseño.
   var FICHAS = {
-    spectral: {
-      imagen: 'assets/opt/menu-spectral.webp',
-      video: 'assets/video/menu-spectral.mp4',
-      nombre: 'Spectral',
-      productos: [
-        { nombre: 'Spectral CF', precio: 'From 2.999€', desc: 'Carbon frame, killer components' },
-        { nombre: 'Spectral al', precio: 'From 2.999€', desc: 'Carbon frame, killer components' },
-        { nombre: 'Spectral on', precio: 'From 2.999€', desc: 'Carbon frame, killer components' }
-      ]
-    },
-    neuron: {
-      imagen: 'assets/opt/menu-neuron.webp',
-      nombre: 'Neuron',
-      productos: [
-        { nombre: 'Neuron oil', precio: 'From 2.999€', desc: 'Carbon frame, killer components' },
-        { nombre: 'neuron above', precio: 'From 2.999€', desc: 'Carbon frame, killer components' },
-        { nombre: 'neuron fx', precio: 'From 2.999€', desc: 'Carbon frame, killer components' }
-      ]
-    }
+    xc: { imagen: 'assets/opt/news-bikepacking.webp', nombre: 'XC', productos: tresProductos('Lux XC') },
+    trail: { imagen: 'assets/opt/news-trail-guides.webp', nombre: 'Trail', productos: tresProductos('Lux Trail') },
+    enduro: { imagen: 'assets/opt/news-riding-skills.webp', nombre: 'Enduro', productos: tresProductos('Spectral') },
+    downhill: { imagen: 'assets/opt/news-epic-rides.webp', nombre: 'Downhill', productos: tresProductos('Torque') },
+    emtb: { imagen: 'assets/opt/frame-1410106428-b17ff0.webp', nombre: 'E-MTB', productos: tresProductos('Spectral ON') },
+    'find-bike': { imagen: 'assets/opt/menu-spectral.webp', video: 'assets/video/menu-spectral.mp4', nombre: 'Find your bike', productos: tresProductos('Spectral') },
+    'all-mtb': { imagen: 'assets/opt/menu-neuron.webp', nombre: 'Mountain bikes', productos: tresProductos('Neuron') },
+
+    protection: { imagen: 'assets/opt/acc-protection.webp', nombre: 'Protection', productos: tresProductos('Guard', 'Trail and enduro protection') },
+    tools: { imagen: 'assets/opt/acc-tools.webp', nombre: 'Tools & repair', productos: tresProductos('Multi', 'Workshop-ready kit') },
+    hydration: { imagen: 'assets/opt/acc-hydration.webp', nombre: 'Hydration', productos: tresProductos('Hydro', 'With 2 L reservoir') },
+    helmets: { imagen: 'assets/opt/acc-helmets.webp', nombre: 'Helmets', productos: tresProductos('Trail helmet', 'Open-face, MIPS') },
+    gloves: { imagen: 'assets/opt/acc-gloves.webp', nombre: 'Gloves & eyewear', productos: tresProductos('Trail glove', 'Full finger, extra grip') },
+    lights: { imagen: 'assets/opt/acc-lights.webp', nombre: 'Lights & GPS', productos: tresProductos('Beam', 'Rechargeable, USB-C') },
+    shoes: { imagen: 'assets/opt/acc-shoes.webp', nombre: 'Shoes & pedals', productos: tresProductos('Flat', 'Sticky sole, all-day comfort') },
+    starter: { imagen: 'assets/opt/acc-best-brands.webp', nombre: 'Trail starter kit', productos: tresProductos('Starter', 'Everything for your first trails') },
+
+    wheels: { imagen: 'assets/opt/cat-wheels.webp', nombre: 'Wheels & tyres', productos: tresProductos('Wheelset', 'Tubeless-ready trail wheels') },
+    suspension: { imagen: 'assets/opt/ficha-detalle-plataforma.webp', nombre: 'Suspension', productos: tresProductos('Fork', 'Plush travel, dialled damping') },
+    drivetrain: { imagen: 'assets/opt/ficha-detalle-pantalla.webp', nombre: 'Drivetrain', productos: tresProductos('Groupset', 'Crisp shifts, long life') },
+    brakes: { imagen: 'assets/opt/ficha-detalle-frenos.webp', nombre: 'Brakes', productos: tresProductos('Stop', 'Four-piston control') },
+    cockpit: { imagen: 'assets/opt/ficha-detalle-compacto.webp', nombre: 'Cockpit', productos: tresProductos('Bar', 'Trail-tuned control') },
+    saddles: { imagen: 'assets/opt/ficha-detalle-ruedas.webp', nombre: 'Saddles & seatposts', productos: tresProductos('Dropper', 'On-the-fly adjust') },
+
+    jerseys: { imagen: 'assets/opt/acc-clothing.webp', nombre: 'Jerseys', productos: tresProductos('Jersey', 'Breathable trail fit') },
+    shorts: { imagen: 'assets/opt/finder-other.webp', nombre: 'Shorts', productos: tresProductos('Short', 'Stretch, pocket space') },
+    jackets: { imagen: 'assets/opt/blog-summit.webp', nombre: 'Jackets', productos: tresProductos('Shell', 'Light weather protection') },
+    baselayers: { imagen: 'assets/opt/blog-sunrise.webp', nombre: 'Base layers', productos: tresProductos('Layer', 'Moisture-wicking comfort') },
+
+    road: { imagen: 'assets/opt/prod-indiana.webp', nombre: 'Road', productos: tresProductos('Aero', 'Race-day efficiency') },
+    gravel: { imagen: 'assets/opt/prod-escape.webp', nombre: 'Gravel', productos: tresProductos('Grail', 'Go further off the tarmac') },
+    city: { imagen: 'assets/opt/prod-evil.webp', nombre: 'City & touring', productos: tresProductos('Commute', 'Comfort for every day') },
+
+    'brand-cycling': { imagen: 'assets/opt/prod-spectral.webp', nombre: 'Cycling', productos: tresProductos('Spectral') },
+    'brand-evil': { imagen: 'assets/opt/prod-evil.webp', nombre: 'Evil', productos: tresProductos('Following') },
+    'brand-escape': { imagen: 'assets/opt/prod-escape.webp', nombre: 'Lux Escape', productos: tresProductos('Escape') },
+    'brand-radavist': { imagen: 'assets/opt/blog-bikepacking.webp', nombre: 'The Radavist', productos: tresProductos('Edition') },
+    'brand-travel': { imagen: 'assets/opt/blog-jump.webp', nombre: 'Bike Travel', productos: tresProductos('Tour') }
   };
 
   var header = document.querySelector('.site-header');
@@ -208,13 +280,25 @@
         }
       };
 
+      var marcarSubActiva = function (enlaceSub) {
+        if (!subLista) { return; }
+        subLista.querySelectorAll('a').forEach(function (a) {
+          a.classList.toggle('is-hot', a === enlaceSub);
+        });
+      };
+
       var conectarFichas = function () {
         if (!subLista) { return; }
         subLista.querySelectorAll('a').forEach(function (a) {
           var mostrar = function () {
             var ficha = a.getAttribute('data-ficha');
-            if (ficha) { renderCards(ficha); }
-            else if (cards) { cards.removeAttribute('data-visible'); }
+            if (ficha) {
+              marcarSubActiva(a);
+              renderCards(ficha);
+            } else if (cards) {
+              marcarSubActiva(null);
+              cards.removeAttribute('data-visible');
+            }
           };
           a.addEventListener('mouseenter', mostrar);
           a.addEventListener('focus', mostrar);
@@ -222,17 +306,40 @@
       };
 
       var abrirSub = function (enlace) {
-        var datos = SUBMENUS[enlace.textContent.trim()];
+        var clave = enlace.childNodes[0] && enlace.childNodes[0].textContent
+          ? enlace.childNodes[0].textContent.trim()
+          : enlace.textContent.trim();
+        var datos = SUBMENUS[clave];
         if (!datos) { cerrarSub(); return; }
         if (subTitulo) { subTitulo.textContent = datos.titulo; }
         if (subLista) {
+          // En la ficha, los anclas del home necesitan el prefijo index.html.
+          var prefijo = /ficha-producto\.html/i.test(location.pathname)
+            ? 'index.html'
+            : '';
           subLista.innerHTML = datos.items.map(function (item) {
             var ficha = item.ficha ? ' data-ficha="' + item.ficha + '"' : '';
-            return '<li><a href="#"' + ficha + '>' + item.nombre + '</a></li>';
+            var href = item.href || '#';
+            if (prefijo && href.charAt(0) === '#') { href = prefijo + href; }
+            var etiqueta = item.em
+              ? '<em>' + item.nombre + '</em>'
+              : item.nombre;
+            return '<li><a href="' + href + '"' + ficha + '>' + etiqueta + '</a></li>';
           }).join('');
           conectarFichas();
         }
-        if (cards) { cards.removeAttribute('data-visible'); }
+        // Al abrir una categoría, se muestra ya la ficha de la primera subcategoría.
+        var primeraConFicha = null;
+        for (var i = 0; i < datos.items.length; i++) {
+          if (datos.items[i].ficha) { primeraConFicha = datos.items[i]; break; }
+        }
+        if (primeraConFicha && cards) {
+          var primerEnlace = subLista && subLista.querySelector('[data-ficha="' + primeraConFicha.ficha + '"]');
+          marcarSubActiva(primerEnlace);
+          renderCards(primeraConFicha.ficha);
+        } else if (cards) {
+          cards.removeAttribute('data-visible');
+        }
         sub.setAttribute('data-visible', '');
         header.classList.add('is-sub-open');
         if (enlaceActivo && enlaceActivo !== enlace) { enlaceActivo.classList.remove('is-active'); }
