@@ -15,9 +15,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css?v=20261113">
 </head>
 <body>
 
@@ -32,14 +32,14 @@
       <span class="nav__burger-text">Menu</span>
     </button>
 
-    <a class="nav__logo" href="#" aria-label="Rock Bikes, home">
+    <a class="nav__logo" href="index.html" aria-label="Rock Bikes, home">
       <img src="assets/svg/frame-1410106506-I15076-6464;15048-25588.svg" alt="Rock Bikes" width="228" height="24">
     </a>
 
     <nav class="nav__menu" id="nav-menu" aria-label="Main">
       <p class="nav__menu-title">Let&rsquo;s rock !</p>
       <ul class="nav__list">
-        <li><a class="nav__link" href="#categories">Mountain Bikes <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li><a class="nav__link" href="#products">Mountain Bikes <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
         <li><a class="nav__link" href="#brands">Brands <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
         <li><a class="nav__link" href="#products">Road Bikes <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
         <li><a class="nav__link" href="#accessories">Accessories <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
@@ -128,7 +128,10 @@
 <main id="main">
 
 <!-- ============================== HERO ============================== -->
-<section class="hero">
+<!-- `hero--plain` es una prueba: sin la tarjeta de producto, sin el degradado
+     oscuro de la izquierda y con el vídeo centrado. Quitando la clase vuelve
+     el hero del diseño. -->
+<section class="hero hero--plain">
 
   <!-- Fondo en vídeo. El póster es la imagen que había antes, así que mientras
        el vídeo carga —o si el navegador no lo reproduce— se ve exactamente
@@ -136,42 +139,48 @@
        muted, autoplay y playsinline: sin muted los navegadores lo bloquean. -->
   <video class="hero__video"
          autoplay muted loop playsinline preload="auto"
-         poster="assets/opt/frame-1410106389-540de9.webp"
+         poster="assets/opt/hero-poster.webp"
          aria-hidden="true" tabindex="-1">
-    <!-- El navegador usa la primera fuente que sepa reproducir, así que el
-         orden importa: si algún día añades un WebM, ponlo antes que el MP4. -->
+    <!-- Dos versiones del mismo vídeo. El original es 1600x900 y en pantallas
+         grandes el hero lo pinta a 2191 px de ancho (1366 x 1,15 del
+         desplazamiento), o sea que el navegador lo estiraba un 37 % y se veía
+         blando. A partir de 1600 px de ventana se sirve la versión de
+         2560x1440, que el navegador ya reduce en vez de ampliar.
+
+         El `media` del <source> se respeta en Chrome, Edge y Safari; donde no,
+         entra el segundo source y no se rompe nada. -->
+    <source src="assets/video/hero-1440.mp4" type="video/mp4" media="(min-width: 1600px)">
     <source src="assets/video/hero.mp4" type="video/mp4">
-    <source src="assets/video/hero.webm" type="video/webm">
   </video>
 
   <div class="hero__inner">
     <div class="hero__copy">
       <h1 class="hero__title">Mountain<br>Bikes <span class="hero__title-alt">specialist</span></h1>
       <p class="hero__lead">Discover freedom on wheels with our best mountain bikes models</p>
-      <a class="btn btn--light" href="#categories">See all <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="btn btn--dark" href="#terrain">See all <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
 
     <div class="hero__card" data-carousel data-carousel-mode="fade">
       <div class="pcard">
-        <div class="pcard__media">
-          <img src="assets/opt/img-0b4ee9.png" alt="Xiaomi Electric Scooter 4 Lite 2ndGen" width="156" height="177" loading="eager">
-        </div>
+        <a class="pcard__media" href="ficha-producto.html" aria-label="Lux Trail CF Di2">
+          <img src="assets/opt/prod-spectral.webp" alt="Lux Trail CF Di2" width="156" height="177" loading="eager">
+        </a>
         <div class="pcard__body">
           <div class="pcard__slides" data-carousel-track>
             <article class="pcard__slide">
-              <p class="pcard__brand">xiaomi</p>
-              <h3 class="pcard__name">Xiaomi Electric Scooter 4 Lite 2ndGen</h3>
-              <p class="pcard__price"><span>225 €</span><span class="pcard__dot" aria-hidden="true"></span></p>
+              <p class="pcard__brand">canyon</p>
+              <h3 class="pcard__name">Lux Trail CF Di2</h3>
+              <p class="pcard__price"><span>4.299 €</span><span class="pcard__dot" aria-hidden="true"></span></p>
             </article>
             <article class="pcard__slide">
-              <p class="pcard__brand">xiaomi</p>
-              <h3 class="pcard__name">Xiaomi Electric Scooter 4 Lite 2ndGen</h3>
-              <p class="pcard__price"><span>225 €</span><span class="pcard__dot" aria-hidden="true"></span></p>
+              <p class="pcard__brand">canyon</p>
+              <h3 class="pcard__name">Spectral CF 8</h3>
+              <p class="pcard__price"><span>2.799 €</span><span class="pcard__dot" aria-hidden="true"></span></p>
             </article>
             <article class="pcard__slide">
-              <p class="pcard__brand">xiaomi</p>
-              <h3 class="pcard__name">Xiaomi Electric Scooter 4 Lite 2ndGen</h3>
-              <p class="pcard__price"><span>225 €</span><span class="pcard__dot" aria-hidden="true"></span></p>
+              <p class="pcard__brand">canyon</p>
+              <h3 class="pcard__name">Neuron CF 9</h3>
+              <p class="pcard__price"><span>4.299 €</span><span class="pcard__dot" aria-hidden="true"></span></p>
             </article>
           </div>
           <div class="pcard__foot">
@@ -189,57 +198,123 @@
     </div>
   </div>
 
-  <ul class="usp">
-    <li>Free shipping over €250</li>
-    <li>Free returns</li>
-    <li>Fast and secure shipping</li>
-    <li>Our own workshop</li>
-    <li>Secure payment</li>
   </ul>
 </section>
 
-<!-- =========================== CATEGORÍAS =========================== -->
-<section class="section section--surface" id="categories">
+<!-- ======================= ELIGE TU TERRENO ======================== -->
+<!-- Sección de disciplinas MTB: cinco paneles en fila; el que tiene el ratón
+     (o el foco) se ensancha y enseña su descripción. El activo por defecto es
+     Trail, como en el componente original. -->
+<section class="terrain" id="terrain" aria-labelledby="terrain-title">
   <div class="container">
-    <div class="section__head">
-      <div>
-        <h2 class="display display--dark">Featured<br>categories</h2>
-        <p class="section__lead">Explore our top categories: the most sought-after models, powerful and ready for action.</p>
+    <div class="terrain__head">
+      <div class="terrain__intro">
+        <p class="terrain__eyebrow">Shop by discipline</p>
+        <h2 class="display display--light terrain__title" id="terrain-title">Choose your terrain</h2>
+        <p class="terrain__lead">From fast XC climbs to full-send downhill. Find the bike built for how you ride.</p>
       </div>
-      <a class="btn btn--dark" href="#">All categories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="btn terrain__all" href="#">All bikes <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
 
-    <div class="cat-grid">
-      <a class="cat cat--shade" href="#">
-        <img class="cat__photo" src="assets/opt/cat-wheels.webp" alt="" loading="lazy">
-        <img class="cat__badge" src="assets/svg/cat-badge-1.svg" alt="" aria-hidden="true">
-        <div class="cat__text">
-          <h3 class="cat__title">Wheels</h3>
-          <p class="cat__desc">Discover freedom on wheels with our latest-generation mountain bikes</p>
-          <span class="cat__more">See more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
-      </a>
+    <div class="terrain__panels">
+      <ul class="terrain__list" data-terrain>
+        <li class="terrain__item">
+          <a class="terrain__link" href="#" data-terrain-panel style="--panel-bg: #2B2027"
+             aria-label="XC, 100 mm de recorrido. Ver bicis de XC">
+            <img class="terrain__photo" src="assets/opt/news-bikepacking.webp" alt="" loading="lazy" width="832" height="1160">
+            <span class="terrain__veil" aria-hidden="true"></span>
+            <div class="terrain__top">
+              <span class="terrain__num">01</span>
+              <span class="terrain__travel">~100 mm</span>
+            </div>
+            <div class="terrain__foot">
+              <h3 class="terrain__name">XC</h3>
+              <div class="terrain__more">
+                <p class="terrain__desc">Cross-country. Light, efficient and built for long climbs and race pace.</p>
+                <span class="terrain__shop">Shop XC <span aria-hidden="true">&rarr;</span></span>
+              </div>
+            </div>
+          </a>
+        </li>
 
-      <a class="cat cat--shade" href="#">
-        <img class="cat__photo" src="assets/opt/cat-accessories.webp" alt="" loading="lazy">
-        <img class="cat__badge" src="assets/svg/cat-badge-2.svg" alt="" aria-hidden="true">
-        <div class="cat__text">
-          <h3 class="cat__title">Accessories</h3>
-          <p class="cat__desc">Discover freedom on wheels with our latest-generation mountain bikes</p>
-          <span class="cat__more">See more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
-      </a>
+        <li class="terrain__item">
+          <a class="terrain__link" href="#" data-terrain-panel style="--panel-bg: #33262E"
+             aria-label="Trail, 140 mm de recorrido. Ver bicis de Trail">
+            <img class="terrain__photo" src="assets/opt/news-trail-guides.webp" alt="" loading="lazy" width="832" height="1160">
+            <span class="terrain__veil" aria-hidden="true"></span>
+            <div class="terrain__top">
+              <span class="terrain__num">02</span>
+              <span class="terrain__travel">~140 mm</span>
+            </div>
+            <div class="terrain__foot">
+              <h3 class="terrain__name">Trail</h3>
+              <div class="terrain__more">
+                <p class="terrain__desc">The all-rounder. Climbs well, descends with confidence, rides everything.</p>
+                <span class="terrain__shop">Shop Trail <span aria-hidden="true">&rarr;</span></span>
+              </div>
+            </div>
+          </a>
+        </li>
 
-      <a class="cat cat--shade cat--wide" href="#">
-        <img class="cat__photo" src="assets/opt/cat-best-models.webp" alt="" loading="lazy">
-        <img class="cat__badge" src="assets/svg/cat-badge-3.svg" alt="" aria-hidden="true">
-        <div class="cat__text">
-          <h3 class="cat__title">Best models</h3>
-          <p class="cat__desc">Discover freedom on wheels with our latest-generation mountain bikes</p>
-          <span class="cat__more">See more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
-      </a>
+        <li class="terrain__item">
+          <a class="terrain__link" href="#" data-terrain-panel style="--panel-bg: #3B2C35"
+             aria-label="Enduro, 170 mm de recorrido. Ver bicis de Enduro">
+            <img class="terrain__photo" src="assets/opt/news-riding-skills.webp" alt="" loading="lazy" width="832" height="1160">
+            <span class="terrain__veil" aria-hidden="true"></span>
+            <div class="terrain__top">
+              <span class="terrain__num">03</span>
+              <span class="terrain__travel">~170 mm</span>
+            </div>
+            <div class="terrain__foot">
+              <h3 class="terrain__name">Enduro</h3>
+              <div class="terrain__more">
+                <p class="terrain__desc">Pedal up, send it down. Made for steep, rough and timed descents.</p>
+                <span class="terrain__shop">Shop Enduro <span aria-hidden="true">&rarr;</span></span>
+              </div>
+            </div>
+          </a>
+        </li>
+
+        <li class="terrain__item">
+          <a class="terrain__link" href="#" data-terrain-panel style="--panel-bg: #2F2A33"
+             aria-label="Downhill, 200 mm de recorrido. Ver bicis de Downhill">
+            <img class="terrain__photo" src="assets/opt/news-epic-rides.webp" alt="" loading="lazy" width="832" height="1160">
+            <span class="terrain__veil" aria-hidden="true"></span>
+            <div class="terrain__top">
+              <span class="terrain__num">04</span>
+              <span class="terrain__travel">~200 mm</span>
+            </div>
+            <div class="terrain__foot">
+              <h3 class="terrain__name">Downhill</h3>
+              <div class="terrain__more">
+                <p class="terrain__desc">Pure gravity. Maximum travel for bike parks and lift-served lines.</p>
+                <span class="terrain__shop">Shop Downhill <span aria-hidden="true">&rarr;</span></span>
+              </div>
+            </div>
+          </a>
+        </li>
+
+        <li class="terrain__item">
+          <a class="terrain__link" href="#" data-terrain-panel style="--panel-bg: #3A2A23"
+             aria-label="E-MTB, 150 mm de recorrido. Ver bicis eléctricas">
+            <img class="terrain__photo" src="assets/opt/frame-1410106428-b17ff0.webp" alt="" loading="lazy" width="1600" height="900">
+            <span class="terrain__veil" aria-hidden="true"></span>
+            <div class="terrain__top">
+              <span class="terrain__num">05</span>
+              <span class="terrain__travel">~150 mm</span>
+            </div>
+            <div class="terrain__foot">
+              <h3 class="terrain__name">E-MTB</h3>
+              <div class="terrain__more">
+                <p class="terrain__desc">Electric assist. Ride further, climb anything, repeat the best descents.</p>
+                <span class="terrain__shop">Shop E-MTB <span aria-hidden="true">&rarr;</span></span>
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
 </section>
 
 <!-- ========================== MOST WANTED ========================== -->
@@ -247,6 +322,7 @@
   <div class="container">
     <div class="section__head">
       <div>
+        <p class="section__eyebrow">Catalogue</p>
         <h2 class="display display--dark">Find your<br>perfect bike</h2>
         <p class="section__lead">Explore mountain bikes built for rugged trails and new adventures.</p>
       </div>
@@ -278,7 +354,7 @@
               <h3 class="prod__name">Neuron oil</h3>
               <p class="prod__price">4.299 €<span class="prod__swatch" aria-hidden="true"></span><span class="prod__colors">+2 colors</span></p>
             </div>
-          </li>
+          <a class="prod__hit" href="ficha-producto.html" aria-label="Neuron oil"></a></li>
           <li class="prod">
             <div class="prod__media" data-prod-gallery>
               <span class="prod__tag">New Stock</span>
@@ -300,7 +376,7 @@
               <h3 class="prod__name">Spectral CF</h3>
               <p class="prod__price">2.799 €<span class="prod__swatch" aria-hidden="true"></span><span class="prod__colors">+2 colors</span></p>
             </div>
-          </li>
+          <a class="prod__hit" href="ficha-producto.html" aria-label="Spectral CF"></a></li>
           <li class="prod">
             <div class="prod__media" data-prod-gallery>
               <span class="prod__tag">New Stock</span>
@@ -322,7 +398,7 @@
               <h3 class="prod__name">Indiana 6.000</h3>
               <p class="prod__price">5.199 €<span class="prod__swatch" aria-hidden="true"></span><span class="prod__colors">+2 colors</span></p>
             </div>
-          </li>
+          <a class="prod__hit" href="ficha-producto.html" aria-label="Indiana 6.000"></a></li>
           <li class="prod">
             <div class="prod__media" data-prod-gallery>
               <span class="prod__tag">New Stock</span>
@@ -344,7 +420,7 @@
               <h3 class="prod__name">SnowPatrol 52</h3>
               <p class="prod__price">5.899 €<span class="prod__swatch" aria-hidden="true"></span><span class="prod__colors">+2 colors</span></p>
             </div>
-          </li>
+          <a class="prod__hit" href="ficha-producto.html" aria-label="SnowPatrol 52"></a></li>
           <li class="prod">
             <div class="prod__media" data-prod-gallery>
               <span class="prod__tag">New Stock</span>
@@ -366,7 +442,7 @@
               <h3 class="prod__name">BMT0321</h3>
               <p class="prod__price">3.499 €<span class="prod__swatch" aria-hidden="true"></span><span class="prod__colors">+2 colors</span></p>
             </div>
-          </li>
+          <a class="prod__hit" href="ficha-producto.html" aria-label="BMT0321"></a></li>
         </ul>
       </div>
       <div class="carousel__foot">
@@ -380,6 +456,7 @@
 <section class="brands" id="brands">
   <div class="container brands__top">
     <div class="brands__copy">
+      <p class="section__eyebrow section__eyebrow--light">Our brands</p>
       <h2 class="display display--light">Discover our<br>best brands<br><span class="accent">Lux Trail</span></h2>
       <p class="brands__lead">Power, design and technology.<br>The Lux Trail: built to rule<br>the city without limits.</p>
       <a class="btn btn--light" href="#">All categories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -418,11 +495,131 @@
   </div>
 </section>
 
+<!-- ==================== ACCESORIOS PARA RIDERS ==================== -->
+<!-- Sección de scroll largo: la caja se queda pegada a la ventana (sticky)
+     mientras se recorren las siete categorías. El alto total es
+     nº de categorías × 80vh y la categoría activa se calcula con el progreso
+     de scroll; pulsar una la lleva a su tramo (JS en main.js). -->
+<section class="riders" id="riders" aria-labelledby="riders-title" data-riders>
+  <div class="riders__sticky">
+    <div class="riders__cols">
+
+      <div class="riders__panel">
+        <div class="riders__panel-top">
+          <h2 class="riders__title" id="riders-title">Accessories<br>for riders</h2>
+          <p class="riders__lead">Safety, style and practicality for every journey. Get fully equipped.</p>
+        </div>
+
+        <ul class="riders__list" aria-label="Accessory categories">
+          <li><span class="riders__cat is-active" aria-current="true">Protection</span></li>
+          <li><span class="riders__cat">Tools &amp; repair</span></li>
+          <li><span class="riders__cat">Hydration</span></li>
+          <li><span class="riders__cat">Helmets</span></li>
+          <li><span class="riders__cat">Gloves &amp; eyewear</span></li>
+          <li><span class="riders__cat">Lights &amp; GPS</span></li>
+          <li><span class="riders__cat">Shoes &amp; pedals</span></li>
+        </ul>
+
+        <div class="riders__foot">
+          <a class="btn btn--dark" href="#">All accessories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+
+      <div class="riders__stage">
+        <div class="riders__track" data-riders-track>
+          <article class="riders__slide is-active">
+            <img class="riders__photo" src="assets/opt/acc-protection.webp" alt="" loading="lazy" width="900" height="1350">
+            <span class="riders__veil" aria-hidden="true"></span>
+            <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/></svg></span>
+            <div class="riders__info">
+              <h3 class="riders__product">Knee pads</h3>
+              <p class="riders__note">Trail and enduro protection</p>
+              <a class="riders__cta" href="#">See protection category <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="riders__slide" aria-hidden="true">
+            <img class="riders__photo" src="assets/opt/acc-tools.webp" alt="" loading="lazy" width="900" height="1350">
+            <span class="riders__veil" aria-hidden="true"></span>
+            <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5.5a4 4 0 0 0 4 5l-8 8a2 2 0 0 1-3-3l8-8a4 4 0 0 1-1-2z"/></svg></span>
+            <div class="riders__info">
+              <h3 class="riders__product">Multitool</h3>
+              <p class="riders__note">Chain breaker included</p>
+              <a class="riders__cta" href="#" tabindex="-1">See tools category <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="riders__slide" aria-hidden="true">
+            <img class="riders__photo" src="assets/opt/acc-hydration.webp" alt="" loading="lazy" width="900" height="1600">
+            <span class="riders__veil" aria-hidden="true"></span>
+            <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11z"/></svg></span>
+            <div class="riders__info">
+              <h3 class="riders__product">Hydration pack</h3>
+              <p class="riders__note">With 2 L reservoir</p>
+              <a class="riders__cta" href="#" tabindex="-1">See hydration category <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="riders__slide" aria-hidden="true">
+            <img class="riders__photo" src="assets/opt/acc-helmets.webp" alt="" loading="lazy" width="900" height="1350">
+            <span class="riders__veil" aria-hidden="true"></span>
+            <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16a8 8 0 0 1 16 0v2H4z M9 9.5l1.5 3 M15 9.5l-1.5 3"/></svg></span>
+            <div class="riders__info">
+              <h3 class="riders__product">Trail helmet</h3>
+              <p class="riders__note">Open-face, MIPS</p>
+              <a class="riders__cta" href="#" tabindex="-1">See helmet category <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="riders__slide" aria-hidden="true">
+            <img class="riders__photo" src="assets/opt/acc-gloves.webp" alt="" loading="lazy" width="900" height="1600">
+            <span class="riders__veil" aria-hidden="true"></span>
+            <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V6a1.5 1.5 0 0 1 3 0v5 M11 11V4.5a1.5 1.5 0 0 1 3 0V11 M14 11V6a1.5 1.5 0 0 1 3 0v8a7 7 0 0 1-7 7 6 6 0 0 1-5-3l-2-4a1.5 1.5 0 0 1 2.5-1.5L8 15"/></svg></span>
+            <div class="riders__info">
+              <h3 class="riders__product">Trail gloves</h3>
+              <p class="riders__note">Full finger, extra grip</p>
+              <a class="riders__cta" href="#" tabindex="-1">See gloves &amp; eyewear category <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="riders__slide" aria-hidden="true">
+            <img class="riders__photo" src="assets/opt/acc-lights.webp" alt="" loading="lazy" width="900" height="596">
+            <span class="riders__veil" aria-hidden="true"></span>
+            <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6 M10 21h4 M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z"/></svg></span>
+            <div class="riders__info">
+              <h3 class="riders__product">Front light</h3>
+              <p class="riders__note">Rechargeable, USB-C</p>
+              <a class="riders__cta" href="#" tabindex="-1">See lights &amp; GPS category <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="riders__slide" aria-hidden="true">
+            <img class="riders__photo" src="assets/opt/acc-shoes.webp" alt="" loading="lazy" width="900" height="1600">
+            <span class="riders__veil" aria-hidden="true"></span>
+            <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18v2H3z M3 17V9l5 1 3 3 6 1a4 4 0 0 1 4 3"/></svg></span>
+            <div class="riders__info">
+              <h3 class="riders__product">Flat pedal shoes</h3>
+              <p class="riders__note">Sticky sole, all-day comfort</p>
+              <a class="riders__cta" href="#" tabindex="-1">See shoes &amp; pedals category <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+
+        <div class="riders__dots" aria-hidden="true">
+          <span class="is-active"></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ======================= ENCUENTRA TU BICI ======================= -->
 <section class="section" id="finder">
   <div class="container">
     <div class="section__head">
       <div>
+        <p class="section__eyebrow">Complements</p>
         <h2 class="display display--dark">Find your<br>perfect complement</h2>
         <p class="section__lead">Explore mountain bikes built for rugged trails and new adventures.</p>
       </div>
@@ -588,7 +785,10 @@
 <!-- =========================== NOTICIAS =========================== -->
 <section class="news" id="news">
   <div class="news__head">
-    <h2 class="news__title">Latest<br><span>news</span></h2>
+    <div class="news__heading">
+      <p class="section__eyebrow section__eyebrow--light">Blog</p>
+      <h2 class="news__title">Latest<br><span>news</span></h2>
+    </div>
     <p class="news__lead">News, launches and everything driving<br>the world of mountain bikes.</p>
     <a class="news__all" href="#">View all <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   </div>
@@ -596,97 +796,97 @@
   <div class="news__carousel">
     <ul class="news__cards" data-drag-scroll>
       <li class="article">
-        <img class="article__img" src="assets/opt/news-trail-guides.webp" alt="" loading="lazy">
+        <img class="article__img" width="676" height="942" src="assets/opt/blog-jump.webp" alt="" loading="lazy">
         <div class="article__content">
           <div class="article__meta">
             <span class="article__cat">Trail guides</span>
             <span class="article__time">6 min read</span>
           </div>
-          <h3 class="article__title">Find your<br>flow.</h3>
+          <h3 class="article__title">Find your flow.</h3>
           <p class="article__summary">From rocky climbs to flowing descents, get more from every mountain-bike ride.</p>
           <a class="article__link" href="#">Read the story <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </li>
       <li class="article">
-        <img class="article__img" src="assets/opt/news-bikepacking.webp" alt="" loading="lazy">
+        <img class="article__img" width="676" height="942" src="assets/opt/blog-bikepacking.webp" alt="" loading="lazy">
         <div class="article__content">
           <div class="article__meta">
             <span class="article__cat">Bikepacking</span>
             <span class="article__time">8 min read</span>
           </div>
-          <h3 class="article__title">Pack light.<br>Ride far.</h3>
+          <h3 class="article__title">Pack light. Ride far.</h3>
           <p class="article__summary">Trade the daily routine for open trails. Your guide to a first overnight escape on two wheels.</p>
           <a class="article__link" href="#">Read the story <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </li>
       <li class="article">
-        <img class="article__img" src="assets/opt/news-riding-skills.webp" alt="" loading="lazy">
+        <img class="article__img" width="676" height="942" src="assets/opt/blog-summit.webp" alt="" loading="lazy">
         <div class="article__content">
           <div class="article__meta">
             <span class="article__cat">Riding skills</span>
             <span class="article__time">5 min read</span>
           </div>
-          <h3 class="article__title">Own the<br>corners.</h3>
+          <h3 class="article__title">Own the corners.</h3>
           <p class="article__summary">Brake less, lean in and look ahead. Build the confidence to carry speed through every turn.</p>
           <a class="article__link" href="#">Read the story <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </li>
       <li class="article">
-        <img class="article__img" src="assets/opt/news-epic-rides.webp" alt="" loading="lazy">
+        <img class="article__img" width="676" height="942" src="assets/opt/blog-sunrise.webp" alt="" loading="lazy">
         <div class="article__content">
           <div class="article__meta">
             <span class="article__cat">Epic rides</span>
             <span class="article__time">7 min read</span>
           </div>
-          <h3 class="article__title">Chase the<br>sunrise.</h3>
+          <h3 class="article__title">Chase the sunrise.</h3>
           <p class="article__summary">Early starts, alpine ridgelines and golden light. Find a new reason to set your alarm.</p>
           <a class="article__link" href="#">Read the story <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </li>
       <li class="article">
-        <img class="article__img" src="assets/opt/news-trail-guides.webp" alt="" loading="lazy">
+        <img class="article__img" width="676" height="942" src="assets/opt/blog-jump.webp" alt="" loading="lazy">
         <div class="article__content">
           <div class="article__meta">
             <span class="article__cat">Trail guides</span>
             <span class="article__time">6 min read</span>
           </div>
-          <h3 class="article__title">Find your<br>flow.</h3>
+          <h3 class="article__title">Find your flow.</h3>
           <p class="article__summary">From rocky climbs to flowing descents, get more from every mountain-bike ride.</p>
           <a class="article__link" href="#">Read the story <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </li>
       <li class="article">
-        <img class="article__img" src="assets/opt/news-bikepacking.webp" alt="" loading="lazy">
+        <img class="article__img" width="676" height="942" src="assets/opt/blog-bikepacking.webp" alt="" loading="lazy">
         <div class="article__content">
           <div class="article__meta">
             <span class="article__cat">Bikepacking</span>
             <span class="article__time">8 min read</span>
           </div>
-          <h3 class="article__title">Pack light.<br>Ride far.</h3>
+          <h3 class="article__title">Pack light. Ride far.</h3>
           <p class="article__summary">Trade the daily routine for open trails. Your guide to a first overnight escape on two wheels.</p>
           <a class="article__link" href="#">Read the story <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </li>
       <li class="article">
-        <img class="article__img" src="assets/opt/news-epic-rides.webp" alt="" loading="lazy">
+        <img class="article__img" width="676" height="942" src="assets/opt/blog-sunrise.webp" alt="" loading="lazy">
         <div class="article__content">
           <div class="article__meta">
             <span class="article__cat">Epic rides</span>
             <span class="article__time">7 min read</span>
           </div>
-          <h3 class="article__title">Chase the<br>sunrise.</h3>
+          <h3 class="article__title">Chase the sunrise.</h3>
           <p class="article__summary">Early starts, alpine ridgelines and golden light. Find a new reason to set your alarm.</p>
           <a class="article__link" href="#">Read the story <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </li>
       <li class="article">
-        <img class="article__img" src="assets/opt/news-riding-skills.webp" alt="" loading="lazy">
+        <img class="article__img" width="676" height="942" src="assets/opt/blog-summit.webp" alt="" loading="lazy">
         <div class="article__content">
           <div class="article__meta">
             <span class="article__cat">Riding skills</span>
             <span class="article__time">5 min read</span>
           </div>
-          <h3 class="article__title">Own the<br>corners.</h3>
+          <h3 class="article__title">Own the corners.</h3>
           <p class="article__summary">Brake less, lean in and look ahead. Build the confidence to carry speed through every turn.</p>
           <a class="article__link" href="#">Read the story <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
@@ -701,7 +901,7 @@
 <footer class="site-footer" id="footer">
   <div class="footer__inner">
 
-    <a class="footer__logo" href="#" aria-label="Rock Bikes, home">
+    <a class="footer__logo" href="index.html" aria-label="Rock Bikes, home">
       <img src="assets/svg/rock-bikes-footer.svg" alt="Rock Bikes" width="1293" height="136">
     </a>
 
@@ -800,6 +1000,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js"></script>
+<script src="assets/js/main.js?v=20261113"></script>
 </body>
 </html>

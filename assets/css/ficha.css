@@ -1,0 +1,936 @@
+/* ==========================================================================
+   ROCK BIKES — ficha de producto (frame 15408:6030, 1366 x 5448)
+
+   Esta hoja se carga DESPUÉS de style.css y solo añade lo que no existía:
+   migas, galería, caja de compra, acordeones, barra de garantías, rejilla de
+   detalles, opiniones, banner y fila de relacionados. Todo lo demás —cabecera,
+   footer, botones, tarjetas de producto, puntos y carrusel— se hereda.
+
+   Las medidas están copiadas del JSON de Figma (design/ficha/15408-6030.json),
+   no estimadas a ojo: cuando un número parece raro, es el del diseño.
+
+   Recordatorio del proyecto: las reglas empatadas en especificidad dependen
+   del ORDEN del archivo. Aquí van detrás de style.css, así que ganan.
+   ========================================================================== */
+
+/* Las variables van en el <body> (clase .page-ficha) y no en .ficha, porque
+   media página —garantías, detalles, opiniones, banner y relacionados— vive
+   FUERA de <main>. Si se declaran en .ficha, esas secciones se quedan sin
+   --fx-pad y el relleno lateral se pierde. */
+.page-ficha {
+  --fx-bg: #FCFCFC;
+  --fx-line: #D9D9D9;
+  --fx-blue: #0057FF;
+  --fx-card: #F3F3F5;
+  --fx-pad: 35px;
+}
+
+.ficha { background: var(--fx-bg); }
+
+/* El diseño está dibujado sobre 1366 px. En pantallas más anchas el contenido
+   se queda centrado en esa columna; las secciones con fondo (garantías, banner)
+   sí van a sangre, pero su contenido no. */
+.frame {
+  position: relative;
+  width: min(100%, 1366px);
+  margin-inline: auto;
+}
+
+/* Cabecera clara: en reposo barra blanca y contenido negro. Al pasar el ratón
+   el home pinta la barra de negro; estas reglas van DESPUÉS de style.css, así
+   que si fuerzan negro siempre, burger e iconos desaparecen sobre el fondo
+   negro. Por eso el negro solo aplica con el menú y el buscador cerrados, y el
+   hover de la barra vuelve a blanco. */
+.site-header--light .nav {
+  background: rgba(252, 252, 252, .94);
+  color: #000;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
+  backdrop-filter: blur(6px);
+}
+/* El hover del home (`.site-header:hover .nav` → negro) suma (0,3,0):
+   dos clases + :hover. Empata con `.is-menu-open .nav` y, al abrir el menú
+   con el ratón encima, el negro se comía el amarillo. Hay que ganar con
+   :hover incluido. Lo mismo para el buscador. */
+.site-header--light.is-menu-open .nav,
+.site-header--light.is-menu-open:hover .nav,
+.site-header--light.is-search-open .nav,
+.site-header--light.is-search-open:hover .nav {
+  background: #FFD900;
+  background-image: none;
+  color: #000;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.site-header--light .nav__logo img {
+  filter: none;
+  content: url("../svg/rock-bikes-header-dark.svg");
+}
+.site-header--light:hover .nav__logo img,
+.site-header--light.is-menu-open .nav__logo img,
+.site-header--light.is-search-open .nav__logo img {
+  content: url("../svg/frame-1410106506-I15076-6464;15048-25588.svg");
+}
+
+.site-header--light:not(.is-menu-open):not(.is-search-open) .nav__icon img {
+  filter: brightness(0);
+}
+.site-header--light:not(.is-menu-open):not(.is-search-open) .nav__burger {
+  color: #000;
+}
+.site-header--light:not(.is-menu-open):not(.is-search-open) .nav__burger-circle {
+  border-color: #000;
+}
+.site-header--light:not(.is-menu-open):not(.is-search-open) .nav__burger-circle i {
+  background: #000;
+}
+
+.site-header--light:hover:not(.is-menu-open):not(.is-search-open) .nav__burger {
+  color: #fff;
+}
+.site-header--light:hover:not(.is-menu-open):not(.is-search-open) .nav__burger-circle {
+  border-color: #fff;
+}
+.site-header--light:hover:not(.is-menu-open):not(.is-search-open) .nav__burger-circle i {
+  background: #fff;
+}
+.site-header--light:hover:not(.is-menu-open):not(.is-search-open) .nav__icon img {
+  filter: none;
+}
+
+/* --------------------------------------------------------------------------
+   1. Migas y bloque superior
+   -------------------------------------------------------------------------- */
+
+.ficha__top {
+  position: relative;
+  padding: 100px var(--fx-pad) 0;
+}
+
+.crumbs { font-size: 14px; line-height: 18px; color: #8C8C8C; }
+.crumbs ol {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 20px;
+}
+.crumbs li { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.crumbs li + li::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-top: 1px solid #8C8C8C;
+  border-right: 1px solid #8C8C8C;
+  transform: rotate(45deg);
+  flex: none;
+}
+.crumbs a:hover { color: #000; text-decoration: underline; }
+.crumbs [aria-current] { color: #000; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* --------------------------------------------------------------------------
+   2. Galería
+
+   Seis diapositivas de 591x626 con 16 px entre ellas. La tira sangra por la
+   derecha: en el diseño la segunda foto sigue por debajo de la caja de compra.
+   -------------------------------------------------------------------------- */
+
+.gallery-wrap {
+  position: relative;
+  margin: 16px calc(var(--fx-pad) * -1) 0 0;
+}
+
+.gallery {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+.gallery::-webkit-scrollbar { display: none; }
+.gallery.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+
+.gallery__track {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.gallery__slide {
+  flex: 0 0 591px;
+  height: 626px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--fx-card);
+}
+.gallery__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Flechas y puntos: en el diseño de escritorio no existen (la tira se arrastra);
+   en el móvil sí, y son la única forma cómoda de pasar de foto. */
+.gallery__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .9);
+  color: #000;
+  cursor: pointer;
+}
+.gallery__arrow svg { width: 22px; height: 22px; }
+.gallery__arrow--prev { left: 12px; }
+.gallery__arrow--next { right: 12px; }
+.gallery__arrow[disabled] { opacity: 0; pointer-events: none; }
+
+.gallery__dots { display: none; justify-content: center; gap: 8px; margin-top: 12px; }
+
+/* La foto es un enlace a su archivo: sin JS la abre el navegador y con JS la
+   abre el visor. El cursor invita a ampliarla. */
+.gallery__zoom {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: zoom-in;
+}
+.gallery__zoom:focus-visible {
+  outline: 2px solid var(--c-yellow);
+  outline-offset: -2px;
+}
+
+/* --------------------------------------------------------------------------
+   Visor de la galería
+
+   Un <dialog> nativo: se abre con showModal(), atrapa el foco, cierra con
+   Escape y deja el velo al ::backdrop. El velo NO es negro: es el mismo
+   lenguaje de cristal de la caja de compra —blanco cálido translúcido y
+   desenfoque— para que se siga viendo la página por detrás.
+   -------------------------------------------------------------------------- */
+
+.lightbox {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  padding: 0;
+  border: 0;
+  /* El velo lo pone el ::backdrop; el diálogo en sí va transparente. */
+  background: transparent;
+  color: var(--c-text);
+  overflow: hidden;
+}
+
+.lightbox[open] {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  place-items: center;
+}
+
+.lightbox::backdrop {
+  background: rgba(252, 252, 252, .5);
+  backdrop-filter: blur(16px) saturate(1.08);
+  -webkit-backdrop-filter: blur(16px) saturate(1.08);
+}
+
+/* La foto se ajusta a la ventana sin deformarse y la caja se ciñe a ella, para
+   que la sombra caiga alrededor de la foto y no del viewport entero. */
+.lightbox__img {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  width: auto;
+  height: auto;
+  max-width: 94vw;
+  max-height: 92vh;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 24px 60px rgba(32, 19, 28, .22);
+}
+
+.lightbox__btn {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  /* Oscuro y no blanco translúcido: sobre la foto clara, un botón blanco al
+     12 % desaparece. */
+  background: rgba(0, 0, 0, .45);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color .15s ease;
+}
+.lightbox__btn:hover { background: rgba(0, 0, 0, .7); }
+.lightbox__btn svg { width: 24px; height: 24px; }
+
+.lightbox__close { position: absolute; top: 20px; right: 20px; }
+.lightbox__prev { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); }
+.lightbox__next { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); }
+
+.lightbox__count {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .45);
+  font-size: 14px;
+  line-height: 1;
+  color: #fff;
+}
+
+/* Con el visor abierto la pagina de detras no se desplaza. */
+html.is-lightbox,
+html.is-lightbox body { overflow: hidden; }
+
+@media (max-width: 560px) {
+  .lightbox__btn { width: 38px; height: 38px; }
+  .lightbox__prev { left: 8px; }
+  .lightbox__next { right: 8px; }
+  .lightbox__close { top: 12px; right: 12px; }
+  .lightbox__img { max-width: 100vw; max-height: 86vh; border-radius: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   3. Caja de compra
+
+   Flota sobre la galería: en el diseño su primera tarjeta empieza 72 px por
+   debajo del borde superior de las fotos, así que la posición es absoluta.
+   -------------------------------------------------------------------------- */
+
+/* La columna de la caja: recorre de la galeria al final de la ficha, para que
+   el sticky tenga por donde viajar. Fuera del flujo en escritorio. */
+.side {
+  position: absolute;
+  top: 136px;
+  right: 37px;
+  bottom: 60px;
+  width: 402px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.buybox {
+  position: sticky;
+  top: 80px;
+  /* 136 + 72 = 208: la posicion de reposo del diseno. */
+  margin-top: 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+/* Las tres tarjetas llevan en Figma dos efectos, no solo la transparencia:
+   sombra (0 / 12,32 / 24,64, negro al 6 %) y desenfoque de fondo de 20.
+   Sin el backdrop-filter se veian translucidas pero planas: el cristal
+   esmerilado es justo lo que difumina la foto que queda debajo. */
+.buybox__card {
+  padding: 16px;
+  border-radius: 8px;
+  /* El diseño la pone al 80 %. A 0,74 se transparenta un poco más y la foto
+     todavía se lee. Es un solo número: cambia --buybox-alpha y ya. */
+  background: rgba(255, 255, 255, var(--buybox-alpha, .74));
+  box-shadow: 0 12.32px 24.64px rgba(0, 0, 0, .06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.buybox__head { display: flex; flex-direction: column; gap: 6px; }
+.buybox__brand { margin: 0; font-size: 16px; font-weight: 400; line-height: 20px; color: #736200; }
+.buybox__title { margin: 0; font-size: 32px; font-weight: 600; line-height: 36px; color: #000; }
+
+.buybox__sub { margin: 12px 0 0; font-size: 16px; font-weight: 300; line-height: 20px; color: #454545; }
+
+.buybox__price { display: flex; align-items: center; gap: 12px; margin: 12px 0 0; }
+.buybox__now { font-size: 18px; font-weight: 600; line-height: 23px; color: #000; }
+.buybox__was { font-size: 16px; font-weight: 500; line-height: 20px; color: #8C8C8C; }
+.buybox__off {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 49px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 12px;
+  background: var(--fx-blue);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.buybox__text {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 20px;
+  color: #454545;
+}
+
+.buybox__opt { display: flex; align-items: center; gap: 24px; margin-top: 12px; }
+.buybox__opt-label { font-size: 16px; font-weight: 400; line-height: 20px; color: #000; flex: none; }
+.buybox__pills {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 44px;
+  padding: 4px;
+  border: 1px solid #5E178A;
+  border-radius: 16px;
+  flex: 1;
+  min-width: 0;
+}
+.buybox__pill {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 36px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: #340D4C;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  cursor: pointer;
+  transition: background-color .18s ease, color .18s ease;
+}
+.buybox__pill.is-active { background: var(--c-yellow); color: #0E090D; }
+
+.buybox__stock { margin: 0; font-size: 16px; font-weight: 300; line-height: 20px; color: #454545; }
+.buybox__stock strong { font-weight: 500; color: #56157E; }
+
+.buybox__cart {
+  width: 100%;
+  height: 44px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 24px;
+  background: #000;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  cursor: pointer;
+  transition: background-color .18s ease, transform .18s ease;
+}
+.buybox__cart:hover { background: #2B2B2B; transform: translateY(-1px); }
+
+/* --------------------------------------------------------------------------
+   4. Características, acordeones y compartir
+
+   La columna mide 811 px: en el diseño la caja de compra le come el resto.
+   -------------------------------------------------------------------------- */
+
+/* La columna NO puede medir 811 fijos: a 1366 deja los 81 px de aire que tiene
+   el diseno hasta la caja de compra, pero en ventanas mas estrechas la caja
+   (que va pegada a la derecha) se le venia encima y tapaba el texto. Se
+   calcula como "lo que queda hasta la caja menos 81 de aire": a 1366 da los
+   mismos 811 y por debajo se encoge sola. */
+.ficha__detail {
+  width: calc(100% - 555px);
+  max-width: 811px;
+  margin: 63px 0 0 var(--fx-pad);
+  padding-bottom: 60px;
+}
+
+.specs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 43px;
+}
+.specs__item { display: flex; flex-direction: column; gap: 8px; }
+.specs__label { font-size: 12px; font-weight: 300; line-height: 15px; color: var(--fx-blue); }
+.specs__value { font-size: 16px; font-weight: 500; line-height: 20px; color: #1E1F1F; white-space: nowrap; }
+/* Separadores como piezas de la propia fila: con space-between salen solos en
+   el centro de cada hueco, que es justo donde los pone el diseño (a 43 px). */
+.specs__sep { flex: 0 0 1px; height: 43px; background: #DFDFDF; }
+
+.faq {
+  margin-top: 24px;
+  border-top: 1px solid var(--fx-line);
+}
+.faq__item { border-bottom: 1px solid var(--fx-line); padding-bottom: 23px; }
+
+.faq__heading { margin: 0; font-size: inherit; font-weight: inherit; }
+
+.faq__toggle {
+  display: flex;
+  /* Arriba, no centrado: en el diseño la etiqueta va pegada al borde superior
+     de la fila y el signo + asoma 2 px por arriba y por abajo. */
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 24px 0 0;
+  border: 0;
+  background: none;
+  color: #000;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.faq__label {
+  font-size: 16px;
+  font-weight: 600;
+  /* 20 y no 24: el frame usa el interlineado intrínseco de Outfit (20,16). */
+  line-height: 20px;
+  text-transform: uppercase;
+}
+
+/* Rareza del diseño, reproducida a propósito: solo «DESCRIPTION» lleva tracking
+   (1,6 px a 16, o sea 0,1 em). «TECHNICAL SPECIFICATIONS» y «SHIPPING & RETURNS»
+   van a 0, aunque sean el mismo componente. Sin el tracking, la primera mide
+   102 px en vez de los 118 del frame; con él en las tres, las otras dos se
+   pasarían 35 px. */
+.faq__item:first-child .faq__label { letter-spacing: .1em; }
+
+.faq__icon { position: relative; width: 24px; height: 24px; flex: none; }
+.faq__icon::before,
+.faq__icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #000;
+  transform: translate(-50%, -50%);
+}
+.faq__icon::before { width: 14px; height: 1px; }
+.faq__icon::after { width: 1px; height: 14px; transition: transform .2s ease, opacity .2s ease; }
+.faq__item.is-open .faq__icon::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+
+.faq__panel { padding: 15px 0 0; }
+.faq__panel[hidden] { display: none; }
+/* 20 px entre párrafos: en el frame los dos bloques van separados por una
+   línea en blanco (20,16), no por el hueco de 16 del componente. */
+.faq__inner { max-width: min(757px, 100%); display: flex; flex-direction: column; gap: 18px; }
+/* 20,16 px de interlineado: es el que declara el frame (100 % del intrínseco
+   de Outfit). Con 20 justos, la quinta línea se quedaba 2 px corta. */
+.faq__inner p { margin: 0; font-size: 16px; font-weight: 300; line-height: 20.16px; color: #454545; }
+
+.faq__specs { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.faq__specs > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #EFEFEF;
+}
+.faq__specs dt { font-size: 14px; font-weight: 300; line-height: 20px; color: #8C8C8C; }
+.faq__specs dd { margin: 0; font-size: 14px; font-weight: 500; line-height: 20px; color: #1E1F1F; }
+
+.share {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 0 23px;
+  border-bottom: 1px solid var(--fx-line);
+}
+.share__label { font-size: 16px; font-weight: 600; line-height: 20px; text-transform: uppercase; }
+.share__list { display: flex; align-items: center; gap: 16px; height: 24px; margin: 0; padding: 0; list-style: none; }
+.share__list img { width: 24px; height: 24px; }
+.share__copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: .8;
+}
+.share__copy:hover { opacity: 1; }
+
+/* --------------------------------------------------------------------------
+   5. Barra de garantías
+   -------------------------------------------------------------------------- */
+
+.trust { background: #1F1F1F; }
+.trust > .frame {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 188px;
+  padding: 0 var(--fx-pad);
+}
+.trust__logo { width: 406px; height: 40px; flex: none; }
+
+.trust__list { display: flex; align-items: flex-start; gap: 52px; margin: 0; padding: 0; list-style: none; }
+.trust__list li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  /* 88 px = 40 del icono + 8 de hueco + 40 de texto: así los cinco iconos
+     quedan en la misma línea aunque un texto ocupe una sola línea. */
+  height: 88px;
+  width: 114px;
+  text-align: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 20px;
+}
+.trust__list img { width: 40px; height: 40px; }
+.trust__list .trust__narrow { width: 51px; }
+.trust__list .trust__wide { width: 188px; }
+/* «Secure payment» mide 115 px en el diseño: con 114 se partía en dos líneas. */
+.trust__list li:first-child { width: 116px; }
+
+/* Entre 1061 y 1330 el ancho ya no da para los 406 px del logo más las cinco
+   garantías: la última se salía por la derecha. Se aprieta la fila, no se
+   cambia el orden. */
+@media (max-width: 1330px) and (min-width: 1061px) {
+  .trust__logo { width: 300px; height: auto; }
+  .trust__list { gap: 28px; }
+  .trust__list li { width: 100px; }
+  .trust__list .trust__narrow { width: 51px; }
+  .trust__list .trust__wide { width: 170px; }
+}
+
+/* En esa franja estrecha la fila de caracteristicas ya no cabe en una linea:
+   pasa a tres columnas, como en el movil. */
+@media (max-width: 1250px) and (min-width: 1061px) {
+  .specs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px 0;
+    height: auto;
+  }
+  .specs__sep { display: none; }
+  .specs__item { padding-left: 16px; border-left: 1px solid #EFEFEF; }
+  .specs__item:first-child { padding-left: 0; border-left: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   6. Detalles del producto
+   -------------------------------------------------------------------------- */
+
+.fdet { margin-top: 60px; }
+.fdet > .frame { padding: 0 var(--fx-pad); }
+.fdet__title {
+  margin: 0 0 11px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 30px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.fdet__row { display: flex; gap: 12px; }
+.fdet__row--double { gap: 8px; margin-top: 8px; }
+
+.fdet__card {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 434px;
+  padding: 24px;
+  border-radius: 4px;
+  background: var(--fx-card);
+  overflow: hidden;
+}
+.fdet__head { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 26px; }
+/* Interlineado de 20 y no de 40: Figma recorta la linea a la altura de la
+   mayuscula (leadingTrim CAP_HEIGHT), asi que el titulo empieza pegado al
+   relleno de la tarjeta. Con 40 el texto caia 10 px por debajo. */
+.fdet__name { margin: 0; font-size: 32px; font-weight: 400; line-height: 20px; color: #000; }
+.fdet__text { margin: 0; max-width: var(--tw, 376px); font-size: 16px; font-weight: 300; line-height: 20px; color: #454545; }
+
+.fdet__card--right .fdet__head { align-items: flex-end; text-align: right; }
+
+/* Cada foto lleva su encuadre del diseño en variables: algunas sangran por
+   los lados y se recortan con el overflow:hidden de la tarjeta. */
+.fdet__img {
+  position: absolute;
+  left: var(--ix, 0);
+  top: var(--iy, 0);
+  width: var(--iw, 100%);
+  height: auto;
+  max-width: none;
+}
+
+/* --------------------------------------------------------------------------
+   7. Opiniones
+   -------------------------------------------------------------------------- */
+
+.ureviews { margin-top: 60px; }
+.ureviews > .frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 var(--fx-pad);
+}
+.ureviews__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 30px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.ureviews__list {
+  width: 854px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 11px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rreview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 12.32px 24.64px rgba(0, 0, 0, .06);
+}
+
+.rreview__rate { display: flex; align-items: center; gap: 12px; margin: 0; font-size: 14px; line-height: 18px; }
+.rreview__stars { display: flex; gap: 2px; }
+/* El diseño usa #FBBF24 en las estrellas, no el ámbar del resto del sitio. */
+.rreview__stars svg { width: 15px; height: 15px; fill: #FBBF24; }
+.rreview__stars .is-empty { fill: none; stroke: #FBBF24; stroke-width: 1.4; }
+.rreview__score { font-size: 14px; line-height: 18px; }
+
+.rreview__who { margin: 0; height: 19px; font-size: 14px; line-height: 19px; }
+.rreview__who strong { font-size: 15px; font-weight: 600; }
+.rreview__who span { color: #595959; }
+.rreview__text { margin: 0; font-size: 14px; line-height: 18px; color: #000; }
+
+/* El separador de 8 px entre autor y comentario. */
+.rreview__who + .rreview__text { margin-top: -8px; }
+
+.ureviews__all {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 16px;
+  color: var(--c-yellow);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+}
+.ureviews__all:hover { color: #E0BE00; }
+.ureviews__all .icon-arrow { width: 20px; height: 20px; }
+
+/* --------------------------------------------------------------------------
+   8. Banner RIDE INTO THE WILD
+
+   La foto no es un fondo: en el diseño está colocada con una matriz dentro del
+   marco. Traducida a porcentajes del marco son estos cuatro números.
+   -------------------------------------------------------------------------- */
+
+.ride { margin-top: 60px; background: #FBBF24; overflow: hidden; }
+.ride > .frame { position: relative; height: 720px; }
+
+.ride__bike {
+  position: absolute;
+  left: 36.2%;
+  top: 21.6%;
+  width: 57.9%;
+  height: auto;
+  max-width: none;
+}
+
+.ride__copy { position: absolute; left: 81px; top: 150px; width: 341px; }
+.ride__logo { width: 337px; height: auto; }
+.ride__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 120.84px;
+  font-weight: 900;
+  line-height: 94.62px;
+  letter-spacing: -.01em;
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   9. Relacionados
+
+   Las tarjetas son las mismas de «Most wanted»: aquí solo cambian el hueco
+   entre ellas (20 px) y los puntos, que no son la píldora amarilla del home.
+   -------------------------------------------------------------------------- */
+
+.related { margin: 60px 0 60px; background: var(--fx-bg); }
+.related > .frame { padding: 0 0 0 24px; }
+
+.related .carousel__track { gap: 20px; }
+
+/* Las tarjetas del diseno NO llevan borde: solo la sombra. La clase .prod del
+   home trae un inset de 1 px que aqui sobra. */
+.related .prod { box-shadow: 0 12.32px 24.64px rgba(0, 0, 0, .06); }
+
+/* En las tarjetas relacionadas la foto NO se recorta al centro: el diseño la
+   coloca con una matriz dentro de los 400x390 de la foto. Traducida a
+   porcentajes, la imagen mide el 86 % del ancho y empieza en (7,1 %, 25 %). */
+.related .prod__img {
+  inset: auto;
+  left: 7.1%;
+  top: 25%;
+  width: 86%;
+  height: auto;
+}
+.related .prod--wide .prod__img { left: 5.6%; top: 24.3%; width: 89%; }
+/* La cuarta va con scaleMode FIT: entera, centrada. */
+.related .prod--contain .prod__img { left: 0; top: 50%; width: 100%; transform: translateY(-50%); }
+
+.related__dots { justify-content: center; margin-top: 32px; }
+.related__dots button { width: 9px; height: 9px; background: #C9C6C9; }
+.related__dots button[aria-current="true"] { width: 9px; background: #0E090D; border-radius: 50%; }
+
+/* --------------------------------------------------------------------------
+   10. Adaptación por debajo de 1060 px
+
+   El diseño trae su propio marco móvil (390 px, nodo 8879:9857). Aquí se
+   apilan las columnas y se sueltan las posiciones absolutas: la caja de compra
+   deja de flotar y la galería pasa a diapositiva completa.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1060px) {
+  .ficha__top {
+    display: flex;
+    flex-direction: column;
+    padding: 88px 16px 0;
+  }
+
+  /* En el diseño móvil la galería va ANTES de las migas. */
+  .gallery-wrap {
+    order: 1;
+    margin: 0 -16px;
+  }
+  .gallery { scroll-snap-type: x mandatory; }
+  .gallery__arrow { display: grid; }
+  .gallery__dots { display: flex; }
+  .gallery__slide {
+    flex-basis: 100%;
+    height: auto;
+    aspect-ratio: 390 / 320;
+    /* En tableta la diapositiva a ancho completo se iría a 630 px de alto. */
+    max-height: 460px;
+    scroll-snap-align: center;
+  }
+
+  .crumbs { order: 2; margin-top: 16px; }
+  .crumbs ol { display: block; height: auto; line-height: 20px; }
+  .crumbs li { display: inline-flex; }
+  .crumbs [aria-current] { white-space: normal; overflow: visible; }
+
+  /* En movil la caja deja de flotar y se coloca entre la galeria y la
+     descripcion, que es donde la pone el marco de 390. */
+  .side {
+    position: static;
+    width: auto;
+    margin-top: 16px;
+    pointer-events: auto;
+  }
+  .buybox { position: static; width: 100%; margin-top: 0; }
+  .buybox__title { font-size: 30px; line-height: 34px; }
+
+  .ficha__detail { width: 100%; margin: 32px 0 0; padding: 0 16px 32px; }
+
+  /* Tres columnas, como el marco móvil: seis características en dos filas. */
+  .specs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px 0;
+    height: auto;
+  }
+  .specs__sep { display: none; }
+  .specs__item { padding-left: 16px; border-left: 1px solid #EFEFEF; }
+  .specs__item:first-child { padding-left: 0; border-left: 0; }
+
+  .trust > .frame {
+    height: auto;
+    flex-direction: column;
+    gap: 32px;
+    padding: 40px 16px;
+  }
+  .trust__logo { width: min(100%, 300px); height: auto; }
+  .trust__list { flex-wrap: wrap; justify-content: center; gap: 24px; }
+  .trust__list li,
+  .trust__list .trust__narrow,
+  .trust__list .trust__wide,
+  .trust__list li:first-child { width: 44%; }
+
+  .fdet { margin-top: 40px; }
+  .fdet > .frame { padding: 0 16px; }
+  .fdet__title { margin-bottom: 16px; font-size: 20px; }
+  .fdet__row,
+  .fdet__row--double { flex-direction: column; gap: 16px; margin-top: 0; }
+  /* Con flex-direction:column, el flex:1 1 0 de escritorio deja la tarjeta a
+     cero de alto y el overflow:hidden se come el texto. */
+  .fdet__card { flex: none; height: auto; padding: 24px 16px 0; }
+  .fdet__card--right .fdet__head { align-items: flex-start; text-align: left; }
+  .fdet__name { font-size: 26px; line-height: 32px; }
+  .fdet__head { gap: 8px; }
+  /* En móvil la foto vuelve al flujo: texto arriba, imagen debajo. */
+  .fdet__img {
+    position: static;
+    width: 100%;
+    margin: 16px 0 0;
+    border-radius: 4px;
+  }
+
+  .ureviews { margin-top: 40px; }
+  .ureviews > .frame { padding: 0 16px; }
+  .ureviews__title { font-size: 20px; }
+  .ureviews__list { width: 100%; margin-top: 16px; }
+  .rreview { padding: 16px; }
+
+  /* En el marcado la foto va antes que el texto (en escritorio ambas son
+     absolutas y da igual); apiladas hay que devolver el texto arriba. */
+  .ride { margin-top: 40px; }
+  .ride > .frame { display: flex; flex-direction: column; height: auto; padding: 40px 16px 0; }
+  .ride__copy { order: -1; }
+  .ride__copy { position: static; width: auto; }
+  .ride__logo { width: 200px; height: auto; }
+  .ride__title { font-size: 19vw; line-height: .86; }
+  .ride__bike { position: static; width: 100%; margin-top: 8px; }
+
+  .related { margin: 40px 0 0; }
+  .related > .frame { padding: 0 0 0 16px; }
+  .related .carousel__track { padding-left: 16px; }
+  .related .prod { flex-basis: 280px; }
+  .related__dots { margin-bottom: 40px; }
+}
+
+@media (max-width: 560px) {
+  .rreview__rate { flex-wrap: wrap; gap: 8px 12px; }
+}

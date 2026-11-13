@@ -602,6 +602,97 @@
     new Carousel(roots[i]);
   }
 
+  /* ----------------------------------- accesorios para riders -- */
+
+  /* Sección de scroll largo: el bloque se queda pegado y la categoría activa
+     sale del progreso de scroll. La lista de la izquierda no se pulsa: es solo
+     un índice que se va encendiendo. */
+  var riders = document.querySelector('[data-riders]');
+
+  if (riders) {
+    var rSlides = [].slice.call(riders.querySelectorAll('.riders__slide'));
+    var rCats = [].slice.call(riders.querySelectorAll('.riders__cat'));
+    var rDots = [].slice.call(riders.querySelectorAll('.riders__dots span'));
+    var rTrack = riders.querySelector('[data-riders-track]');
+    var rTotal = rSlides.length;
+    var rActiva = -1;
+
+    var pintarRiders = function (indice) {
+      if (indice === rActiva) { return; }
+      rActiva = indice;
+
+      rTrack.style.transform = 'translateY(-' + (indice * 100) + '%)';
+
+      rSlides.forEach(function (slide, i) {
+        var activa = i === indice;
+        slide.setAttribute('aria-hidden', activa ? 'false' : 'true');
+        slide.classList.toggle('is-active', activa);
+        var cta = slide.querySelector('.riders__cta');
+        if (cta) { cta.setAttribute('tabindex', activa ? '0' : '-1'); }
+      });
+
+      rCats.forEach(function (texto, i) {
+        var activa = i === indice;
+        texto.classList.toggle('is-active', activa);
+        if (activa) { texto.setAttribute('aria-current', 'true'); }
+        else { texto.removeAttribute('aria-current'); }
+      });
+
+      rDots.forEach(function (punto, i) {
+        punto.classList.toggle('is-active', i === indice);
+      });
+    };
+
+    var scrollRiders = function () {
+      var caja = riders.getBoundingClientRect();
+      var recorrido = caja.height - window.innerHeight;
+
+      if (recorrido <= 0) { pintarRiders(0); return; }
+
+      var progreso = Math.min(Math.max(-caja.top / recorrido, 0), 0.9999);
+      pintarRiders(Math.floor(progreso * rTotal));
+    };
+
+    window.addEventListener('scroll', scrollRiders, { passive: true });
+    window.addEventListener('resize', scrollRiders);
+    scrollRiders();
+  }
+
+  /* ------------------------------------------------ elige tu terreno -- */
+  /* Cinco paneles; el que tiene el ratón o el foco se ensancha. El ancho lo
+     lleva el CSS (`.is-active`), aquí solo se mueve la clase. Trail activo de
+     salida, como en el componente original. */
+  var terrain = document.querySelector('[data-terrain]');
+
+  if (terrain) {
+    var terrainItems = [].slice.call(terrain.querySelectorAll('.terrain__item'));
+    var terrainLinks = terrain.querySelectorAll('[data-terrain-panel]');
+
+    var terreno = function (activo) {
+      for (var t = 0; t < terrainItems.length; t++) {
+        terrainItems[t].classList.toggle('is-active', terrainItems[t] === activo);
+      }
+    };
+
+    for (var p = 0; p < terrainLinks.length; p++) {
+      (function (enlace) {
+        var item = enlace.parentNode;
+        enlace.addEventListener('mouseenter', function () { terreno(item); });
+        enlace.addEventListener('focus', function () { terreno(item); });
+        /* En pantalla táctil no hay ratón: el primer toque abre el panel y el
+           segundo ya sigue el enlace. */
+        enlace.addEventListener('click', function (e) {
+          if (!item.classList.contains('is-active')) {
+            e.preventDefault();
+            terreno(item);
+          }
+        });
+      })(terrainLinks[p]);
+    }
+
+    terreno(terrainItems[1] || terrainItems[0]);
+  }
+
   /* ------------------------------------------------------ arrastrar filas -- */
 
   /* La fila de noticias se arrastra con el ratón. El scroll nativo sigue
@@ -619,37 +710,39 @@
       // inicia su propio arrastre de imagen y aparece la miniatura fantasma.
       row.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
+      /* El arrastre NO captura el puntero. Con setPointerCapture, el
+         pointerup lo recibía la fila y el navegador lanzaba el clic sobre
+         ella, no sobre la tarjeta: los enlaces de dentro no navegaban nunca.
+         Escuchando en window, el clic vuelve a su destino (la tarjeta). */
+      function onMove(e) {
+        if (!down) { return; }
+        var dx = e.clientX - startX;
+        if (Math.abs(dx) > moved) { moved = Math.abs(dx); }
+        row.scrollLeft = startLeft - dx;
+      }
+
+      function endDrag() {
+        if (!down) { return; }
+        down = false;
+        row.classList.remove('is-dragging');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', endDrag);
+        window.removeEventListener('pointercancel', endDrag);
+      }
+
       row.addEventListener('pointerdown', function (e) {
         if (e.pointerType !== 'mouse' || e.button !== 0) { return; }
-        // Los botones (flechas y miniaturas) no arrastran la fila: si se captura
-        // el puntero, su clic se pierde y la galería deja de cambiar.
+        // Los botones (flechas y miniaturas) no arrastran la fila.
         if (e.target.closest('button')) { return; }
         down = true;
         startX = e.clientX;
         startLeft = row.scrollLeft;
         moved = 0;
         row.classList.add('is-dragging');
-        if (row.setPointerCapture) { row.setPointerCapture(e.pointerId); }
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', endDrag);
+        window.addEventListener('pointercancel', endDrag);
       });
-
-      row.addEventListener('pointermove', function (e) {
-        if (!down) { return; }
-        var dx = e.clientX - startX;
-        if (Math.abs(dx) > moved) { moved = Math.abs(dx); }
-        row.scrollLeft = startLeft - dx;
-      });
-
-      function endDrag(e) {
-        if (!down) { return; }
-        down = false;
-        row.classList.remove('is-dragging');
-        if (row.hasPointerCapture && row.hasPointerCapture(e.pointerId)) {
-          row.releasePointerCapture(e.pointerId);
-        }
-      }
-
-      row.addEventListener('pointerup', endDrag);
-      row.addEventListener('pointercancel', endDrag);
 
       /* Un arrastre no debe abrir la tarjeta; un clic normal sí. */
       row.addEventListener('click', function (e) {

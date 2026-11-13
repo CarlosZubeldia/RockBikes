@@ -1,0 +1,12 @@
+---
+description: Requisitos de accesibilidad WCAG 2.2 AA para todo el proyecto
+alwaysApply: true
+---
+- Contraste mínimo de 4,5:1 en texto normal y de 3:1 en texto grande e iconos o bordes de controles (WCAG 1.4.3 y 1.4.11).
+- Todo debe poder usarse con teclado y el foco debe verse siempre (WCAG 2.1.1 y 2.4.7).
+- Las imágenes llevan un alt descriptivo; las decorativas, alt="" (WCAG 1.1.1).
+- Usa HTML semántico: header, nav, main, footer, button para acciones, a para enlaces.
+- Los campos de formulario llevan su label asociado.
+- Las zonas pulsables miden al menos 24×24 px (WCAG 2.5.8).
+- Respeta prefers-reduced-motion en las animaciones.
+- La etiqueta html lleva lang="es".

@@ -2,6 +2,14 @@
 
 Página de inicio construida a partir del diseño de Figma **rock-bikes**, como pieza de porfolio.
 
+> **Nuevo: la ficha de producto** (`ficha-producto.html`), el frame `15408:6030` de 1366 × 5448.
+> Migas, galería arrastrable de 591 × 626, caja de compra que flota sobre la foto, fila de
+> características, acordeones, botón de compartir, barra de garantías, rejilla de cinco
+> detalles, opiniones, banner «RIDE INTO THE WILD» y fila de relacionados. Comparte cabecera
+> y footer con el home. Las ocho fronteras de sección caen en el mismo píxel que en el
+> diseño, y la ficha se adapta hasta 390 px con su propia disposición. Detalles en
+> [La ficha de producto](#la-ficha-de-producto).
+
 > **Estado y por dónde seguir.** Actualizada la sección de categorías, la tipografía (Outfit en
 > el cuerpo, Obviously en los titulares) y **todo el menú**: barra a 70 px con degradado vertical
 > de negro a transparente, hover a negro sólido, desplegable amarillo con panel negro de 301 px,
@@ -61,14 +69,18 @@ GitHub Pages, Netlify o cualquier hosting estático.
 - El nodo antiguo (`15076:5746`) ya no existe: Figma reasigna identificadores.
 
 ```
-index.html              la página completa
+index.html              la home completa
+ficha-producto.html     la ficha de producto (frame 15408:6030)
 assets/
-  css/style.css         estilos, con los tokens del diseño arriba del todo
+  css/style.css         estilos del sitio, con los tokens del diseño arriba del todo
+  css/ficha.css         solo la ficha: migas, galería, caja de compra, acordeones…
   js/main.js            menú adhesivo, menú móvil, carrusel y arrastre de filas
+  js/ficha.js           acordeones, pastillas de batería, flechas y puntos de la ficha
   fonts/                Obviously Demo (variante Wide), ver aviso de licencia
   video/                aquí va hero.mp4, el vídeo de fondo del hero
   logos/                los cinco logos de marca en SVG, ya en amarillo
-  opt/                  fotos optimizadas para web (4,7 MB)
+  ficha/svg/            los diez iconos de la ficha (garantías y compartir)
+  opt/                  fotos optimizadas para web (5,9 MB, 0,8 de ellas de la ficha)
   svg/                  logos e iconos vectoriales exportados de Figma
   img/                  originales de Figma (110 MB, no se publican)
 scripts/                utilidades de extracción y verificación
@@ -154,18 +166,26 @@ La página tiene **dos vídeos de fondo**, los dos a sangre, en bucle y silencia
 
 | Dónde | Archivo | Del original | Queda en |
 |---|---|---|---|
-| Hero | `assets/video/hero.mp4` | 131,87 MB · 1920×1080 · 59,94 fps · 47,8 Mbps | **12,64 MB** (−90 %) |
+| Hero | `assets/video/hero.mp4` | 62,8 MB · **1920×1080** · 25 fps · 49,9 Mbps · 10,5 s | **6,77 MB** (−89 %) |
 | Sección de marcas | `assets/video/brands.mp4` | 58,16 MB · 1920×1080 · 59,94 fps · 69 Mbps | **4,06 MB** (−93 %) |
+
+> **El hero ha cambiado de clip varias veces.** Primero, un descenso por un bosque talado (máster
+> 1080p); luego un descenso alpino a 4K; y ahora uno por un sendero de bosque, también a 1080p y
+> con la misma cadencia que el resto del proyecto (25 fps), así que no hay que tocar tiempos. Es
+> el más corto (10,5 s) y el más ligero, y al ser oscuro el titular se lee sin ayuda. Lo que sigue
+> sobre pesos y versiones es lo de ahora; los párrafos sobre el clip del bosque talado son historia
+> de las decisiones de codificación.
 
 Los dos venían a 60 fotogramas por segundo y con un bitrate enorme. Se recodificaron con
 ffmpeg:
 
 ```powershell
-# Hero. 1600x900 porque es lo que mide en pantalla: el hero son 1366x768 y el
-# desplazamiento del vídeo lleva una escala de 1,15 -> 1572x884.
-ffmpeg -i original.mp4 -map 0:v:0 -an `
+# Hero, versión para pantallas pequeñas. 1600x900 porque es lo que mide en
+# pantalla a 1366: el hero son 1366x768 y el desplazamiento del vídeo lleva una
+# escala de 1,15 -> 1572x884. El máster ya es 16:9, así que no hay que recortar.
+ffmpeg -i master-1080p.mp4 -an `
   -vf "fps=25,scale=1600:900:flags=lanczos,setsar=1" `
-  -c:v libx264 -preset slow -crf 31 -pix_fmt yuv420p `
+  -c:v libx264 -preset slow -crf 29 -pix_fmt yuv420p `
   -movflags +faststart assets/video/hero.mp4
 
 # Sección de marcas, recortado ya a la proporción de su hueco (639x509) para no
@@ -176,8 +196,9 @@ ffmpeg -i original.mp4 -map 0:v:0 -an `
   -movflags +faststart assets/video/brands.mp4
 ```
 
-El material es muy detallado —ramas, hojas, gravilla— y castiga mucho el bitrate: a
-1600×900 no baja de 12 MB sin que se note.
+El material castiga mucho el bitrate —ramas, hojas, gravilla—: a 1600×900 no baja de 12 MB sin
+que se note. El clip alpino, al ser más limpio y más corto (18,9 s), se queda en 16,38 MB con
+CRF 29 y en 28,00 MB la versión de 1440p.
 
 ### Por qué el hero pesa 12,64 MB y no 5,73
 
@@ -198,6 +219,47 @@ distintos del vídeo y con búsqueda exacta al fotograma:
 Se probaron también 1440×810 y varios CRF; 1600×900 con CRF 31 es el punto donde el
 tamaño deja de comprar calidad de forma apreciable. Y **VP9 salió peor que x264** en este
 material —40 MB para un SSIM que x264 lograba con 30—, así que se descartó.
+
+### La versión de 1440p para pantallas grandes
+
+El archivo de 1600×900 está calculado para un hero de 1366. En pantallas mayores el problema
+es otro: el hero mide **ventana × 1,15** de ancho (la escala que saca al ciclista de debajo
+del titular), así que a 1920 el navegador pinta el vídeo a **2191 px** y lo único que puede
+hacer es estirar el archivo 1,37× con un filtro bilineal. De ahí que en monitores grandes se
+viera blando. A 2560 el estirón era de 1,83×.
+
+Ahora hay dos versiones y el navegador elige según el ancho de la ventana:
+
+| Ventana | Archivo | Resolución | Peso | Codificación |
+|---|---|---|---|---|
+| menos de 1600 px | `hero.mp4` | 1600×900 | **6,77 MB** | CRF 29 |
+| 1600 px o más | `hero-1440.mp4` | 2560×1440 | **13,89 MB** | CRF 24, techo 12 Mbps |
+
+Las dos salen del **máster de 1920×1080**: el 1440p es un escalado (el máster no da más), pero a
+1920 de ventana el navegador reduce (0,86×) en vez de ampliar, que es lo que se notaba.
+
+```html
+<source src="assets/video/hero-1440.mp4" type="video/mp4" media="(min-width: 1600px)">
+<source src="assets/video/hero.mp4" type="video/mp4">
+```
+
+```powershell
+ffmpeg -i master-1080p.mp4 -an `
+  -vf "fps=25,scale=2560:1440:flags=lanczos,setsar=1" `
+  -c:v libx264 -preset slow -crf 24 -maxrate 12M -bufsize 24M `
+  -pix_fmt yuv420p -movflags +faststart assets/video/hero-1440.mp4
+```
+
+Comprobado en Chrome con `video.currentSrc`: 1366 → `hero.mp4` (1600 px de ancho de vídeo);
+1600, 1920 y 2560 → `hero-1440.mp4` (2560). El `media` del `<source>` lo respetan Chrome,
+Edge y Safari; donde no, entra el segundo y no se rompe nada.
+
+El **póster** (`assets/opt/hero-poster.webp`, 180 KB) sale del primer fotograma del clip actual, a
+1600×900. Tiene que cambiar con cada clip: si no, el hero da un salto al arrancar el vídeo.
+
+El **máster** (62,8 MB, 1920×1080) no está en el repositorio: se codificó desde el archivo
+que pasó el cliente y solo se guardan las dos versiones finales. Si hay que rehacerlas, hay que
+volver a pedirlo.
 
 ### Un detalle de ffmpeg que cuesta un fotograma
 
@@ -268,10 +330,19 @@ del vídeo, que ha entrado hasta x≈444. La caída se corre en la misma medida,
 78 %, y así el ciclista —que acaba en x≈1112— cae ya en la zona clara, con solo un 36 %
 de oscurecido en vez del 62 % que tendría con el reparto original.
 
-Por debajo de 1180 px el titular ocupa todo el ancho y el degradado horizontal deja de
-cubrirlo, así que ahí se añade un oscurecido vertical extra.
+Por debajo de **1180 px** el titular ocupa todo el ancho y el degradado horizontal deja de cubrirlo.
+Antes ese degradado volvía a partir de 1180; ahora el hero lleva la capa plana al 30 % hasta **620
+px**, y solo por debajo —ya en formato móvil— vuelve el degradado del diseño con un oscurecido
+vertical extra, porque ahí el texto cae sobre la foto sin más.
 
 ### El titular del hero
+
+**«SPECIALIST» va en Outfit Black** (peso 900), la única línea del hero que no usa Obviously Demo.
+Outfit tiene la mayúscula más baja y el trazo más fino, así que a igual `font-size` se veía más
+pequeña (69 px de alto de tinta frente a 74 de «MOUNTAIN»). El span lleva **`font-size: 1.17em`**,
+o sea **110 px** cuando el titular está a 94. Va en `em` para que siga encogiendo con el titular en
+pantallas pequeñas. Como el peso 900 no venía cargado, hay que pedirlo en el `<link>` de Google
+Fonts (`Outfit:wght@…;900`) o el navegador sintetiza la negrita.
 
 Mide 94 px a 1366, pero por debajo no cabe. «SPECIALIST» ocupa 9,36 veces el tamaño de
 fuente, y a su derecha hay que dejar sitio para la tarjeta (312 px) y su separación (48).
@@ -281,6 +352,144 @@ navegadores—.
 
 Sin eso, entre 981 y 1310 px el titular se metía **debajo** de la tarjeta y «SPECIALIST»
 aparecía cortado.
+
+El titular lleva además `opacity: .9`: un 10 % de transparencia que deja ver el vídeo a través de
+las letras. Se aplica al `<h1>` entero, así que afecta a las dos palabras y al amarillo.
+
+### El hero en modo `hero--plain`
+
+Con el clip alpino se probó a quitar la tarjeta de producto y el degradado del diseño, y a
+centrar el vídeo. Todo eso depende de una clase en el `<section class="hero hero--plain">`:
+quitándola vuelve el hero del diseño.
+
+- **Sin tarjeta**: `.hero--plain .hero__card { display: none }`.
+- **Bloque al pie y a la izquierda**: `.hero__inner` alinea abajo (`align-items: flex-end`) con 116 px
+  de respiro y usa **el mismo ancho y centrado que `.container`**, así que el borde izquierdo del
+  titular cae exactamente donde el de «FEATURED CATEGORIES» (x=25 a 1366, x=295 a 1920). El botón
+  del menú está en x=40, 15 px más a la derecha: la barra tiene su propio margen de 40.
+- **Vídeo centrado**: `transform: none` en lugar del `translate(40%, -5%) scale(1.15)`.
+- **Sin la lista de garantías**: se quitó del HTML (`Free shipping over €250`, `Free returns`…) y
+  el hero pasó de 768 a **900 px** de alto, y nunca menos que la ventana menos 18 px, más los 24 del
+  radio de la sección siguiente: `min-height: max(900px, calc(100svh - 18px + 24px))`. Los 900 fijos
+  se quedaban a media pantalla en monitores grandes, y con la ventana entera no asomaba nada de la
+  sección siguiente. Esa información ya no aparece; si hay que recuperarla, su sitio natural es
+  encima del footer.
+- **Contraste**: en vez del degradado opaco de la izquierda hay una **capa negra plana al 30 %**
+  (`background: rgba(0,0,0,.3)` en el `::after`, que está por encima del vídeo y por debajo del
+  texto) más una sombra suave en las letras. Sin esa capa, el amarillo del titular sobre el cielo
+  y el blanco de «SPECIALIST» sobre la ladera no se leen.
+
+En móvil el hero sigue con altura automática (`min-height: 0` en su *media query*, que gana por
+orden a la regla de `hero--plain`), así que los 900 px —y el `max(…, 100svh)`— solo se aplican en
+escritorio.
+
+El **subtítulo** del hero («Discover freedom on wheels…») está a **18 px / 25 px** de interlineado y
+va en **una sola línea**: a ese tamaño mide 515 px de los 640 disponibles.
+
+Hay dos variantes más en el CSS, sin activar: `hero--scrim` (el degradado del diseño, mucho más
+ligero) y `hero--ink` (sin velo y con el texto en tinta).
+
+### El hero se queda pegado y las secciones suben por encima
+
+`.hero` lleva `position: sticky; top: 0; z-index: 0`, y todo lo que va detrás —las secciones y el
+footer— `position: relative; z-index: 1`. Al bajar, el hero se queda quieto y las secciones pasan
+por delante, así que lo tapan. Comprobado a 1848×919: con `scrollY = 500` el hero sigue en `top: 0`
+y la sección de disciplinas ya está en 401; a 900 está en 1.
+
+Tres cosas que hubo que resolver:
+
+- **`body` tenía `overflow-x: hidden`**, que convierte el body en contenedor de scroll y rompe el
+  `sticky`. Ahora es `overflow-x: clip`, que recorta igual sin crear contenedor.
+- **Cada sección tiene que ser opaca**, o se vería el vídeo por detrás. Todas lo eran menos
+  `#accessories`, que se quedaba transparente: se le puso el blanco del fondo.
+- **`#accessories` va en z-index 1 como el resto** (lo pone la regla `main > :not(.hero)`), así que
+  el orden en móvil, donde `main` es flex y cambia el orden con `order`, no se rompe.
+
+El vídeo del hero sigue reproduciéndose aunque las secciones lo tapen. Pararlo al quedar cubierto
+sería una línea de JS más (un `scroll` que compare `scrollY` con la altura del hero), pero se ha
+dejado así: no afecta a lo que se ve y evita el riesgo de que no rearranque.
+
+## Lo que se ha quitado de la página
+
+- **La sección de categorías destacadas** («Featured categories»: Wheels, Accessories, Best
+  models). Se eliminó el 22/11 a petición, con su bloque HTML entero. El CSS de `.cat*` sigue en la
+  hoja porque «Find your bike» usa las mismas piezas (`.cat-grid`, `.cat`, `.cat__photo`…).
+  Los dos enlaces que apuntaban a `#categories` se repuntaron: el «See all» del hero va ahora a
+  `#terrain` y «Mountain Bikes» del menú a `#products`.
+
+## Elige tu terreno (disciplinas)
+
+Justo debajo del hero va la sección de disciplinas MTB: cinco paneles en fila y el que tiene el
+ratón —o el foco— se ensancha de 1 a 4 partes y enseña nombre, descripción y enlace. Los demás
+dejan el nombre **en vertical**, de abajo arriba.
+
+Venía como componente de React + Tailwind (Figma Make) y se ha pasado a HTML, CSS y un poco de JS:
+
+- **El ancho lo hace el CSS**: `flex: 1 1 0` y `.is-active { flex: 4 1 0 }` con `transition: flex .5s`.
+  El JS solo mueve la clase, en `mouseenter`, en `focus` y en el toque.
+- **En los paneles plegados no cabe la píldora del recorrido**, así que se oculta (`:not(.is-active)
+  .terrain__travel { display: none }`). El número va a **24 px en todos** y cambia de color con el
+  estado: blanco puro en reposo, amarillo corporativo en el panel abierto.
+- **Las esquinas de arriba van redondeadas** (24 px) y la sección **se monta 24 px sobre el hero**
+  (`margin-top: -24px`, y el hero crece esos mismos 24). Así el recorte de la esquina cae siempre
+  sobre el vídeo, no sobre el blanco de la página, y al abrir la página siguen asomando 18 px de la
+  sección.
+- **En pantalla táctil no hay hover**: el primer toque abre el panel y el segundo ya sigue el enlace.
+- **Dos sustituciones por coherencia con el resto de la web**: el titular usa `.display` (60 px,
+  Obviously Demo Black) en vez de Archivo Black, y el amarillo es `--c-yellow` en vez de `#FFD400`.
+  El resto de medidas —560 px de alto, 12 px de separación, 12 px de radio, 28 px de relleno— sí
+  son las del componente.
+- **Las fotos son las que ya había** en `assets/opt` (noticias y categorías), porque el componente
+  las espera como parámetro. Cuando haya fotos propias por disciplina, es cambiar el `src`.
+- **El botón «All bikes» no es propio**: lleva `btn` más `terrain__all`, y esta clase solo añade el
+  borde blanco de 2 px del componente. Así hereda el hover de la web —relleno amarillo, texto negro
+  y el relevo de flecha— sin duplicar nada.
+
+Los tres antetítulos de sección usan `.section__eyebrow`: 14 px, 600, versalitas, `letter-spacing:
+.12em` y **sin margen inferior**, así que el hueco entre cajas es 0 y lo que separa las letras es
+solo el interlineado del titular.
+
+| Dónde | Texto | Color |
+|---|---|---|
+| Elige tu terreno | Shop by discipline | `.terrain__eyebrow`, amarillo |
+| Catálogo | Catalogue | `--c-blue` (`#0057FF`) |
+| Encuentra tu bici | Complements | `--c-blue` |
+| Trail essentials | Accessories | `--c-blue` |
+| Marcas | Our brands | `--c-yellow` (`.section__eyebrow--light`) |
+
+El azul es el acento secundario; el amarillo se usa en el hero de disciplinas y en marcas, donde el
+fondo es oscuro y el azul se apagaría.
+- Por debajo de 900 px la fila no cabe: se queda con `min-width: 900px` y la zona hace scroll
+  horizontal, como pedía el componente (`overflow-x: auto`).
+
+## Accesorios para riders (scroll largo)
+
+Debajo de «Our brands» va este bloque, el tercero que llega de Figma Make (React + Tailwind) y se
+pasa a HTML, CSS y JS. La sección ocupa **7 × 60vh** (3780 px a 900 de alto) y dentro el contenido se
+queda **pegado a la ventana** mientras se recorren las siete categorías: protección, herramientas,
+hidratación, cascos, guantes y gafas, luces y GPS, y zapatos y pedales.
+
+- **La categoría activa sale del scroll**: con getBoundingClientRect().top y el alto de la sección
+  se calcula el progreso (0–1) y se reparte entre las siete. El panel derecho es una pista vertical
+  que se desplaza con 	ranslateY(-n × 100%) y 	ransition: transform .7s
+  cubic-bezier(.65, 0, .35, 1).
+- **La lista de la izquierda no se pulsa**: es un índice que se enciende solo. Son <span>, no
+  botones, así que no reciben foco ni clic; el único camino para cambiar de categoría es el scroll.
+- **Los CTA del panel derecho llevan el hover de la casa**: el mismo de los enlaces del menú y de los
+  CTA del blog y de disciplinas —azul #2B74FF y 8 px de desplazamiento en .15s—.
+- **Accesibilidad**: las diapositivas ocultas llevan ria-hidden=true y su CTA 	abindex=-1;
+  la categoría activa marca ria-current.
+- **Las fotos son de Unsplash** y están descargadas en ssets/opt/acc-*.webp (900 px de ancho,
+  calidad 80, 62–221 KB, 867 KB entre las siete). No se enlazan en caliente.
+- **Adaptación a la casa**: el titular va con Obviously Demo en vez de Archivo Black, y el botón
+  «All accessories» es el tn btn--dark de la web.
+- **Medidas**: el bloque se queda **pegado arriba**, no centrado: arranca 90 px del borde (los 70 de
+  la barra más 20) y deja **120 px libres por debajo**. Las cajas ocupan lo que queda, así que el
+  hueco de abajo es siempre el mismo y no se acumula al crecer la pantalla: a 918 la caja mide 708, a
+  1080 mide 870 y a 1221 mide 1011. Por debajo de 900 px los dos paneles se apilan.
+
+El alto por categoría (60vh) se cambia en el height de .riders; el JS se ajusta solo porque usa
+el alto real de la sección.
 
 ## El menú
 
@@ -492,6 +701,11 @@ Al pasar el ratón, **todos** van al amarillo corporativo con el texto en negro 
 cual sea su variante, y la flecha hace un relevo: la de la derecha sale deslizándose y
 otra idéntica entra por la izquierda del texto.
 
+**La excepción es el botón del hero**: en reposo va en tinta con la letra blanca (`btn--dark`) y
+al pasar el ratón se invierte a blanco con la letra en tinta, sin amarillo. Es una regla aparte,
+`.hero .btn--dark:hover`, que gana a la general por llevar `.hero` delante. La flecha no necesita
+nada: su máscara se pinta con `currentColor` y cambia sola.
+
 Cuatro detalles de cómo está hecho:
 
 - **El negro es `#000`, no `--c-ink`** (que es `#1E1F1F`). Sobre el amarillo la
@@ -576,20 +790,40 @@ hasta la siguiente. Los valores intermedios se interpolan con `calc()`/`clamp()`
 
 A la izquierda va «LATEST NEWS» (Outfit 800, «NEWS» en amarillo), el subtítulo y el botón
 «Ver todas». A la derecha, la fila de tarjetas con la foto a sangre y el scrim del Figma
-(transparente al 36 %, opaco desde el 65 %), la píldora azul `#2B74FF`, el tiempo de lectura,
-el titular en Obviously 36/40, el resumen y el botón amarillo «Read the story». Son ocho, con
-cuatro fotos y cuatro textos que se repiten.
+(transparente al 36 %, opaco desde el 65 %), la etiqueta, el tiempo de lectura, el titular en
+Obviously 36/40, el resumen y el enlace «Read the story». El **titular de cada noticia va en Outfit
+20/26, 700 y mayúsculas** (antes era Obviously 36/40) y **ya no lleva `<br>`**: a ese tamaño cabe en
+una línea y solo parte cuando de verdad no entra. Son ocho, con cuatro fotos y cuatro textos
+que se repiten.
 
-**La primera tarjeta es la anterior**: su contenido baja al 50 % de opacidad; el degradado
-ocupa los 22 px del hueco entre la columna y las tarjetas, **sin tocar la foto**; al
-desplazarse, la tarjeta entra en ese hueco y queda más cerca del titular. La fila se desplaza
-en horizontal de forma nativa y se puede arrastrar con el ratón (`data-drag-scroll` en
-`main.js`); no usa el carrusel de diapositivas. Las fotos son 896×1200 del Figma, recortadas a
-832×1160 WebP en `assets/opt/news-*.webp`.
+**Todas las tarjetas van a plena opacidad.** Antes, por encima de 1400 px, la primera llevaba el
+contenido al 50 % y un degradado de 22 px en el borde izquierdo, porque la fila se metía bajo la
+columna del titular. Con la sección ya alineada al contenedor eso solo la estropeaba —se veía gris y
+con una banda oscura encima—, así que se quitaron las dos cosas. La fila se desplaza en horizontal de
+forma nativa y se puede arrastrar con el ratón (`data-drag-scroll` en `main.js`); no usa el carrusel
+de diapositivas. **Las cuatro fotos del blog son propias** (`assets/opt/blog-*.webp`, 676×942,
+29–155 KB): sustituyeron a las de `news-*` en noviembre. La tarjeta mide 416×580 y esas fotos
+tienen la misma proporción, así que entran sin recortar; se guardaron en WebP a calidad 82 y sin
+alfa. Las `news-*.webp` siguen en uso en los paneles de disciplinas.
 
-Los dos botones de la sección («Ver todas» y «Read the story») comparten el efecto del resto
-de la web: al pasar el ratón la flecha sale a la derecha y entra otra por la izquierda, el
-fondo va al amarillo, el texto a negro y el botón sube 1 px, conservando su ancho.
+**La columna del titular se estrechó**: era `clamp(556px…618px)` y dejaba más de 300 px entre
+«LATEST NEWS» y la primera tarjeta. Ahora es `clamp(400px…456px)`, que deja unos 140, y el
+antetítulo «BLOG» va en amarillo dentro de `.news__heading`, pegado al titular (0 de margen, como en
+el resto de secciones).
+
+**El contenido se alinea con `.container`**: la sección lleva
+`padding-inline: max(25px, calc((100% - var(--container)) / 2))`, así que su columna empieza y su
+carrusel acaba donde los de las demás secciones (a 1848: 259 y 1575; a 1366: 25 y 1326). El fondo
+sigue a sangre. Antes las tarjetas se salían hasta el borde de la ventana y en pantallas anchas la
+sección se veía más ancha que el resto.
+
+**«All news» conserva el efecto del resto de la web**: al pasar el ratón la flecha sale a la derecha
+y entra otra por la izquierda, el fondo va al amarillo y el texto a negro. **«Read the story» ya no
+es una píldora**: es texto y flecha en amarillo, igual que el «Shop X» de las disciplinas. Los dos
+CTA de texto —ese y el «Shop X»— **se comportan como los enlaces del menú desplegado**: al pasar el
+ratón el texto se desplaza 8 px a la derecha y se tiñe del azul del menú (`#2B74FF`), con la misma
+transición de `.15s`. **Las etiquetas** van sin relleno, con el texto y el contorno en el azul de
+acento (`--c-blue`).
 
 ## El footer
 
@@ -614,6 +848,299 @@ de tres columnas (`1fr auto 1fr`) con las redes centradas.
 
 El Figma actual ya incluye este footer en la página (contenedor `15366:30491`, 837 px). Se
 montó primero desde la imagen que se pasó y las medidas coinciden con el frame.
+
+## La ficha de producto
+
+La segunda página del proyecto es la ficha: `ficha-producto.html`, a partir del frame
+**`15408:6030` — “Ficha de Producto”, 1366 × 5448**, de la página `8426:5899` del archivo de
+Figma. Comparte con el home la cabecera (`site-header`) y el footer, así que esos dos bloques
+están duplicados en el marcado; solo la cabecera lleva la clase `site-header--light`, porque
+en el diseño la barra va blanca con el texto negro en lugar del degradado sobre vídeo.
+
+Las secciones, con su altura en el diseño:
+
+| Sección | Alto | Dónde empieza |
+|---|---|---|
+| Migas, galería y caja de compra | 1416 | 0 |
+| Barra de garantías | 188 | 1476 |
+| Product details | 917 | 1724 |
+| User reviews | 462 | 2701 |
+| RIDE INTO THE WILD | 720 | 3223 |
+| Relacionados | 548 | 4003 |
+| Footer | 832 | 4611 |
+
+Entre sección y sección hay **60 px**, no relleno interno: van como `margin-top` para que el
+cálculo cuadre con el frame. El orden de la página (galería, garantías, detalles, opiniones,
+banner, relacionados) es el del diseño; no se ha reordenado nada «para que venda más».
+
+### Las tres cosas que no son obvias
+
+**La caja de compra flota.** Su primera tarjeta empieza en (927, 208), o sea 72 px por debajo
+del borde superior de la galería, y tapa la segunda foto. Por eso va en `position: absolute`
+dentro del bloque superior y no en una columna de rejilla: en rejilla empezaría a la altura de
+las fotos. Los tres paneles son blancos al **80 %**, con radio 8 y 16 px de relleno.
+
+**La galería sangra por la derecha.** Las diapositivas miden 591 × 626 con 16 px entre ellas y
+la tira no se corta en el contenedor: la segunda se ve a medias por debajo de la caja de compra,
+como en el diseño. Se arrastra con ratón y dedo con `[data-drag-scroll]`, que ya existía para
+las noticias del home.
+
+**Cada foto de «Product details» va colocada con las proporciones del diseño.** No es
+`object-fit: cover`: los rellenos de Figma llevan su propia matriz de transformación y la foto
+sangra por los lados (la de las ruedas empieza 72 px a la izquierda de la tarjeta y mide 496 px
+de ancho). En el CSS cada tarjeta lleva su encuadre en variables:
+
+```html
+<article class="fdet__card" style="--ix:-16.98%;--iy:28.80%;--iw:116.98%;--tw:376px">
+```
+
+`--ix`/`--iy`/`--iw` son el desplazamiento y el ancho de la foto, y `--tw` el ancho máximo del
+texto (217 px en la tarjeta de la pantalla LED, 596 px en la del patinete entero). Sin ese
+`--tw` las cinco tarjetas parten el texto en el mismo sitio, y en el diseño no lo hacen.
+
+### Navegación entre las dos páginas
+
+El logo lleva a la home en las dos páginas y las tarjetas de producto llevan a la ficha:
+
+- **Logo** (`a.nav__logo`): `href="index.html"` en `index.html` y en `ficha-producto.html`.
+- **Tarjetas de producto**: las cinco del home y las cinco de «relacionados» de la ficha apuntan
+  a `ficha-producto.html`. No van envueltas en un `<a>` porque dentro llevan botones
+  (las miniaturas y la píldora «New Stock») y un enlace no puede contener botones. En su lugar
+  hay una capa vacía:
+
+  ```html
+  <a class="prod__hit" href="ficha-producto.html" aria-label="Neuron oil"></a>
+  ```
+
+  ```css
+  .prod__hit { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+  ```
+
+  El `z-index: 1` la deja **por encima de la foto** (para que el clic llegue) y **por debajo de
+  las miniaturas (2) y de la píldora (3)**, que siguen funcionando. Comprobado: pulsar una
+  miniatura cambia la foto y no navega.
+- **Tarjeta del hero**: enlaza solo la foto (`a.pcard__media`), porque el carrusel de dentro
+  tiene sus propias flechas.
+
+Las tarjetas de categorías, accesorios y noticias siguen en `#`: son categorías, accesorios y
+artículos, no fichas de producto. Si quieren que también lleven a la ficha, es añadir el mismo
+`prod__hit`.
+
+**La trampa: `setPointerCapture` se comía los clics.** El arrastre de las filas capturaba el
+puntero en `pointerdown`. Con la captura activa, el `pointerup` lo recibe la fila y el navegador
+lanza el `click` sobre ella, no sobre la tarjeta, así que los enlaces de dentro **no navegaban
+nunca**. Costó verlo porque probando con `element.click()` desde la consola sí funcionaba: ese
+camino se salta los eventos de puntero. Ahora los `pointermove` y `pointerup` se escuchan en
+`window` y no hay captura, con lo que el clic vuelve a su destino.
+
+Comprobado con ratón de verdad (`scripts/shot.mjs --click-on` y `--drag-on`, que usan
+`Input.dispatchMouseEvent`): un clic en una tarjeta lleva a la ficha; un arrastre de 320 px
+desplaza la fila 424 y no navega; y las filas de noticias siguen arrastrándose igual.
+
+### El cristal de la caja de compra
+
+Las tres tarjetas del precio llevan en Figma **dos efectos** además del blanco al 80 %, y en la
+primera versión solo estaba la transparencia —se veían translúcidas pero planas—:
+
+```css
+.buybox__card {
+  background: rgba(255, 255, 255, .8);
+  box-shadow: 0 12.32px 24.64px rgba(0, 0, 0, .06);   /* sombra paralela */
+  backdrop-filter: blur(20px);                        /* desenfoque del fondo */
+}
+```
+
+El `backdrop-filter` es el que hace el cristal esmerilado: difumina la foto que queda debajo, y
+eso es lo que separa «caja translúcida» de «caja de cristal». La sombra es la del panel de Figma
+—Y 12,32, desenfoque 24,64, negro al 6 %— y la llevan también las tarjetas de opiniones y las de
+relacionados, donde además había que quitar el borde interior de 1 px que trae la clase `.prod`
+del home: en el diseño esas tarjetas no tienen trazo.
+
+El blanco va al **74 %** y no al 80 % del figma, a petición: con 0,74 la foto se transparenta un
+poco más y el texto sigue teniendo contraste. Es un solo número, la variable `--buybox-alpha` en
+`.buybox__card`.
+
+### La columna izquierda se encoge con la ventana
+
+Con la caja pegada a la derecha, la columna de texto no puede medir 811 px fijos: a 1366 deja
+los 81 px de aire del diseño, pero a 1200 la caja se le venía encima y tapaba la descripción
+(46 px de solape; a 1100 eran 146).
+
+```css
+.ficha__detail { width: calc(100% - 555px); max-width: 811px; }
+```
+
+`555` = 402 de la caja + 37 del margen derecho + 81 de aire + 35 del margen izquierdo. A 1366
+da los mismos 811 del diseño; por debajo, la columna se encoge sola y el aire se mantiene en
+81 px a cualquier ancho. El texto va con `max-width: min(757px, 100%)` para seguirla.
+
+Medido: 1100 → columna 530 y 81 px de aire; 1200 → 630 y 81; 1280 → 710 y 81; 1366 → 796 (la
+ventana pierde 15 px por la barra de desplazamiento) y 120 de aire.
+
+Y entre 1061 y 1250 la fila de características pasa a tres columnas, como en móvil, porque en
+una sola línea ya no cabe.
+
+### La caja de compra se queda pegada
+
+En el diseño la caja de compra flota sobre la galería (empieza en 208), pero al bajar tiene
+que **seguir al usuario** hasta la altura de SHARE y quedarse ahí. No es una posición fija: es
+`position: sticky` dentro de una columna que va de la galería al final de la ficha.
+
+```html
+<div class="side">      <!-- absolute: de la galería al pie de la ficha -->
+  <aside class="buybox">  <!-- sticky: top 80 -->
+```
+
+- La columna `.side` empieza en 136 (el borde de la galería) y termina 60 px antes del final,
+  o sea en la línea de SHARE (1416).
+- La caja se queda a 80 px del borde superior (la cabecera mide 70) mientras la columna le dé
+  recorrido, y se detiene cuando su borde inferior toca la línea de SHARE.
+- Como la columna está fuera del flujo, en móvil vuelve a ser estática y la caja se coloca
+  entre la galería y la descripción, que es el orden del marco de 390.
+
+Medido: a 400 px de scroll la caja está en 80; a 900 ya está frenada (36, con su borde inferior
+en 516 = 1416 − 900); a partir de ahí se va con el contenido.
+
+### El marco de 1366 px
+
+El diseño está dibujado sobre un marco de **1366 px** y la primera versión se construyó como si
+esa fuera la única medida buena: las posiciones iban en píxeles absolutos y el ancho lo ponía
+el `padding` de cada sección. A 1366 se veía bien y en un monitor de 1920 se desmontaba —la
+caja de compra se iba al borde derecho, la columna de texto quedaba suelta a la izquierda y la
+galería enseñaba tres fotos donde el diseño enseña dos.
+
+Ahora todo el contenido vive dentro de un `.frame`:
+
+```css
+.frame { position: relative; width: min(100%, 1366px); margin-inline: auto; }
+```
+
+- Las secciones con **fondo a sangre** (barra de garantías, banner, footer) siguen ocupando todo
+  el ancho; lo que se centra es su contenido, que va dentro del `.frame`.
+- La **galería** sigue sangrando por la derecha, pero hasta el borde del marco, no de la ventana.
+- La **cabecera** se queda como la del home: ancho completo y 40 px de margen, con el logo
+  centrado en la ventana. Se probó a alinear su contenido con la columna de 1366 y no funciona:
+  en pantallas anchas la barra se «centra» y deja de parecer la misma barra que en el home
+  (el menú desplegable sí va pegado al borde, así que el conjunto queda descuadrado).
+
+Comprobado a 390, 768, 1024, 1200, 1366, 1440, 1920 y 2560. A 1366 el cotejo sigue dando el
+mismo 1,97 % que antes del cambio, o sea que el marco no ha movido nada del diseño.
+
+### Los tres detalles tipográficos que no se ven en una captura
+
+El JSON de Figma declara cosas que no salen en el render y que, sin mirarlas, dejan el texto
+desplazado unos píxeles. Aquí se han reproducido las tres:
+
+- **Tracking desigual.** «PRODUCT DETAILS» y «USER REVIEWS» llevan 2,4 px de interletraje (0,1 em
+  a 24 px) y «DESCRIPTION» 1,6 px (0,1 em a 16). Pero «TECHNICAL SPECIFICATIONS»,
+  «SHIPPING & RETURNS» y «SHARE» van a **0**, aunque sean el mismo componente. Sin el tracking,
+  «DESCRIPTION» mide 102 px en vez de los 118 del frame; con él en las cinco, las otras tres se
+  pasan 35 px. Se aplica con `.faq__item:first-child .faq__label`.
+- **`leadingTrim: CAP_HEIGHT`.** Figma recorta el interlineado a la altura de la mayúscula, así
+  que el titular de cada tarjeta de «Product details» empieza pegado al relleno. En CSS, con
+  `line-height: 40` para un texto de 32, el título caía **10 px** por debajo del diseño: se
+  arregla con `line-height: 20` (media línea por encima) y 26 px de hueco hasta el párrafo.
+- **Interlineado de 20,16, no de 20.** Es el 100 % del intrínseco de Outfit. Con 20 justos, la
+  quinta línea del párrafo se quedaba 2 px corta y la separación entre los dos párrafos —que en
+  el frame es una línea en blanco, no un hueco de 16 px— no cuadraba.
+
+Con todo eso, el cotejo píxel a píxel del render contra el PNG de Figma da **1,97 % de píxeles
+distintos** por debajo del footer, y casi todo es antialiasing del texto y la recompresión WebP
+de las fotos. El 3 % que sale contando el footer es el footer del home, que es distinto a
+propósito.
+
+### La revisión de colores
+
+El diseño se ha actualizado dos veces. La segunda cambió cuatro cosas, todas ya aplicadas:
+
+- **La píldora de batería seleccionada** pasa de negro a amarillo `#FFD900` con el texto
+  `#0E090D`.
+- **El banner RIDE INTO THE WILD** deja el blanco y pasa a ámbar `#FBBF24`, con el titular en
+  blanco, más pequeño (120,84 / 94,62 en vez de 130 / 110) y el bloque de texto 28 px más abajo.
+- **La fila de relacionados** arranca 24 px a la derecha (`padding-left` en el marco).
+- **La foto del banner** se recompone sobre el ámbar: es un PNG con alfa y, si se aplana sobre
+  blanco —como estaba—, aparecen halos claros alrededor de la bici.
+
+Y una que no viene de Figma pero se veía mal: el logo de la cabecera usaba
+`filter: brightness(0)` y se comía el rayo amarillo. Ahora hay un SVG propio
+(`assets/svg/rock-bikes-header-dark.svg`) con las letras en negro y el rayo en el amarillo
+corporativo.
+
+La barra de la ficha se comporta **igual que la del home**: en reposo es clara, y al pasar el
+ratón se rellena de negro con el texto y los iconos en blanco. Como el logo tiene que cambiar de
+color con ella —negro en reposo, blanco sobre negro, todo negro sobre la barra amarilla— se
+intercambia la imagen con `content`:
+
+```css
+.site-header--light .nav__logo img { content: url("../svg/rock-bikes-header-dark.svg"); }
+.site-header--light:hover .nav__logo img { content: url("../svg/frame-1410106506-…;….svg"); }
+```
+
+El amarillo del rayo se mantiene en los dos casos; en los estados de menú y buscador la regla
+del home (`filter: brightness(0)`) lo ennegrece del todo, que es lo correcto sobre amarillo.
+
+**Trampa de la cabecera clara (nov 2026).** `ficha.css` va después de `style.css`, así que unas
+reglas demasiado amplias (`.site-header--light .nav__burger { color: #000 }` sin `:not`)
+dejaban burger e iconos negros cuando el hover del home pintaba la barra de negro: el menú
+«desaparecía». Además `.site-header:hover .nav` (negro) empataba en especificidad con
+`.is-menu-open .nav` (amarillo): al abrir el menú con el ratón encima, la barra se quedaba
+negra. La solución está en `ficha.css`: el negro del reposo solo aplica con menú y buscador
+cerrados; el hover claro vuelve burger e iconos a blanco; y el amarillo abierto se declara
+también como `.site-header--light.is-menu-open:hover .nav` para ganar al hover negro.
+
+### Lo que se ha tenido que inventar
+
+El diseño llega hasta donde llega, y hay tres cosas que no están y hubo que decidir:
+
+- **El contenido de dos acordeones.** «Technical Specifications» y «Shipping & returns» solo
+  aparecen cerrados en el frame, así que su contenido es una propuesta coherente con el resto
+  del sitio (las mismas características de la fila superior, y las condiciones de envío y
+  devolución que ya cuenta el home).
+- **El footer.** El frame trae una instancia del footer con los textos de la revisión anterior
+  («Most searched», «Bikes», «Orders»… y un botón «View all scooters»). Se ha usado el footer
+  del home, que es el mismo componente con el contenido nuevo: así las dos páginas no se
+  contradicen. Es la única diferencia visible con el render de Figma.
+- **La adaptación móvil.** El frame móvil (`8879:9857`, 390 × 8392) es otra disposición, no
+  una versión estrecha de esta: galería antes que las migas, cabecera propia y una barra
+  amarilla de compra pegada abajo. Se ha tomado lo que encaja —el orden galería/migas, las
+  flechas y puntos de la galería, las características en tres columnas— y se ha mantenido la
+  cabecera del sitio. Lo que no se ha hecho: la barra de compra fija y el marco de iPhone.
+  La maqueta de escritorio aguanta desde 1061 px; entre 1061 y 1330 la barra de garantías se
+  aprieta (logo de 300 px y 28 px de hueco) porque si no la última columna se salía.
+
+### Los textos son los del diseño
+
+La ficha heredó del Figma textos de patinete (Dualtron, baterías, motor…) sobre fotos de
+mountain bike. En noviembre de 2026 se sustituyeron por copy de **Lux Trail CF Di2** (Canyon,
+Shimano Di2, 29″, 150 mm). La tarjeta del hero en el home dejó de ser el Xiaomi scooter y
+apunta al mismo producto. Las fotos de detalle siguen siendo las del frame; solo cambió el texto.
+
+### Imágenes
+
+Las fotos de esta página no salen de `figma-assets.mjs` sino de **`figma-render.mjs`**, que
+pide a Figma el render del nodo ya compuesto: así el recorte lo hace Figma y no hay que
+repetir su matriz en CSS. Después `optimize-ficha.py` las pasa a WebP:
+
+| Grupo | Archivos | Peso |
+|---|---|---|
+| Galería (6) | `assets/opt/ficha-galeria-0N.webp`, 1182 × 1252 | 314 KB |
+| Detalles (5) | `assets/opt/ficha-detalle-*.webp` | 255 KB |
+| Banner | `assets/opt/ficha-banner.webp`, 1600 × 901 | 76 KB |
+| Relacionados (5) | `assets/opt/ficha-relacionada-0N.webp` | 165 KB |
+| Iconos (10) | `assets/ficha/svg/*.svg` | 18 KB |
+
+**Ojo con el alfa.** Varias fotos de Figma llevan el fondo recortado con croma: los píxeles
+transparentes guardan el color (verde `71,112,76` en una de las relacionadas). Si se convierten
+a RGB sin más, el verde reaparece. `optimize-ficha.py` las compone sobre el color que hay
+debajo —`#F2F2F2` en las tarjetas, blanco en el banner— antes de guardarlas.
+
+### La trampa del BOM
+
+El HTML de la ficha se generó una vez con un script que copiaba la cabecera y el footer del
+home. Al pasar el archivo intermedio por PowerShell, un BOM se coló **entre `<header>` y
+`<main>`**: un nodo de texto invisible que creaba una línea de 19 px y desplazaba toda la
+página. Se veía como «todo está 19 px más abajo» sin motivo aparente. Si vuelve a pasar:
+`document.body.childNodes` lo delata, porque aparece un `#text` con `\uFEFF` justo ahí.
 
 ## Ver la página
 
@@ -692,12 +1219,15 @@ aparece. La API REST, en cambio, **funciona con cualquier plan**.
 |---|---|
 | `figma-fetch.mjs` | Descarga un nodo como JSON + PNG y destila `tokens.json` (colores, tipografías, radios, textos) |
 | `figma-assets.mjs` | Baja las fotos incrustadas, cruzando cada `imageRef` con el nombre del nodo que la usa |
+| `figma-render.mjs` | Exporta nodos como PNG **ya recortados por Figma**, con su matriz de transformación aplicada. Es lo que usan las fotos de la ficha |
 | `figma-svg.mjs` | Exporta nodos concretos como SVG. Acepta `--ids` o `--match <regex>`, y `--list` para solo mirar |
 | `figma-outline.mjs` | Árbol del diseño. Con `--flat` vuelca los 1332 nodos a un `.txt` consultable con grep |
 | `figma-node.mjs` | Detalle fino por nodo: `--texts` (fuente, tamaño, color de cada texto) y `--frames` (relleno, radios, auto layout) |
 | `slice-render.py` | Parte un render muy alto en trozos legibles, o recorta una zona con `--crop` |
 | `optimize-images.py` | Reescala y convierte a WebP; deja PNG solo donde hay transparencia real |
+| `optimize-ficha.py` | Lo mismo para las fotos de la ficha, componiendo antes el alfa sobre `#F2F2F2` |
 | `recolor-logos.py` | Pinta una imagen en un color plano (se usó con los logos de la revisión anterior) |
+| `shot.mjs` | Captura y **mide** la página por el protocolo de depuración de Chrome: cajas reales de 30 selectores, sin el mínimo de 492 px |
 | `mobile-check.html` | Herramienta de revisión: mete la página en un iframe del ancho que pidas |
 | `scroll-check.html` | Herramienta de revisión: carga la página en un iframe y lo desplaza a la altura que pidas |
 | `menu-check.html` | Herramienta de revisión: abre el menú y recorre el segundo y tercer nivel (`?ficha=`, `?link=`, `?ancho=`) |
@@ -709,36 +1239,51 @@ aparece. La API REST, en cambio, **funciona con cualquier plan**.
 ```
 node scripts/figma-fetch.mjs   [--file <key>] [--node <id>] [--out <dir>] [--scale <n>]
 node scripts/figma-assets.mjs  [--input <ruta>] [--file <key>] [--out <dir>]
+node scripts/figma-render.mjs  (--ids <a,b> | --pairs <id:nombre,...>) [--out <dir>] [--scale <n>]
 node scripts/figma-svg.mjs     (--ids <a,b,c> | --match <regex>) [--out <dir>] [--list] [--min-size <px>]
 node scripts/figma-outline.mjs [--input <ruta>] [--depth <n>] [--leaf] [--flat] [--out <ruta>]
 node scripts/figma-node.mjs    (--texts | --frames | --id <nodo>) [--out <ruta>]
+node scripts/shot.mjs          --url <url> [--width <px>] [--height <px>] [--out <png> | --measure | --eval <js>] [--do <js>]
 python scripts/slice-render.py [--input <png>] [--slices <n>] [--width <px>] [--crop x,y,w,h]
 python scripts/optimize-images.py [--max-width <px>] [--quality <n>] [--min-bytes <n>]
+python scripts/optimize-ficha.py  [--out <dir>] [--quality <n>]
 python scripts/recolor-logos.py   [--color RRGGBB] [--outdir <dir>]
 ```
 
 ## Comprobar el resultado en el navegador
 
-Comparar la página con `design/slices/` es lo que permite detectar desviaciones. Chrome
-en modo headless hace capturas completas:
+Comparar la página con `design/slices/` es lo que permite detectar desviaciones. Para la
+ficha, lo que de verdad ha servido es **`scripts/shot.mjs`**: habla con Chrome por el
+protocolo de depuración y, además de la captura, devuelve la caja real de cada sección.
 
 ```powershell
-& "C:\Program Files\Google\Chrome\Application\chrome.exe" `
-  --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 `
-  --user-data-dir="$env:TEMP\rb" --virtual-time-budget=9000 --window-size=1366,10000 `
-  --screenshot="design/render-full.png" `
-  "file:///C:/Users/carlos/Documents/deepseek-harness/RockBikes/index.html"
+# Chrome con el puerto de depuración abierto (una vez)
+& "C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --no-sandbox `
+  --remote-debugging-port=9222 --user-data-dir="$env:TEMP\rb-cdp" about:blank
+
+node scripts/shot.mjs --url http://127.0.0.1:5500/ficha-producto.html `
+  --width 1366 --height 5448 --out design/ficha/render-desktop.png
+
+node scripts/shot.mjs --url http://127.0.0.1:5500/ficha-producto.html --width 1366 --measure
+node scripts/shot.mjs --url ... --do "document.querySelectorAll('.faq__toggle')[1].click()" --measure
 ```
 
-Dos avisos que cuestan tiempo si no se saben:
+Con eso se comparan los números con los del `design/ficha/frames.txt` (que sale de
+`figma-node.mjs --frames`), y ahí se ve si una sección empieza 3 px antes o después. Las
+ocho fronteras de la ficha cuadran al píxel; las alturas de las tarjetas de opinión se
+ajustaron con `height` porque el navegador redondeaba la línea del autor a 20 px y el diseño
+la tiene a 19.
+
+Chrome `--screenshot` a secas también vale, pero tiene dos limitaciones que cuestan tiempo:
 
 - **Chrome necesita salir del sandbox de DSH.** Su comunicación interna usa tuberías con
   nombre, que el sandbox bloquea, y falla con `Check failed: platform_channel.cc`. No es
   un problema de la página.
 - **Chrome impone un ancho mínimo de ventana de unos 492 px.** Pedir `--window-size=390`
   no da una vista de 390: da una de 492 y la captura sale recortada, lo que parece un
-  fallo de maquetación sin serlo. Para anchos pequeños, usa `scripts/mobile-check.html`,
-  que mete la página en un iframe del ancho exacto:
+  fallo de maquetación sin serlo. `shot.mjs` no tiene ese problema, porque fija el tamaño
+  con `Emulation.setDeviceMetricsOverride`; si se usa `--screenshot`, hay que pasar por
+  `scripts/mobile-check.html`, que mete la página en un iframe del ancho exacto:
 
 ```powershell
 & "...\chrome.exe" --headless=new --disable-gpu --hide-scrollbars `
@@ -790,3 +1335,22 @@ como acento. Ocho secciones más la barra de navegación:
 
 La página resultante mide 8134 px de alto. El frame de Figma (7426 px) todavía incluye el
 taller, que se ha retirado de la web a petición.
+
+### El visor de la galería
+
+Al pulsar una foto de la galería se abre a pantalla completa. No es un modal hecho a mano: es un
+`<dialog>` nativo, así que el foco queda atrapado, el fondo se pinta solo con `::backdrop` y
+Escape cierra sin escribir nada de eso.
+
+- Cada foto va dentro de un **enlace a su propio archivo** (`a.gallery__zoom[href]`). Sin JS abre
+  la imagen en el navegador; con JS el clic se intercepta y se abre el visor. El enlace también
+  sirve de algo más: `main.js` no arranca el arrastre cuando el `pointerdown` cae en un `button`,
+  pero sí en un enlace, así que la tira se sigue pudiendo arrastrar desde la foto.
+- Un **arrastre no abre el visor**: el propio arrastre de filas cancela el clic cuando se ha
+  movido más de 6 px. Comprobado: arrastrar 280 px mueve la tira y el visor sigue cerrado.
+- Mientras está abierto, `html.is-lightbox` bloquea el desplazamiento de la página de detrás; la
+  clase se quita en el evento `close`, así que también se limpia al cerrar con Escape.
+- Dentro: flechas para pasar de foto, contador «1 / 6» y cierre al pulsar el fondo.
+- El **velo no es negro**: es `rgba(252,252,252,.5)` con `backdrop-filter: blur(16px)`, el mismo
+  lenguaje de cristal que la caja de compra, para que la página se siga viendo por detrás. La
+  foto va sobre una tarjeta blanca con sombra (0 24 / 60 al 22 %), que la separa del velo.

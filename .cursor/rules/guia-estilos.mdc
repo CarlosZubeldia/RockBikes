@@ -1,0 +1,162 @@
+---
+description: Sistema visual de RockBikes. Usar siempre estos valores.
+alwaysApply: true
+---
+
+Sistema visual extraído de `index.html`, `ficha-producto.html`, `assets/css/style.css` y `assets/css/ficha.css`. No se ha cambiado el diseño; esto documenta lo que ya hay.
+
+**No introduzcas colores, tipografías ni espaciados que no estén en esta guía sin preguntarme.**
+
+---
+
+## Colores (tokens de `:root`)
+
+| Token | Hex | Uso |
+|---|---|---|
+| `--c-yellow` | `#FFD900` | Amarillo corporativo: acentos, hover de botones, barra de menú/búsqueda abierta, footer |
+| `--c-amber` | `#F6BB06` | Punto activo de carrusel (dots) |
+| `--c-purple` | `#5E178A` | Acento violeta (píldoras de talla en ficha, bordes) |
+| `--c-plum` | `#20131C` | Ciruela: texto base, botones oscuros, fondos de sección |
+| `--c-plum-deep` | `#270A3A` | Degradado oscuro sobre fotos del menú (tercer nivel) |
+| `--c-ink` | `#1E1F1F` | Tinta casi negra (specs de ficha, textos densos) |
+| `--c-dark` | `#101010` | Fondo de la sección de marcas |
+| `--c-black` | `#000000` | Negro puro: menú abierto, hover de barra, texto sobre amarillo |
+| `--c-white` | `#FFFFFF` | Fondos y texto sobre oscuro |
+| `--c-surface` | `#FAFAFA` | Fondo de «Most wanted» y superficies claras |
+| `--c-teal` | `#0D7678` | Contorno de foco visible; píldora «Ofertas» |
+| `--c-teal-dark` | `#115E6A` | Punto de color en la tarjeta del hero |
+| `--c-blue` | `#0057FF` | Azul de acento (antetítulos, etiquetas) |
+| `--c-text` | `#20131C` | Texto principal (= plum) |
+| `--c-text-warm` | `#483D45` | Texto secundario cálido |
+| `--c-text-mid` | `#595959` | Texto medio (precios, meta) |
+| `--c-text-soft` | `#736A70` | Texto suave |
+| `--c-text-pale` | `#C9C6C9` | Texto muy claro / desactivado |
+
+### Colores sueltos (sin token) que ya se usan
+
+| Hex | Uso |
+|---|---|
+| `#2B74FF` | Hover de enlaces del menú y CTA de texto (`.terrain__shop`, `.article__link`, `.riders__cta`) |
+| `#DFBE00` / `#E0BE00` | Redes del menú en oro; hover del enlace «View all reviews» |
+| `#FBBF24` | Estrellas de opiniones en la ficha (no es `--c-amber`) |
+| `#1C1117` | Fondo de «Elige tu terreno» |
+| `#1F1F1F` | Fondo de riders y barra de garantías |
+| `#F2F2F2` | Fondo de foto en tarjetas de producto |
+| `#F3F3F5` | `--fx-card` (ficha) |
+| `#FCFCFC` | `--fx-bg` (fondo de ficha) |
+| `#FAFAFA` | Ya tokenizado como `--c-surface` |
+| `#8C8C8C` | Separadores y migas |
+| `#929292` | Primera palabra del titular de riders (`.accent--grey`) |
+| `#0E090D` | Texto sobre píldora amarilla activa |
+| `#454545` | Cuerpo de texto en caja de compra / detalles |
+| `#736200` | Marca en caja de compra |
+| `#56157E` / `#340D4C` | Morados de stock y pastillas en ficha |
+| `#EDEDED` / `#EFEFEF` / `#DFDFDF` / `#D9D9D9` | Bordes y líneas suaves |
+
+---
+
+## Tipografías
+
+| Familia | Token / clase | Uso |
+|---|---|---|
+| **Outfit** (+ Work Sans de respaldo) | `--font-body` | Cuerpo, botones, menú, precios, UI |
+| **Obviously Demo** (Semibold 600, Black 900) | `--font-display` / `.display` | Titulares de sección (60 px, mayúsculas, peso 900) |
+| **Obviously Wide** (Bold 700, Black 900) | solo CSS | Titular del hero y rótulo del tercer nivel del menú |
+
+### Tamaños habituales
+
+| Tamaño | Uso |
+|---|---|
+| 12–14 px | Antetítulos (`.section__eyebrow`), migas, meta, precios secundarios |
+| 16 px | Cuerpo base, botones, enlaces del menú |
+| 18 px | Subtítulos, nombres de producto, leads |
+| 20–24 px | Números / titulares pequeños de tarjeta |
+| 32 px | Título de producto en ficha, nombres de detalle |
+| 60 px | Titulares de sección (`.display`) |
+| ~94 px (clamp) | Titular del hero; «SPECIALIST» a `1.17em` en Outfit 900 |
+
+Antetítulo de sección: 14 px, peso 600, versalitas, `letter-spacing: .12em`, azul (`--c-blue`) o amarillo (`.section__eyebrow--light`).
+
+---
+
+## Espaciados y layout
+
+| Token / valor | Uso |
+|---|---|
+| `--container: 1316px` | Ancho máximo de contenido |
+| `--gutter: 25px` | Margen lateral del `.container` |
+| `--section-y: 100px` | Padding vertical de sección (72 px en tablet, 56 px en móvil) |
+| `--fx-pad: 35px` | Relleno lateral de la ficha |
+| Marco de diseño | 1366 px (home y ficha); en ficha el contenido va en `.frame` |
+| Barra de menú | 70 px de alto, 40 px de relleno a los lados |
+| Gaps frecuentes | 8, 10, 12, 16, 24, 32, 40, 60 px |
+
+---
+
+## Bordes y radios
+
+| Token / valor | Uso |
+|---|---|
+| `--radius: 8px` | Radio base (fotos de menú, algunas cajas) |
+| `--radius-pill: 999px` | Botones, skip-link, píldoras |
+| 4 px | Tarjetas `.prod`, algunas fichas de detalle |
+| 6 px | Miniaturas, lightbox |
+| 12 px | Paneles de terreno, badge de descuento |
+| 16 px | Tags «New Stock», pastillas de talla, paneles riders |
+| 20–24 px | Menú móvil, botón «Add to cart», esquinas de terreno / búsqueda |
+| 50% | Círculos (burger, dots, avatares) |
+
+---
+
+## Sombras
+
+| Valor | Uso |
+|---|---|
+| `0 12px 25px rgba(0,0,0,.06)` (+ borde interior `#EDEDED`) | Tarjetas de producto |
+| `0 12.32px 24.64px rgba(0,0,0,.06)` | Caja de compra y opiniones (ficha) |
+| `0 6px 20px rgba(0,0,0,.25)` | Elementos flotantes del menú |
+| `0 4px 16px rgba(32,19,28,.2)` | Controles de carrusel |
+| `0 24px 60px rgba(32,19,28,.22)` | Foto del visor (lightbox) |
+| `0 1px 0 rgba(0,0,0,.06)` | Línea bajo la cabecera clara de la ficha |
+
+---
+
+## Componentes que se repiten
+
+### Botones (`.btn`)
+- Variantes: `--light`, `--dark`, `--ghost`, `--outline-light`, `--outline-dark`.
+- Hover común: fondo `--c-yellow`, texto `#000`, leve `translateY(-1px)`.
+- Con flecha (`.icon-arrow`): relevo de flecha al hover.
+- Excepción: `.hero .btn--dark:hover` → blanco con texto oscuro (sin amarillo).
+
+### Cabecera / menú (`.site-header`, `.nav`)
+- Barra fija 70 px; degradado o clara (`site-header--light` en ficha).
+- Desplegable negro 301 px; segundo y tercer nivel; buscador amarillo.
+- Hover de enlaces: `#2B74FF` + 8 px de desplazamiento.
+
+### Tarjetas de producto (`.prod`)
+- Foto + miniaturas al hover, badge, marca, nombre, precio, colores.
+- Capa `.prod__hit` para navegar a la ficha.
+
+### Otras piezas
+- `.section__eyebrow` — antetítulo de sección.
+- `.display` — titular de sección.
+- Carruseles / puntos (`.dots`) y filas arrastrables (`data-drag-scroll`).
+- Footer amarillo (`.site-footer`) compartido en home y ficha.
+- Ficha: migas, galería, `.buybox`, acordeones `.faq`, `.trust`, `.fdet`, `.ureviews`, banner `.ride`, relacionados.
+
+---
+
+## Valores casi iguales (candidatos a unificar)
+
+Preguntar antes de fusionarlos; hoy coexisten a propósito o por herencia de Figma:
+
+1. **Amarillos:** `#FFD900` (corporativo) vs `#F6BB06` (dots) vs `#FBBF24` (estrellas) vs `#DFBE00` / `#E0BE00` (oro de redes).
+2. **Azules:** `--c-blue` `#0057FF` vs hover de enlaces `#2B74FF` (documentado como distinto a propósito).
+3. **Negros / ciruelas:** `#000` vs `--c-ink` `#1E1F1F` vs `--c-plum` / `--c-text` `#20131C` vs `#1C1117` / `#1F1F1F` / `#101010` / `#0E090D`.
+4. **Blancos / superficies:** `#FFFFFF` vs `#FCFCFC` (ficha) vs `#FAFAFA` (surface) vs `#F3F3F5` / `#F2F2F2`.
+5. **Grises de texto:** `#454545`, `#483D45`, `#595959`, `#736A70`, `#736200`, `#8C8C8C`, `#929292`, `#C9C6C9`.
+6. **Líneas:** `#D9D9D9`, `#DFDFDF`, `#EDEDED`, `#EFEFEF`.
+7. **Morados de ficha:** `#5E178A`, `#56157E`, `#340D4C`, `#270A3A`.
+8. **Sombras de tarjeta:** `0 12px 25px …06` (home) vs `0 12.32px 24.64px …06` (ficha) — mismo lenguaje, números casi iguales.
+9. **`--fx-blue`** en ficha es el mismo hex que `--c-blue` (`#0057FF`).

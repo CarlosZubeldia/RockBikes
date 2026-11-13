@@ -84,6 +84,7 @@
   --c-surface: #FAFAFA;
   --c-teal: #0D7678;        /* la píldora «Ofertas» del menú */
   --c-teal-dark: #115E6A;   /* el punto de color de la tarjeta del hero */
+  --c-blue: #0057FF;        /* azul de acento secundario */
 
   /* Grises de texto, del más oscuro al más claro */
   --c-text: #20131C;
@@ -133,7 +134,9 @@ body {
   font-size: 16px;
   line-height: 1.2;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* `clip` y no `hidden`: con `overflow-x: hidden` el body se convierte en
+     contenedor de scroll y rompe el `position: sticky` del hero. */
+  overflow-x: clip;
 }
 
 img { max-width: 100%; display: block; }
@@ -881,7 +884,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    -------------------------------------------------------------------------- */
 
 .hero {
-  position: relative;
+  /* El hero se queda pegado a la ventana: al bajar, las secciones suben por
+     encima de él (`z-index: 1` en las de después). Necesita que ni `body` ni
+     `main` sean contenedores de scroll, de ahí el `overflow-x: clip` de body. */
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  /* 768 es la altura del diseño; con la variante `hero--plain` se quitaron las
+     garantías del pie, así que se le dan 60 px más para que el bloque respire
+     igual (ver más abajo). */
   min-height: 768px;
   display: flex;
   flex-direction: column;
@@ -889,6 +900,17 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   color: var(--c-white);
   overflow: hidden;
 }
+
+/* Todo lo que va detrás del hero lo tapa al subir: tiene que ir por encima y
+   con fondo opaco (cada sección ya lo trae salvo accesorios, que se quedaba
+   transparente y dejaba ver el vídeo). */
+main > :not(.hero),
+.site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+#accessories { background: var(--c-white); }
 
 /* El fondo del hero es un vídeo a sangre. La imagen de póster es la que había
    antes de que hubiera vídeo, de modo que si el archivo no está o el navegador
@@ -903,10 +925,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   /* El vídeo va desplazado a la derecha para sacar al ciclista de debajo del
      titular.
 
-     Aquí no sirve object-position: el vídeo es 1280x720 y el hero 1366x768, o
-     sea exactamente la misma proporción (1,778 las dos). Con object-fit: cover
-     no sobra nada que recortar, así que no hay margen que repartir y
-     object-position no cambia ni un píxel. Desplazando el elemento entero sí.
+     Aquí no sirve object-position: el vídeo y el hero tienen la misma
+     proporción (16:9 los dos), así que con object-fit: cover no sobra nada que
+     recortar y object-position no cambia ni un píxel. Desplazando el elemento
+     entero sí.
+
+     OJO con la escala: el elemento acaba midiendo ventana x 1,15 de ancho (a
+     1920 son 2191 px), y de ahí sale que en pantallas grandes haga falta la
+     versión de 2560x1440 del vídeo. Ver «La versión de 1440p» en el README.
 
      El ligero aumento de escala tiene dos motivos. Uno, da el margen vertical
      que hace falta para subir al ciclista y que no quede pegado a la tarjeta de
@@ -971,6 +997,65 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   pointer-events: none;
 }
 
+/* --------------------------------------------------------------------------
+   Variante sin tarjeta, sin degradado y con el vídeo centrado
+
+   Se activa con `hero--plain` en el <section>: sin tarjeta de producto, sin el
+   degradado del diseño y con el vídeo centrado (sin el desplazamiento que lo
+   llevaba a la derecha). El contraste lo da una capa negra plana al 30 %.
+   -------------------------------------------------------------------------- */
+.hero--plain .hero__card { display: none; }
+.hero--plain .hero__video { transform: none; }
+/* Sin la lista de garantías el bloque se quedaba corto: 900 px de alto, y nunca
+   menos que la ventana menos 18 px, más los 24 del radio de la sección de
+   debajo: como esa sección se monta 24 px sobre el hero (margin-top negativo),
+   el recorte de sus esquinas cae sobre el vídeo y no sobre el blanco del body.
+   Así al abrir la página asoma una franja de 18 px de la sección siguiente;
+   `svh` y no `vh` para que en móvil no cuente la barra del navegador. */
+.hero--plain {
+  min-height: 900px;
+  min-height: max(900px, calc(100svh - 18px + 24px));
+}
+
+/* Capa negra al 30 % entre el vídeo y el texto: aplana la foto lo justo para
+   que el titular se lea sin volver al degradado del diseño. Va en el ::after,
+   que ya está por encima del vídeo (z 1) y por debajo del contenido (z 2). */
+.hero--plain::after {
+  display: block;
+  background: rgba(0, 0, 0, .3);
+}
+
+/* Y una sombra suave en las letras, que con la capa ya es solo un refuerzo. */
+.hero--plain .hero__title {
+  text-shadow: 0 2px 20px rgba(32, 19, 28, .55), 0 1px 3px rgba(32, 19, 28, .45);
+}
+.hero--plain .hero__lead,
+.hero--plain .usp {
+  text-shadow: 0 1px 4px rgba(32, 19, 28, .75), 0 0 14px rgba(32, 19, 28, .5);
+}
+
+/* Dos variantes más, NO activas: se prueban añadiendo la clase al <section>.
+   A) el velo del diseño pero mucho más ligero; B) texto en tinta sin velo. */
+.hero--scrim::after {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 16, 18, .72) 0%,
+    rgba(20, 16, 18, .5) 38%,
+    rgba(20, 16, 18, .16) 66%,
+    rgba(20, 16, 18, 0) 84%
+  );
+}
+
+/* Opción B: sin velo y con el texto en tinta. El sitio ya usa tinta sobre fondo
+   claro; aquí el titular pierde el amarillo, que sobre una foto clara no se lee. */
+.hero--ink { color: #20131C; }
+.hero--ink .hero__title,
+.hero--ink .hero__title-alt { color: #20131C; }
+.hero--ink .hero__lead,
+.hero--ink .usp { text-shadow: 0 1px 10px rgba(255, 255, 255, .65); }
+.hero--ink .hero__title { text-shadow: none; }
+
 /* El contenido va por encima del vídeo y del degradado. */
 .hero__inner,
 .usp { position: relative; z-index: 2; }
@@ -978,11 +1063,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .hero__inner {
   flex: 1;
   display: flex;
-  align-items: flex-start;
+  /* El bloque baja al pie del hero y se alinea con la columna de contenido: usa
+     el mismo ancho y el mismo centrado que `.container`, así que su borde
+     izquierdo cae donde el de «FEATURED CATEGORIES». */
+  align-items: flex-end;
   justify-content: space-between;
   gap: 48px;
-  padding: 212px 34px 0;
-  width: min(100% - 68px, var(--container));
+  /* 116 y no 56: el bloque sube 60 px desde donde estaba. */
+  padding: 0 0 116px;
+  width: min(100% - (var(--gutter) * 2), var(--container));
   margin-inline: auto;
 }
 
@@ -1002,17 +1091,37 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   text-transform: uppercase;
   letter-spacing: 0;
   color: var(--c-yellow);
+  /* Un 20 % de transparencia: las letras se mezclan con el vídeo. */
+  opacity: .8;
 }
-.hero__title-alt { color: var(--c-white); display: block; }
+/* «SPECIALIST» va en Outfit Black, no en Obviously. Outfit tiene la mayúscula
+   más baja y el trazo más fino, así que a igual font-size se veía más pequeña;
+   con 1.17em queda en 110 px cuando el titular está a 94. */
+.hero__title-alt {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 900;
+  font-size: 1.17em;
+  color: var(--c-white);
+}
 
 .hero__lead {
   margin-top: 24px;
   max-width: 640px;
-  font-size: 20px;
-  line-height: 28px;
+  font-size: 18px;
+  line-height: 25px;
 }
 
 .hero__copy .btn { margin-top: 36px; }
+
+/* El botón del hero no sigue la regla general del amarillo: en reposo es negro
+   con la letra blanca, y al pasar el ratón se invierte a blanco con la letra
+   negra. Va con `.hero` delante para ganar a `.btn--dark:hover`. */
+.hero .btn--dark:hover {
+  background: var(--c-white);
+  border-color: var(--c-white);
+  color: var(--c-plum);
+}
 
 /* Tarjeta de producto flotante del hero */
 .hero__card { flex: none; margin-top: 167px; }
@@ -1027,7 +1136,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   background: var(--c-white);
 }
 
-.pcard__media { display: grid; place-items: center; background: var(--c-white); }
+.pcard__media {
+  display: grid;
+  place-items: center;
+  background: var(--c-white);
+  color: inherit;
+  text-decoration: none;
+}
 .pcard__media img { width: 132px; height: auto; }
 
 .pcard__body {
@@ -1124,6 +1239,23 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   margin-bottom: 48px;
 }
 
+/* Antetítulo de sección, como el «Shop by discipline» de las disciplinas pero
+   en el azul de acento secundario. */
+.section__eyebrow {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--c-blue);
+}
+
+/* Sobre fondo oscuro el antetítulo va en amarillo corporativo: el azul se
+   apaga sobre el negro y aquí el amarillo ya es el acento (LUX TRAIL). */
+.section__eyebrow--light {
+  color: var(--c-yellow);
+}
+
 .section__lead {
   margin-top: 20px;
   max-width: 516px;
@@ -1136,6 +1268,217 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .section__lead--right { margin-top: 0; max-width: 524px; font-weight: 400; }
 
 .section__foot { display: flex; justify-content: flex-end; margin-top: 48px; }
+
+/* --------------------------------------------------------------------------
+   7.b Elige tu terreno (disciplinas MTB)
+
+   Cinco paneles en fila; el del ratón se ensancha de 1 a 4 partes y enseña su
+   descripción, mientras los demás dejan el nombre en vertical. Sale del
+   componente de Figma Make: React + Tailwind, pasado a HTML y CSS.
+   -------------------------------------------------------------------------- */
+
+.terrain {
+  background: #1C1117;
+  color: var(--c-white);
+  padding: 96px 0;
+  /* Esquinas de arriba redondeadas: como el hero se queda pegado detrás, al
+     subir la sección se ve el vídeo por las dos esquinas. Se monta 24 px sobre
+     el hero (tanto como el radio) para que el recorte de la esquina caiga
+     siempre sobre el vídeo y nunca sobre el blanco de la página. */
+  border-radius: 24px 24px 0 0;
+  margin-top: -24px;
+}
+
+.terrain__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.terrain__intro { max-width: 640px; }
+
+.terrain__eyebrow {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--c-yellow);
+}
+
+/* El titular va con el mismo `.display` de 60 px que el resto de secciones. */
+.terrain__title { margin-bottom: 16px; }
+
+.terrain__lead {
+  margin: 0;
+  max-width: 560px;
+  font-size: 18px;
+  line-height: 29px;
+  color: #CFC7CC;
+}
+
+/* Reutiliza el botón de la web (al pasar: relleno amarillo y relevo de flecha)
+   pero en reposo lleva borde blanco de 2 px en vez del relleno. */
+.terrain__all {
+  border: 2px solid var(--c-white);
+  font-weight: 600;
+  min-height: 48px;
+}
+
+.terrain__panels {
+  margin-top: 56px;
+  overflow-x: auto;
+}
+
+.terrain__list {
+  display: flex;
+  gap: 12px;
+  height: 560px;
+  min-width: 900px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.terrain__item {
+  flex: 1 1 0;
+  min-width: 0;
+  transition: flex .5s ease-out;
+}
+.terrain__item.is-active { flex: 4 1 0; }
+@media (prefers-reduced-motion: reduce) {
+  .terrain__item { transition: none; }
+}
+
+.terrain__link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 28px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--panel-bg, #2B2027);
+  color: var(--c-white);
+  text-decoration: none;
+}
+.terrain__link:focus-visible {
+  outline: 3px solid var(--c-yellow);
+  outline-offset: 3px;
+}
+
+.terrain__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Velo de abajo arriba: el texto nunca queda sobre la foto sin contraste. */
+.terrain__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #1C1117 0%, rgba(28, 17, 23, .6) 50%, transparent 100%);
+}
+
+.terrain__top {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.terrain__num {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--c-white);
+}
+/* El número se enciende en amarillo al abrirse el panel; en reposo va en blanco. */
+.is-active .terrain__num { color: var(--c-yellow); }
+
+/* En los paneles plegados no cabe el recorrido: se quita la píldora y queda
+   solo el número, que ya va a 24 px como en el activo. */
+.terrain__item:not(.is-active) .terrain__travel { display: none; }
+
+.terrain__travel {
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #E7E1E4;
+  border: 1px solid #6F6469;
+}
+.is-active .terrain__travel {
+  border-color: var(--c-yellow);
+  background: var(--c-yellow);
+  font-weight: 700;
+  color: #1C1117;
+}
+
+.terrain__foot { position: relative; }
+
+.terrain__name {
+  margin: 0;
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 1;
+  text-transform: uppercase;
+  /* En reposo el nombre va en vertical, de abajo arriba. */
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+.is-active .terrain__name {
+  font-size: 64px;
+  line-height: .95;
+  writing-mode: horizontal-tb;
+  transform: none;
+}
+
+.terrain__more { display: none; }
+.is-active .terrain__more {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.terrain__desc {
+  margin: 0;
+  max-width: 360px;
+  font-size: 17px;
+  line-height: 24px;
+  color: #E7E1E4;
+}
+
+.terrain__shop {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-yellow);
+  transition: color .15s ease, padding-left .15s ease;
+}
+
+/* Los CTA de texto —el «Shop X» de las disciplinas y el «Read the story» del
+   blog— se comportan como los enlaces del menú desplegado: al pasar el ratón el
+   texto se desplaza 8 px a la derecha y se tiñe del azul del menú (#2B74FF). */
+.terrain__shop:hover,
+.terrain__shop:focus-visible,
+.article__link:hover,
+.article__link:focus-visible {
+  color: #2B74FF;
+  padding-left: 8px;
+}
 
 /* --------------------------------------------------------------------------
    8. Categorías
@@ -1469,6 +1812,21 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .prod__thumb.is-active { border-color: var(--c-white); }
 .prod__thumb img { display: block; width: 100%; height: 100%; object-fit: cover; -webkit-user-drag: none; user-select: none; }
 
+/* Toda la tarjeta de producto es un enlace. La capa va en z-index 1: por
+   encima de la foto (para que el clic llegue) y por debajo de la pildora
+   «New Stock» (3) y de las miniaturas (2), que tienen que seguir siendo
+   pulsables. */
+.prod__hit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+.prod__hit:focus-visible {
+  outline: 2px solid var(--c-plum);
+  outline-offset: -3px;
+}
+
 .prod__body {
   position: relative;
   z-index: 2;
@@ -1599,6 +1957,265 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    diseño. --mark-scale permite reducirlos todos a la vez en pantallas
    pequeñas sin tocar cada uno. */
 .brands__logos img { display: block; }
+
+/* --------------------------------------------------------------------------
+   11.b Accesorios para riders (scroll largo con panel pegado)
+
+   Componente de Figma Make (React + Tailwind) pasado a HTML, CSS y JS. La
+   sección mide 7 × 80vh: dentro, el bloque se queda pegado a la ventana y la
+   categoría activa se calcula con el progreso de scroll sobre ese recorrido.
+   -------------------------------------------------------------------------- */
+
+.riders {
+  position: relative;
+  background: #1F1F1F;
+  color: var(--c-white);
+  height: 420vh;          /* 7 categorías × 60vh */
+}
+
+.riders__sticky {
+  position: sticky;
+  top: 0;
+  display: flex;
+  /* Pegado arriba, como en la referencia: 90 px de aire arriba (los 70 de la
+     barra más 20) y 120 abajo. La caja ocupa lo que queda, así que el hueco de
+     abajo es siempre el mismo y no se acumula en pantallas altas. */
+  align-items: flex-start;
+  justify-content: center;
+  height: 100vh;
+  padding: 90px 24px 120px;
+}
+
+.riders__cols {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 1320px;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Panel amarillo: titular, descripción, lista de categorías y botón. */
+.riders__panel {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 48px 40px 20px;
+  border-radius: 16px;
+  background: #FFD800;
+  color: #000;
+  overflow-y: auto;
+}
+
+.riders__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.6vw, 62px);
+  font-weight: 900;
+  line-height: .92;
+  text-transform: uppercase;
+}
+
+.riders__lead {
+  margin: 20px 0 0;
+  max-width: 460px;
+  font-size: 17px;
+  line-height: 1.375;
+}
+
+.riders__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.riders__cat {
+  display: block;
+  width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: clamp(18px, 2.2vw, 30px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: #5E5A4A;
+  transition: color .3s ease;
+}
+.riders__cat.is-active { color: #000; }
+.riders__cat.is-active { font-weight: 800; }
+.riders__cat:focus-visible,
+.riders__cta:focus-visible,
+.riders__foot .btn:focus-visible {
+  outline: 3px solid #000;
+  outline-offset: 3px;
+}
+
+.riders__foot { display: flex; justify-content: flex-end; }
+
+/* Panel derecho: pista vertical que se desplaza una pantalla por categoría. */
+.riders__stage {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #2A2A2A;
+}
+
+.riders__track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  transition: transform .7s cubic-bezier(.65, 0, .35, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .riders__track { transition: none; }
+}
+
+.riders__slide {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.riders__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Velos: uno general para el texto y otro arriba para el icono. */
+.riders__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, .85) 0%,
+    rgba(0, 0, 0, .45) 35%,
+    rgba(0, 0, 0, 0) 60%);
+}
+
+.riders__icon {
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #FFD800;
+  color: #000;
+}
+.riders__icon svg { width: 22px; height: 22px; }
+
+.riders__info {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.riders__product {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--c-white);
+}
+
+.riders__note {
+  margin: 0;
+  font-size: 16px;
+  color: #E8E8E8;
+}
+
+.riders__cta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #FFD400;
+  transition: color .15s ease, padding-left .15s ease;
+}
+/* Mismo hover que los enlaces del menú y los CTA del blog y de disciplinas. */
+.riders__cta:hover,
+.riders__cta:focus-visible {
+  color: #2B74FF;
+  padding-left: 8px;
+}
+.riders__cta span { margin-left: 8px; }
+
+/* Indicador de progreso, a la derecha del panel. */
+.riders__dots {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.riders__dots span {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, .55);
+  transition: height .3s ease, background-color .3s ease;
+}
+.riders__dots span.is-active {
+  height: 22px;
+  background: #FFD800;
+}
+
+/* Por debajo de 900 se apilan: el panel arriba y la foto abajo. */
+@media (max-width: 900px) {
+  .riders { height: 420vh; }
+
+  .riders__sticky { padding: 24px 16px; }
+
+  .riders__cols {
+    flex-direction: column;
+    gap: 12px;
+    max-height: none;
+  }
+
+  .riders__panel {
+    flex: 0 0 auto;
+    padding: 28px 24px 20px;
+    gap: 16px;
+    overflow: visible;
+  }
+
+  .riders__lead { display: none; }
+
+  .riders__cat { font-size: 18px; }
+
+  .riders__stage { flex: 1 1 auto; min-height: 260px; }
+}
 
 /* --------------------------------------------------------------------------
    12. Encuentra tu bici
@@ -1886,17 +2503,30 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   height: 700px;
   background: var(--c-plum);
   color: var(--c-white);
+  /* El contenido se alinea con la columna de la web (el mismo margen que
+     `.container`) para que en pantallas anchas la sección no se estire más que
+     las demás. El fondo sigue a sangre. */
+  padding-inline: max(25px, calc((100% - var(--container)) / 2));
 }
 .news__head {
   flex: none;
-  width: clamp(556px, calc(556px + (100vw - 1366px) * 0.579), 618px);
-  padding: 213px 0 0 clamp(32px, calc(32px + (100vw - 1366px) * 0.364), 71px);
+  /* Estrechado: era 556-618 y dejaba más de 300 px entre el titular y la
+     primera tarjeta. El texto no necesita tanto (el antetítulo y el titular
+     acaban en ~314 y el resumen en ~400). */
+  width: clamp(400px, calc(400px + (100vw - 1366px) * 0.42), 456px);
+  padding: 213px 0 0 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: clamp(24px, calc(24px + (100vw - 1366px) * 0.196), 45px);
   align-self: stretch;
+}
+
+/* Antetítulo y titular van juntos, sin el hueco que separa al resto de hijos. */
+.news__heading {
+  display: flex;
+  flex-direction: column;
 }
 .news__title {
   margin: 0 0 clamp(12px, calc(12px + (100vw - 1366px) * 0.159), 29px);
@@ -2018,10 +2648,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .article__time { font-size: 14px; color: var(--c-white); }
 .article__title {
   margin: 12px 0 0;
-  font-family: var(--font-display);
-  font-size: 36px;
-  font-weight: 600;
-  line-height: 40px;
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 26px;
   text-transform: uppercase;
   color: var(--c-white);
 }
@@ -2031,54 +2661,63 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   line-height: 20px;
   color: #D9D4D7;
 }
+/* Igual que el «Shop X» de las disciplinas: solo texto y flecha, sin píldora,
+   y con el mismo hover azul del menú. */
 .article__link {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  height: 44px;
+  gap: 8px;
   margin-top: 20px;
-  padding: 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-yellow);
+  transition: color .15s ease, padding-left .15s ease;
+}
+.article__link .icon-arrow { width: 20px; height: 20px; }
+
+/* Etiqueta sin relleno: el texto y el contorno en el azul de acento. */
+.article__cat {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--c-blue);
   border-radius: 32px;
-  background: var(--c-yellow);
-  color: var(--c-plum);
+  background: transparent;
+  color: var(--c-blue);
   font-size: 14px;
   font-weight: 500;
+  text-transform: uppercase;
 }
-.article__link .icon-arrow { width: 24px; height: 24px; }
 
-/* Los dos botones de la sección comparten el efecto del resto de la web (los
-   `.btn`): al pasar el ratón la flecha sale a la derecha y entra otra por la
-   izquierda, el fondo va al amarillo y el texto a negro, y el botón sube 1 px.
-   Cada uno conserva sus medidas, así que el ancho no cambia al pasar el cursor. */
-.news__all,
-.article__link {
+/* El botón «All news» conserva el efecto del resto de la web (los `.btn`): al
+   pasar el ratón la flecha sale a la derecha y entra otra por la izquierda, el
+   fondo va al amarillo, el texto a negro y el botón sube 1 px. El enlace de
+   cada noticia ya no es una píldora, así que no lleva nada de esto. */
+.news__all {
   position: relative;
   overflow: hidden;
   transition: background-color .18s ease, color .18s ease, border-color .18s ease,
               transform .18s ease, padding .3s cubic-bezier(.4, 0, .2, 1);
 }
-.news__all:hover,
-.article__link:hover {
+.news__all:hover {
   background: var(--c-yellow);
   border-color: var(--c-yellow);
   color: #000;
   transform: translateY(-1px);
 }
-.news__all .icon-arrow,
-.article__link .icon-arrow {
+.news__all .icon-arrow {
   transition: transform .3s cubic-bezier(.4, 0, .2, 1), opacity .3s ease,
               width .3s cubic-bezier(.4, 0, .2, 1);
 }
-.news__all:hover .icon-arrow,
-.article__link:hover .icon-arrow {
+.news__all:hover .icon-arrow {
   width: 0;
   transform: translateX(14px);
   opacity: 0;
 }
 
 /* La flecha que entra por la izquierda, recortada con la misma máscara. */
-.news__all::before,
-.article__link::before {
+.news__all::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -2094,15 +2733,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   -webkit-mask: var(--arrow-mask) center / 100% 100% no-repeat;
   mask: var(--arrow-mask) center / 100% 100% no-repeat;
 }
-.article__link::before {
-  left: 16px;
-  width: 24px;
-  height: 24px;
-  margin-top: -12px;
-  transform: translateX(-36px);
-}
-.news__all:hover::before,
-.article__link:hover::before {
+.news__all:hover::before {
   opacity: 1;
   transform: translateX(0);
 }
@@ -2110,19 +2741,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   padding-left: clamp(46px, calc(46px + (100vw - 1366px) * 0.187), 66px);
   padding-right: clamp(10px, calc(10px + (100vw - 1366px) * 0.0187), 12px);
 }
-.article__link:hover {
-  padding-left: 52px;
-  padding-right: 4px;
-}
 
-/* A partir de 1400 la tarjeta de la izquierda es la anterior: el degradado ocupa
-   los 22 px del hueco entre la columna y las tarjetas (sin tocar la foto) y el
-   contenido baja al 50 %. Al desplazarse, la tarjeta entra en ese hueco. */
+/* Antes, por encima de 1400, la fila se metía bajo la columna del titular: un
+   degradado de 22 px en el borde izquierdo y la primera tarjeta al 50 % de
+   opacidad. Con la sección ya alineada al contenedor esas dos cosas solo
+   estropeaban la primera tarjeta (se veía gris y con una banda oscura encima),
+   así que se han quitado: las tarjetas van todas a plena opacidad. */
 @media (min-width: 1400px) {
   .news { gap: 0; }
-  .news__cards { padding-left: 22px; }
-  .news__carousel::before { width: 22px; }
-  .article:first-child .article__content { opacity: .5; }
 }
 
 /* --------------------------------------------------------------------------
@@ -2259,18 +2885,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (max-width: 1180px) {
   .nav { gap: 12px; }
 
-  /* En pantallas estrechas el titular ocupa todo el ancho y el degradado
-     horizontal deja de cubrir el texto, así que se oscurece el conjunto. */
-  .hero::after {
-    background:
-      linear-gradient(180deg, rgba(32, 19, 28, .38), rgba(32, 19, 28, .52)),
-      linear-gradient(83deg,
-        #20131C 0%,
-        #20131C 30%,
-        rgba(32, 19, 28, .32) 72%,
-        rgba(32, 19, 28, .32) 100%);
-  }
-
   .nav__menu { display: none; }
   /* El estado abierto lo marca .is-menu-open en la cabecera; el antiguo
      .nav__menu.is-open no llegaba a aplicarse nunca. */
@@ -2331,7 +2945,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   :root { --section-y: 72px; }
 
   .hero { min-height: 0; padding-bottom: 32px; }
-  .hero__inner { flex-direction: column; padding: 150px 24px 0; width: 100%; gap: 32px; }
+  .hero__inner { flex-direction: column; align-items: stretch; padding: 150px 24px 0; width: 100%; gap: 32px; }
   /* El desplazamiento del vídeo es para el encuadre de escritorio; en móvil
      dejaría al ciclista fuera de pantalla. */
   .hero__video { transform: none; }
@@ -2451,6 +3065,19 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (max-width: 620px) {
   :root { --section-y: 56px; }
 
+  /* Solo cerca del móvil: con el titular a todo el ancho y el texto encima de
+     la foto, el velo plano al 30 % no basta, así que vuelve el degradado
+     horizontal del diseño (más un oscurecido general). */
+  .hero::after {
+    background:
+      linear-gradient(180deg, rgba(32, 19, 28, .38), rgba(32, 19, 28, .52)),
+      linear-gradient(83deg,
+        #20131C 0%,
+        #20131C 30%,
+        rgba(32, 19, 28, .32) 72%,
+        rgba(32, 19, 28, .32) 100%);
+  }
+
   .hero__title { font-size: 38px; line-height: 1; }
   .display { font-size: 34px; line-height: 34px; }
   .brands__title { font-size: 34px; line-height: 34px; }
@@ -2485,10 +3112,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .news { padding: 56px 16px; }
   .news__title { font-size: 40px; line-height: 40px; }
   .news__cards { gap: 20px; }
-  .news__carousel::before { width: 0; }
   .article { width: 84vw; }
   .article__content { left: 20px; right: 20px; bottom: 20px; }
-  .article__title { font-size: 30px; line-height: 34px; }
 
   .foot-links {
     display: grid;
