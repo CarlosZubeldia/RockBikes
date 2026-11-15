@@ -57,7 +57,7 @@
         { nombre: 'Gloves & eyewear', href: '#riders', ficha: 'gloves' },
         { nombre: 'Lights & GPS', href: '#riders', ficha: 'lights' },
         { nombre: 'Shoes & pedals', href: '#riders', ficha: 'shoes' },
-        { nombre: 'Trail starter kit', href: '#accessories', em: true, ficha: 'starter' }
+        { nombre: 'Trail starter kit', href: '#riders', em: true, ficha: 'starter' }
       ]
     },
     'Parts': {
@@ -74,10 +74,10 @@
     'Clothing': {
       titulo: 'Clothing',
       items: [
-        { nombre: 'Jerseys', href: '#accessories', ficha: 'jerseys' },
-        { nombre: 'Shorts', href: '#accessories', ficha: 'shorts' },
-        { nombre: 'Jackets', href: '#accessories', ficha: 'jackets' },
-        { nombre: 'Base layers & socks', href: '#accessories', ficha: 'baselayers' }
+        { nombre: 'Jerseys', href: '#riders', ficha: 'jerseys' },
+        { nombre: 'Shorts', href: '#riders', ficha: 'shorts' },
+        { nombre: 'Jackets', href: '#riders', ficha: 'jackets' },
+        { nombre: 'Base layers & socks', href: '#riders', ficha: 'baselayers' }
       ]
     },
     'Other bikes': {
@@ -749,9 +749,8 @@
 
   /* ----------------------------------- accesorios para riders -- */
 
-  /* Sección de scroll largo: el bloque se queda pegado y la categoría activa
-     sale del progreso de scroll. La lista de la izquierda no se pulsa: es solo
-     un índice que se va encendiendo. */
+  /* Escritorio: scroll largo + pista vertical. Móvil (≤900): un solo
+     carrusel de cards (la lista de categorías se oculta en CSS). */
   var riders = document.querySelector('[data-riders]');
 
   if (riders) {
@@ -759,14 +758,52 @@
     var rCats = [].slice.call(riders.querySelectorAll('.riders__cat'));
     var rDots = [].slice.call(riders.querySelectorAll('.riders__dots span'));
     var rTrack = riders.querySelector('[data-riders-track]');
+    var rStage = riders.querySelector('.riders__stage');
+    var rMovil = window.matchMedia('(max-width: 900px)');
+    var rReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     var rTotal = rSlides.length;
     var rActiva = -1;
 
-    var pintarRiders = function (indice) {
+    var esRidersMovil = function () {
+      return rMovil.matches;
+    };
+
+    var rScrollSuave = function () {
+      return rReduce.matches ? 'auto' : 'smooth';
+    };
+
+    var indiceMasCercano = function (scroller, items) {
+      if (!scroller || !items.length) { return 0; }
+      var origen = scroller.scrollLeft;
+      var mejor = 0;
+      var mejorDist = Infinity;
+      for (var i = 0; i < items.length; i++) {
+        var dist = Math.abs(items[i].offsetLeft - origen);
+        if (dist < mejorDist) {
+          mejorDist = dist;
+          mejor = i;
+        }
+      }
+      return mejor;
+    };
+
+    var pintarRiders = function (indice, opts) {
+      opts = opts || {};
+      if (indice < 0 || indice >= rTotal) { return; }
       if (indice === rActiva) { return; }
       rActiva = indice;
 
-      rTrack.style.transform = 'translateY(-' + (indice * 100) + '%)';
+      if (esRidersMovil()) {
+        rTrack.style.transform = '';
+        if (!opts.desdeFotos && rStage && rSlides[indice]) {
+          rStage.scrollTo({
+            left: rSlides[indice].offsetLeft,
+            behavior: rScrollSuave()
+          });
+        }
+      } else {
+        rTrack.style.transform = 'translateY(-' + (indice * 100) + '%)';
+      }
 
       rSlides.forEach(function (slide, i) {
         var activa = i === indice;
@@ -789,6 +826,7 @@
     };
 
     var scrollRiders = function () {
+      if (esRidersMovil()) { return; }
       var caja = riders.getBoundingClientRect();
       var recorrido = caja.height - window.innerHeight;
 
@@ -798,9 +836,67 @@
       pintarRiders(Math.floor(progreso * rTotal));
     };
 
+    var alScrollStage = function () {
+      if (!esRidersMovil() || !rStage || !rSlides[0]) { return; }
+      pintarRiders(indiceMasCercano(rStage, rSlides), { desdeFotos: true });
+    };
+
+    if (rStage) {
+      rStage.addEventListener('scroll', alScrollStage, { passive: true });
+    }
+
+    rCats.forEach(function (texto, i) {
+      texto.setAttribute('role', 'button');
+      texto.setAttribute('tabindex', '0');
+      var irACategoria = function () {
+        if (esRidersMovil()) {
+          pintarRiders(i);
+          return;
+        }
+        var caja = riders.getBoundingClientRect();
+        var recorrido = riders.offsetHeight - window.innerHeight;
+        if (recorrido <= 0) { return; }
+        var destino = window.scrollY + caja.top + ((i + 0.01) / rTotal) * recorrido;
+        window.scrollTo({ top: destino, behavior: rScrollSuave() });
+      };
+      texto.addEventListener('click', irACategoria);
+      texto.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          irACategoria();
+        }
+      });
+    });
+
+    var alCambiarModo = function () {
+      rActiva = -1;
+      if (esRidersMovil()) {
+        rTrack.style.transform = '';
+        if (rStage) { rStage.scrollLeft = 0; }
+        pintarRiders(0, { desdeFotos: true });
+      } else {
+        if (rStage) { rStage.scrollLeft = 0; }
+        scrollRiders();
+      }
+    };
+
+    if (rMovil.addEventListener) {
+      rMovil.addEventListener('change', alCambiarModo);
+    } else if (rMovil.addListener) {
+      rMovil.addListener(alCambiarModo);
+    }
+
     window.addEventListener('scroll', scrollRiders, { passive: true });
-    window.addEventListener('resize', scrollRiders);
-    scrollRiders();
+    window.addEventListener('resize', function () {
+      if (esRidersMovil()) { alScrollStage(); }
+      else { scrollRiders(); }
+    });
+
+    if (esRidersMovil()) {
+      pintarRiders(0, { desdeFotos: true });
+    } else {
+      scrollRiders();
+    }
   }
 
   /* ------------------------------------------------ elige tu terreno -- */
@@ -918,8 +1014,8 @@
       }
 
       row.addEventListener('pointerdown', function (e) {
-        /* Ratón: arrastre propio. Dedo/lápiz: el scroll nativo (touch-action:
-           pan-x) mueve la fila; no interceptamos para no pelear con él. */
+        /* Ratón: arrastre propio. Dedo/lápiz: scroll nativo (horizontal en el
+           carrusel, vertical en la página); no interceptamos el puntero. */
         if (e.pointerType !== 'mouse' || e.button !== 0) { return; }
         // Los botones (flechas y miniaturas) no arrastran la fila.
         if (e.target.closest('button')) { return; }

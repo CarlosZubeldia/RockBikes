@@ -932,7 +932,6 @@ html.is-lightbox body { overflow: hidden; }
     margin-right: -16px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
     overscroll-behavior-x: contain;
     container-type: inline-size;
   }
@@ -941,7 +940,6 @@ html.is-lightbox body { overflow: hidden; }
     flex: 0 0 calc(100cqw - 32px);
     width: calc(100cqw - 32px);
     max-width: none;
-    touch-action: pan-x;
   }
   .related__dots { margin-bottom: 40px; }
 

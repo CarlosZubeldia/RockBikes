@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="assets/css/style.css?v=20261115i">
+<link rel="stylesheet" href="assets/css/style.css?v=20261115af">
 </head>
 <body>
 
@@ -42,7 +42,7 @@
         <li><a class="nav__link" href="#terrain">Mountain Bikes <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
         <li><a class="nav__link" href="#riders">Accessories <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
         <li><a class="nav__link" href="#">Parts <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
-        <li><a class="nav__link" href="#accessories">Clothing <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li><a class="nav__link" href="#riders">Clothing <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
         <li><a class="nav__link" href="#products">Other bikes <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
         <li><a class="nav__link" href="#brands">Brands <svg class="nav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
         <li><a class="nav__link nav__link--outlet" href="#">Outlet</a></li>
@@ -210,7 +210,6 @@
         <h2 class="display display--light terrain__title" id="terrain-title">Choose your terrain</h2>
         <p class="terrain__lead">From fast XC climbs to full-send downhill. Find the bike built for how you ride.</p>
       </div>
-      <a class="btn terrain__all" href="#">All bikes <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
 
     <div class="terrain__panels" data-drag-scroll>
@@ -324,7 +323,6 @@
         <h2 class="display display--dark">Find your<br>perfect bike</h2>
         <p class="section__lead">Explore mountain bikes built for rugged trails and new adventures.</p>
       </div>
-      <a class="btn btn--dark" href="#">All categories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
 
     <div class="carousel">
@@ -505,7 +503,7 @@
       <div class="riders__panel">
         <div class="riders__panel-top">
           <p class="section__eyebrow riders__eyebrow">Accessories</p>
-          <h2 class="riders__title" id="riders-title">Your perfect<br>complement</h2>
+          <h2 class="display riders__title" id="riders-title">Your perfect<br>complement</h2>
           <p class="riders__lead">Safety, style and practicality for every journey. Get fully equipped.</p>
         </div>
 
@@ -518,79 +516,82 @@
           <li><span class="riders__cat">Lights &amp; GPS</span></li>
           <li><span class="riders__cat">Shoes &amp; pedals</span></li>
         </ul>
-
-        <div class="riders__foot">
-          <a class="btn btn--dark" href="#">All accessories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        </div>
       </div>
 
-      <div class="riders__stage">
+      <div class="riders__stage" data-drag-scroll>
         <div class="riders__track" data-riders-track>
-          <article class="riders__slide is-active">
+          <article class="riders__slide is-active" data-riders-cat="Protection">
             <img class="riders__photo" src="assets/opt/acc-protection.webp" alt="" loading="lazy" width="900" height="1350">
             <span class="riders__veil" aria-hidden="true"></span>
             <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/></svg></span>
             <div class="riders__info">
+              <p class="riders__tag">Protection</p>
               <h3 class="riders__product">Knee pads</h3>
               <p class="riders__note">Trail and enduro protection</p>
               <a class="riders__cta" href="#">See protection category <span aria-hidden="true">&rarr;</span></a>
             </div>
           </article>
-          <article class="riders__slide" aria-hidden="true">
+          <article class="riders__slide" aria-hidden="true" data-riders-cat="Tools &amp; repair">
             <img class="riders__photo" src="assets/opt/acc-tools.webp" alt="" loading="lazy" width="900" height="1350">
             <span class="riders__veil" aria-hidden="true"></span>
             <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5.5a4 4 0 0 0 4 5l-8 8a2 2 0 0 1-3-3l8-8a4 4 0 0 1-1-2z"/></svg></span>
             <div class="riders__info">
+              <p class="riders__tag">Tools &amp; repair</p>
               <h3 class="riders__product">Multitool</h3>
               <p class="riders__note">Chain breaker included</p>
               <a class="riders__cta" href="#" tabindex="-1">See tools category <span aria-hidden="true">&rarr;</span></a>
             </div>
           </article>
-          <article class="riders__slide" aria-hidden="true">
+          <article class="riders__slide" aria-hidden="true" data-riders-cat="Hydration">
             <img class="riders__photo" src="assets/opt/acc-hydration.webp" alt="" loading="lazy" width="900" height="1600">
             <span class="riders__veil" aria-hidden="true"></span>
             <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11z"/></svg></span>
             <div class="riders__info">
+              <p class="riders__tag">Hydration</p>
               <h3 class="riders__product">Hydration pack</h3>
               <p class="riders__note">With 2 L reservoir</p>
               <a class="riders__cta" href="#" tabindex="-1">See hydration category <span aria-hidden="true">&rarr;</span></a>
             </div>
           </article>
-          <article class="riders__slide" aria-hidden="true">
+          <article class="riders__slide" aria-hidden="true" data-riders-cat="Helmets">
             <img class="riders__photo" src="assets/opt/acc-helmets.webp" alt="" loading="lazy" width="900" height="1350">
             <span class="riders__veil" aria-hidden="true"></span>
             <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16a8 8 0 0 1 16 0v2H4z M9 9.5l1.5 3 M15 9.5l-1.5 3"/></svg></span>
             <div class="riders__info">
+              <p class="riders__tag">Helmets</p>
               <h3 class="riders__product">Trail helmet</h3>
               <p class="riders__note">Open-face, MIPS</p>
               <a class="riders__cta" href="#" tabindex="-1">See helmet category <span aria-hidden="true">&rarr;</span></a>
             </div>
           </article>
-          <article class="riders__slide" aria-hidden="true">
+          <article class="riders__slide" aria-hidden="true" data-riders-cat="Gloves &amp; eyewear">
             <img class="riders__photo" src="assets/opt/acc-gloves.webp" alt="" loading="lazy" width="900" height="1600">
             <span class="riders__veil" aria-hidden="true"></span>
             <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V6a1.5 1.5 0 0 1 3 0v5 M11 11V4.5a1.5 1.5 0 0 1 3 0V11 M14 11V6a1.5 1.5 0 0 1 3 0v8a7 7 0 0 1-7 7 6 6 0 0 1-5-3l-2-4a1.5 1.5 0 0 1 2.5-1.5L8 15"/></svg></span>
             <div class="riders__info">
+              <p class="riders__tag">Gloves &amp; eyewear</p>
               <h3 class="riders__product">Trail gloves</h3>
               <p class="riders__note">Full finger, extra grip</p>
               <a class="riders__cta" href="#" tabindex="-1">See gloves &amp; eyewear category <span aria-hidden="true">&rarr;</span></a>
             </div>
           </article>
-          <article class="riders__slide" aria-hidden="true">
+          <article class="riders__slide" aria-hidden="true" data-riders-cat="Lights &amp; GPS">
             <img class="riders__photo" src="assets/opt/acc-lights.webp" alt="" loading="lazy" width="900" height="596">
             <span class="riders__veil" aria-hidden="true"></span>
             <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6 M10 21h4 M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z"/></svg></span>
             <div class="riders__info">
+              <p class="riders__tag">Lights &amp; GPS</p>
               <h3 class="riders__product">Front light</h3>
               <p class="riders__note">Rechargeable, USB-C</p>
               <a class="riders__cta" href="#" tabindex="-1">See lights &amp; GPS category <span aria-hidden="true">&rarr;</span></a>
             </div>
           </article>
-          <article class="riders__slide" aria-hidden="true">
+          <article class="riders__slide" aria-hidden="true" data-riders-cat="Shoes &amp; pedals">
             <img class="riders__photo" src="assets/opt/acc-shoes.webp" alt="" loading="lazy" width="900" height="1600">
             <span class="riders__veil" aria-hidden="true"></span>
             <span class="riders__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18v2H3z M3 17V9l5 1 3 3 6 1a4 4 0 0 1 4 3"/></svg></span>
             <div class="riders__info">
+              <p class="riders__tag">Shoes &amp; pedals</p>
               <h3 class="riders__product">Flat pedal shoes</h3>
               <p class="riders__note">Sticky sole, all-day comfort</p>
               <a class="riders__cta" href="#" tabindex="-1">See shoes &amp; pedals category <span aria-hidden="true">&rarr;</span></a>
@@ -598,17 +599,22 @@
           </article>
         </div>
 
-        <div class="riders__dots" aria-hidden="true">
-          <span class="is-active"></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
       </div>
 
+      <div class="riders__dots" aria-hidden="true">
+        <span class="is-active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+    </div>
+
+    <div class="riders__foot">
+      <a class="btn btn--dark" href="#">All accessories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
   </div>
 </section>
@@ -726,40 +732,6 @@
   </div>
 </section>
 
-<!-- ========================== ACCESORIOS ========================== -->
-<section class="section" id="accessories">
-  <div class="container">
-    <div class="section__head">
-      <div>
-        <h2 class="display display--dark">Accessories<br>for riders</h2>
-        <p class="section__lead">Safety, style and practicality for every journey. Get fully equipped.</p>
-      </div>
-      <a class="btn btn--dark" href="#">All accessories <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    </div>
-
-    <div class="acc-grid">
-      <a class="acc acc--photo" href="#">
-        <img src="assets/opt/acc-best-brands.webp" alt="" loading="lazy">
-        <span class="acc__badge" aria-hidden="true"><span></span></span>
-        <div class="acc__overlay">
-          <h3 class="acc__title">Best mountain bikes brands</h3>
-          <p class="acc__desc">Discover freedom on wheels with our latest-generation mountain bikes</p>
-          <span class="acc__more">See more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
-      </a>
-      <a class="acc acc--photo" href="#">
-        <img src="assets/opt/acc-clothing.webp" alt="" loading="lazy">
-        <span class="acc__badge" aria-hidden="true"><span></span></span>
-        <div class="acc__overlay">
-          <h3 class="acc__title">Clothing</h3>
-          <p class="acc__desc">Discover freedom on wheels with our latest-generation mountain bikes</p>
-          <span class="acc__more">See more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- =========================== OPINIONES =========================== -->
 <section class="section reviews" id="reviews">
   <div class="container">
@@ -768,7 +740,6 @@
         <h2 class="display display--dark">Customer<br>reviews</h2>
         <p class="section__lead">See what our riders think</p>
       </div>
-      <a class="btn btn--dark" href="#">All reviews <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
 
     <div class="reviews__panel">
@@ -920,7 +891,7 @@
     <div class="foot-bottom">
       <div class="foot-sub">
         <h3>Subscribe</h3>
-        <a class="foot-sub__btn" href="#">Enjoy our Newsletter <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="foot-sub__btn" href="#">Newsletter Sign Up <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
       <div class="foot-follow">
@@ -934,18 +905,11 @@
         </ul>
       </div>
 
-      <div class="foot-app">
-        <h3>Download the RockBikes App</h3>
-        <div class="foot-app__badges">
-          <a href="#" aria-label="Download on the App Store"><img src="assets/opt/app-store-badge.png" alt="Download on the App Store" width="160" height="52" loading="lazy"></a>
-          <a href="#" aria-label="Get it on Google Play"><img src="assets/opt/google-play-badge.png" alt="Get it on Google Play" width="180" height="52" loading="lazy"></a>
-        </div>
-      </div>
     </div>
 
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=20261115i"></script>
+<script src="assets/js/main.js?v=20261115o"></script>
 </body>
 </html>

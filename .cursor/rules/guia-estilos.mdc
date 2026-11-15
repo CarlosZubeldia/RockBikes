@@ -63,6 +63,10 @@ Sistema visual extraído de `index.html`, `ficha-producto.html`, `assets/css/sty
 | **Obviously Demo** (Semibold 600, Black 900) | `--font-display` / `.display` | Titulares de sección (60 px, mayúsculas, peso 900) |
 | **Obviously Wide** (Bold 700, Black 900) | solo CSS | Titular del hero y rótulo del tercer nivel del menú |
 
+### Titulares de sección (coherencia)
+
+**Todos los titulares de sección usan el mismo peso tipográfico:** Obviously Demo Black (`font-weight: 900`) vía la clase `.display`. No uses otro peso (700, 800, etc.) en un titular de sección. Si una sección necesita un titular, reutiliza `.display` (y variantes de color `--dark` / `--light`); no inventes una tipografía o peso distinto. Excepción ya documentada: `.display--outfit` (Outfit/Work Sans 800) solo donde el diseño lo pide (p. ej. Taller, Últimas noticias).
+
 ### Tamaños habituales
 
 | Tamaño | Uso |

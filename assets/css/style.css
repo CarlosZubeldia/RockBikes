@@ -916,8 +916,6 @@ main > :not(.hero),
   z-index: 1;
 }
 
-#accessories { background: var(--c-white); }
-
 /* El fondo del hero es un vídeo a sangre. La imagen de póster es la que había
    antes de que hubiera vídeo, de modo que si el archivo no está o el navegador
    no lo reproduce, el hero se ve igual que siempre. */
@@ -1635,16 +1633,14 @@ main > :not(.hero),
 #categories { padding: 60px 0; }
 
 /* Las otras dos insignias siguen siendo un círculo de CSS con el rayo dentro. */
-.fcard__badge,
-.acc__badge {
+.fcard__badge {
   width: 30px; height: 30px;
   border-radius: 50%;
   background: var(--c-yellow);
   display: grid; place-items: center;
   flex: none;
 }
-.fcard__badge span,
-.acc__badge span {
+.fcard__badge span {
   width: 12px; height: 12px;
   background: var(--c-plum);
   clip-path: polygon(58% 0, 20% 52%, 46% 52%, 40% 100%, 80% 44%, 53% 44%);
@@ -1972,36 +1968,37 @@ main > :not(.hero),
 .riders__sticky {
   position: sticky;
   top: 0;
-  display: flex;
-  /* Arriba 90 px (cajas bloqueadas como ahora). Abajo 60 px, igual que
-     #categories, para que se vea un trozo de la sección siguiente. El alto
-     de las cajas no cambia: sigue siendo ventana − 270. */
-  align-items: flex-start;
-  justify-content: center;
-  height: auto;
-  padding: 90px 24px 60px;
-}
-
-.riders__cols {
+  /* Grid de 2 columnas: el CTA vive fuera del panel en el HTML, pero en
+     escritorio se ancla al pie de la caja amarilla. */
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  align-items: stretch;
+  justify-content: center;
   width: 100%;
-  max-width: 1320px;
-  /* 90 + 180 era el recorte anterior; mantenemos ese alto de caja. */
-  height: calc(100vh - 270px);
-  min-height: 0;
+  max-width: calc(1320px + 48px);
+  margin-inline: auto;
+  height: auto;
+  padding: 90px 24px 60px;
+  box-sizing: border-box;
 }
 
-/* Panel amarillo: titular, descripción, lista de categorías y botón. */
+.riders__cols {
+  display: contents;
+}
+
+/* Panel amarillo: titular, descripción y lista de categorías. */
 .riders__panel {
+  grid-column: 1;
+  grid-row: 1;
   min-width: 0;
   min-height: 0;
+  height: calc(100vh - 270px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 24px;
-  padding: 48px 40px 20px;
+  padding: 48px 40px 72px;
   border-radius: 16px;
   background: #FFD800;
   color: #000;
@@ -2013,13 +2010,9 @@ main > :not(.hero),
   color: #000;
 }
 
+/* Mismo `.display` (Obviously Black 900) que el resto de secciones. */
 .riders__title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(36px, 4.6vw, 62px);
-  font-weight: 900;
-  line-height: .92;
-  text-transform: uppercase;
+  color: #000;
 }
 
 .riders__lead {
@@ -2063,13 +2056,27 @@ main > :not(.hero),
   outline-offset: 3px;
 }
 
-.riders__foot { display: flex; justify-content: flex-end; }
+.riders__foot {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  justify-self: stretch;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 40px 20px;
+  pointer-events: none;
+}
+.riders__foot .btn { pointer-events: auto; }
 
 /* Panel derecho: pista vertical que se desplaza una pantalla por categoría. */
 .riders__stage {
+  grid-column: 2;
+  grid-row: 1;
   position: relative;
   min-width: 0;
   min-height: 0;
+  height: calc(100vh - 270px);
   overflow: hidden;
   border-radius: 16px;
   background: #2A2A2A;
@@ -2135,6 +2142,16 @@ main > :not(.hero),
   gap: 10px;
 }
 
+.riders__tag {
+  display: none;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--c-yellow);
+}
+
 .riders__product {
   margin: 0;
   font-family: var(--font-display);
@@ -2169,15 +2186,18 @@ main > :not(.hero),
 }
 .riders__cta span { margin-left: 8px; }
 
-/* Indicador de progreso, a la derecha del panel. */
+/* Indicador de progreso, encima de la foto (columna derecha). */
 .riders__dots {
-  position: absolute;
-  right: 18px;
-  top: 50%;
-  transform: translateY(-50%);
+  grid-column: 2;
+  grid-row: 1;
+  z-index: 3;
+  justify-self: end;
+  align-self: center;
+  margin-right: 18px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  pointer-events: none;
 }
 .riders__dots span {
   display: block;
@@ -2185,43 +2205,141 @@ main > :not(.hero),
   height: 6px;
   border-radius: 3px;
   background: rgba(255, 255, 255, .55);
-  transition: height .3s ease, background-color .3s ease;
+  transition: height .3s ease, width .3s ease, background-color .3s ease;
 }
 .riders__dots span.is-active {
   height: 22px;
   background: #FFD800;
 }
 
-/* Por debajo de 900 se apilan: el panel arriba y la foto abajo. */
+/* Móvil: sin scroll largo; fotos en carrusel horizontal; CTA al final. */
 @media (max-width: 900px) {
-  /* Scroll más corto en móvil: 7 categorías × ~22 vh. */
-  .riders { height: 160vh; }
+  .riders { height: auto; }
 
   .riders__sticky {
-    padding: 24px 16px;
-    align-items: stretch;
-  }
-
-  .riders__cols {
-    grid-template-columns: 1fr;
+    position: static;
+    display: flex;
+    flex-direction: column;
     gap: 12px;
-    height: auto;
-    max-height: none;
+    max-width: none;
+    padding: 24px 16px 40px;
   }
 
+  .riders__cols { display: contents; }
+
+  /* Caja amarilla: titular + lead (sin lista de categorías). */
   .riders__panel {
-    padding: 28px 24px 20px;
-    gap: 16px;
+    grid-column: auto;
+    grid-row: auto;
+    order: 1;
+    height: auto;
+    width: auto;
+    margin-right: 0;
+    padding: 28px 24px;
+    gap: 0;
     overflow: visible;
+    border-radius: 16px;
   }
 
-  .riders__lead { display: none; }
+  .riders__panel-top {
+    padding: 0;
+  }
 
-  .riders__cat { font-size: 18px; }
+  .riders__lead {
+    display: block;
+    margin-top: 16px;
+    max-width: none;
+    font-size: 16px;
+  }
 
+  .riders__list {
+    display: none;
+  }
+
+  .riders__tag { display: block; }
+
+  /* Un solo carrusel: cards a 410 px con peek. */
   .riders__stage {
-    min-height: 280px;
-    height: min(70vw, 420px);
+    grid-column: auto;
+    grid-row: auto;
+    order: 2;
+    height: 410px;
+    min-height: 410px;
+    width: calc(100% + 16px);
+    margin-right: -16px;
+    border-radius: 0;
+    background: transparent;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    container-type: inline-size;
+    cursor: grab;
+  }
+  .riders__stage.is-dragging { cursor: grabbing; }
+  .riders__stage::-webkit-scrollbar { display: none; }
+
+  .riders__track {
+    position: static;
+    inset: auto;
+    flex-direction: row;
+    width: max-content;
+    height: 100%;
+    gap: 12px;
+    padding-inline-end: 32px;
+    transform: none !important;
+    transition: none;
+  }
+
+  .riders__slide {
+    flex: 0 0 calc(100cqw - 32px);
+    width: calc(100cqw - 32px);
+    height: 100%;
+    scroll-snap-align: start;
+    border-radius: 16px;
+  }
+  .riders__slide[aria-hidden="true"] {
+    visibility: visible;
+  }
+  .riders__slide img { -webkit-user-drag: none; }
+
+  .riders__dots {
+    position: static;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+    order: 3;
+  }
+  .riders__dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #D9D9D9;
+  }
+  .riders__dots span.is-active {
+    width: 22px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--c-amber);
+  }
+
+  .riders__foot {
+    grid-column: auto;
+    grid-row: auto;
+    order: 4;
+    align-self: stretch;
+    justify-content: stretch;
+    padding: 0;
+    margin-top: 8px;
+    pointer-events: auto;
+  }
+  .riders__foot .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -2332,143 +2450,22 @@ main > :not(.hero),
 
 .reviews__carousel { margin-top: 48px; }
 
-/* --------------------------------------------------------------------------
-   14. Accesorios
-   -------------------------------------------------------------------------- */
-
-.acc-grid {
-  display: grid;
-  /* El diseño de esta sección son dos tarjetas grandes. */
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
-.acc {
-  position: relative;
-  min-height: 358px;
-  border-radius: var(--radius);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-  color: var(--c-white);
-}
-
-.acc--plum   { background: var(--c-plum); }
-.acc--purple { background: var(--c-purple); }
-
-.acc--photo > img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-/* Degradado de la tarjeta: transparente en la mitad de arriba y oscureciendo
-   poco a poco desde el bloque de texto, para que la foto respire arriba y el
-   texto blanco se lea abajo. */
-.acc--photo::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg,
-    rgba(33, 48, 139, 0) 42%,
-    rgba(10, 12, 23, .30) 66%,
-    rgba(10, 12, 23, .72) 86%,
-    rgba(10, 12, 23, .92) 100%);
-  mix-blend-mode: multiply;
-  opacity: 1;
-  z-index: 1;
-}
-.acc__overlay { position: relative; z-index: 2; }
-.acc--photo .acc__badge { position: relative; z-index: 2; }
-.acc--photo > div:last-child { margin-top: auto; }
-
-/* Medidas del componente de tarjeta de accesorios (15455:1433): titular 24/30,
-   descripción 16/20 a 309 px de ancho y bloque de texto separado 24 px. */
-.acc__title { font-size: 24px; font-weight: 600; line-height: 30px; max-width: 309px; }
-.acc__desc  { margin-top: 24px; font-size: 16px; line-height: 20px; max-width: 309px; }
-.acc--photo .acc__badge {
-  width: 28px;
-  height: 28px;
-  /* El componente lleva un resplandor amarillo (0 0 12, #FFD900 al 70 %). */
-  box-shadow: 0 0 12px rgba(255, 217, 0, .7);
-}
-.acc--photo .acc__badge span { width: 16px; height: 16px; background: var(--c-white); }
-
-/* CTA del estado hover. En el componente es un Secondary CTA de 127 × 48 con el
-   texto en amarillo y la flecha en blanco. En reposo está plegado (alto y margen
-   a cero) para no mover el texto; al entrar se despliega poco a poco y el bloque
-   sube con él, en vez de pegar el salto. */
-.acc__more {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: fit-content;
-  height: 48px;
-  max-height: 0;
-  margin-top: 0;
-  padding: 0 16px;
-  /* El borde va como sombra interior para que en reposo no ocupe alto. */
-  box-shadow: inset 0 0 0 1px var(--c-yellow);
-  border-radius: var(--radius-pill);
-  color: var(--c-yellow);
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1;
-  opacity: 0;
-  transform: translateY(22px);
-  overflow: hidden;
-  pointer-events: none;
-  transition: max-height .45s cubic-bezier(.22, .61, .36, 1),
-              margin-top .45s cubic-bezier(.22, .61, .36, 1),
-              opacity .35s ease,
-              transform .45s cubic-bezier(.22, .61, .36, 1),
-              /* Mismos tiempos que .btn: el relleno y el color. */
-              padding .3s cubic-bezier(.4, 0, .2, 1),
-              background-color .18s ease,
-              color .18s ease,
-              box-shadow .18s ease;
-}
-.acc__more svg { color: var(--c-yellow); }
-/* Mismo estado hover del Secondary CTA que en categorías. */
-.acc__more:hover,
-.acc__more:focus-visible {
-  background: var(--c-yellow);
-  color: #0E090D;
-  box-shadow: inset 0 0 0 1px var(--c-yellow);
-}
-.acc__more:hover svg,
-.acc__more:focus-visible svg { color: #0E090D; }
-.acc--photo:hover .acc__more,
-.acc--photo:focus-within .acc__more {
-  max-height: 48px;
-  margin-top: 24px;
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
-}
-
 /* Mismo efecto de flecha que el resto de botones de la web: la que hay sale
    hacia la derecha y se desvanece, y otra entra desde la izquierda. El ancho
    total no cambia porque el relleno izquierdo crece lo que la flecha deja. */
-.cat__more,
-.acc__more { position: relative; }
-.cat__more .icon-arrow,
-.acc__more .icon-arrow {
+.cat__more { position: relative; }
+.cat__more .icon-arrow {
   transition: transform .3s cubic-bezier(.4, 0, .2, 1),
               opacity .3s ease,
               width .3s cubic-bezier(.4, 0, .2, 1);
 }
 .cat__more:hover .icon-arrow,
-.acc__more:hover .icon-arrow,
-.cat__more:focus-visible .icon-arrow,
-.acc__more:focus-visible .icon-arrow {
+.cat__more:focus-visible .icon-arrow {
   width: 0;
   transform: translateX(14px);
   opacity: 0;
 }
-.cat__more::before,
-.acc__more::before {
+.cat__more::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -2485,16 +2482,12 @@ main > :not(.hero),
   mask: var(--arrow-mask) center / 20px 20px no-repeat;
 }
 .cat__more:hover::before,
-.acc__more:hover::before,
-.cat__more:focus-visible::before,
-.acc__more:focus-visible::before { opacity: 1; transform: translateX(0); }
+.cat__more:focus-visible::before { opacity: 1; transform: translateX(0); }
 .cat__more:hover,
-.acc__more:hover,
-.cat__more:focus-visible,
-.acc__more:focus-visible { padding-left: 44px; padding-right: 8px; }
+.cat__more:focus-visible { padding-left: 44px; padding-right: 8px; }
 
 /* --------------------------------------------------------------------------
-   15. Noticias
+   14. Noticias
    -------------------------------------------------------------------------- */
 
 /* Sección de noticias. La tarjeta es siempre 416×580 y la sección 700 (60 px de
@@ -2832,8 +2825,8 @@ main > :not(.hero),
   padding: 5px 10px 32px;
   border-top: 1px solid #fff;
 }
-.foot-sub, .foot-follow, .foot-app { min-width: 0; }
-.foot-sub h3, .foot-follow h3, .foot-app h3 {
+.foot-sub, .foot-follow { min-width: 0; }
+.foot-sub h3, .foot-follow h3 {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
@@ -2857,22 +2850,35 @@ main > :not(.hero),
 .foot-sub__btn .icon-arrow { width: 20px; height: 20px; }
 
 .foot-follow h3 { margin-bottom: 16px; }
-.foot-follow .social { display: flex; gap: 16px; }
+.foot-follow .social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 .foot-follow .social a {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  /* Zona pulsable ≥ 44×44 (cómoda al tacto; WCAG pide mínimo 24×24). */
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   background: #fff;
 }
-.foot-follow .social img { width: 18px; height: 18px; filter: brightness(0); }
-
-.foot-app h3 { margin-bottom: 0; max-width: 211px; }
-.foot-app__badges { display: flex; gap: 12px; }
-.foot-app__badges a { display: block; }
-.foot-app__badges img { display: block; width: auto; height: 54px; }
-.foot-app__badges a:last-child img { height: 53px; }
+.foot-follow .social a:focus-visible {
+  outline: 3px solid #0E090D;
+  outline-offset: 2px;
+}
+.foot-follow .social img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0);
+  pointer-events: none;
+}
 
 /* --------------------------------------------------------------------------
    17. Adaptación a otros anchos
@@ -2883,7 +2889,6 @@ main > :not(.hero),
   .prod { flex-basis: 340px; }
   .prod__thumb { width: 54px; height: 54px; }
   .review { flex-basis: 280px; }
-  .acc-grid { grid-template-columns: repeat(2, 1fr); }
   .finder-grid { grid-template-columns: repeat(2, 1fr); }
   .foot-links { flex-wrap: wrap; justify-content: flex-start; gap: 40px 80px; }
 }
@@ -3087,7 +3092,6 @@ main > :not(.hero),
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
     overscroll-behavior-x: contain;
     scrollbar-width: none;
     container-type: inline-size;
@@ -3095,11 +3099,7 @@ main > :not(.hero),
     cursor: grab;
   }
   .terrain__panels.is-dragging { cursor: grabbing; }
-  .terrain__panels a,
-  .terrain__panels img {
-    touch-action: pan-x;
-    -webkit-user-drag: none;
-  }
+  .terrain__panels img { -webkit-user-drag: none; }
   .terrain__panels::-webkit-scrollbar { display: none; }
   .terrain__list {
     min-width: 0;
@@ -3166,6 +3166,24 @@ main > :not(.hero),
   .section__head { flex-direction: column; align-items: flex-start; }
   .section__lead--right { margin-top: 0; }
 
+  .news {
+    display: flex;
+    flex-direction: column;
+  }
+  .news__head { display: contents; }
+  .news__heading { order: 1; }
+  .news__lead { order: 2; }
+  .news__carousel { order: 3; }
+  .news__all { order: 4; margin-top: 32px; }
+
+  .brands__top {
+    display: flex;
+    flex-direction: column;
+  }
+  .brands__copy { display: contents; }
+  .brands__media { order: 2; }
+  .brands__copy .btn { order: 3; margin-top: 32px; }
+
   /* —— Reglas móvil: CTAs a ancho completo (margen a margen) —— */
   .btn {
     display: flex;
@@ -3175,11 +3193,6 @@ main > :not(.hero),
     box-sizing: border-box;
   }
   .section__foot { display: block; }
-  .terrain__head {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .terrain__all,
   .news__all,
   .brands__copy .btn,
   .riders__foot .btn {
@@ -3203,7 +3216,6 @@ main > :not(.hero),
   /* Catálogo: mismo ancho de card que terrain (peek 20 + gap 12). */
   #products .carousel__viewport {
     container-type: inline-size;
-    touch-action: pan-x;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
   }
@@ -3215,23 +3227,14 @@ main > :not(.hero),
     flex: 0 0 calc(100cqw - 32px);
     width: calc(100cqw - 32px);
     max-width: none;
-    touch-action: pan-x;
   }
-  #products .prod img {
-    touch-action: pan-x;
-    -webkit-user-drag: none;
-  }
+  #products .prod img { -webkit-user-drag: none; }
 
   .news__cards {
-    touch-action: pan-x;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
   }
-  .news__cards a,
-  .news__cards img {
-    touch-action: pan-x;
-    -webkit-user-drag: none;
-  }
+  .news__cards img { -webkit-user-drag: none; }
 
   /* En tableta, dos columnas; la ancha ocupa la fila entera. */
   .cat-grid { grid-template-columns: 1fr 1fr; }
@@ -3246,7 +3249,6 @@ main > :not(.hero),
 
   .reviews__panel { grid-template-columns: 1fr; padding: 48px 24px; }
 
-  .acc-grid { grid-template-columns: repeat(2, 1fr); }
   .finder-grid { grid-template-columns: repeat(2, 1fr); }
 
   .news__title { font-size: 48px; line-height: 48px; }
@@ -3263,13 +3265,33 @@ main > :not(.hero),
   .site-footer { padding: 56px 24px; }
   .foot-links { gap: 36px 64px; }
   .foot-bottom {
-    grid-template-columns: 1fr;
-    justify-items: start;
-    gap: 32px;
-    padding-top: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 40px;
+    padding: 32px 0;
   }
-  .foot-follow { justify-self: start; margin-bottom: 0; }
-  .foot-app { justify-self: start; }
+  .foot-sub__btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+  .foot-follow .social {
+    gap: 4px;
+  }
+  .foot-follow .social a {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    background: transparent;
+    border-radius: 0;
+  }
+  .foot-follow .social img {
+    width: 22px;
+    height: 22px;
+  }
 
 /* Hero móvil (Figma 15595:3069): barra negra 70 px, 16 px a cada lado,
    círculo 32, logo centrado ~171×18, iconos con hueco 16. Solo cabecera del
@@ -3370,12 +3392,8 @@ main > :not(.hero),
   .cat { height: 200px; }
   #categories .display { font-size: 32px; line-height: 32px; }
   .finder-grid { grid-template-columns: 1fr; }
-  .acc-grid { grid-template-columns: 1fr; }
   /* Las tarjetas de accesorios miden 358 px de alto en escritorio; en una
      columna de móvil eso deja la sección en más de 3000 px. */
-  .acc { min-height: 220px; padding: 20px; }
-  .acc__title { font-size: 18px; line-height: 22px; }
-
   .hero__inner { padding: 70px 15px 53px; margin-inline: 0; }
   .hero,
   .hero--plain {
@@ -3395,7 +3413,6 @@ main > :not(.hero),
     grid-template-columns: 1fr 1fr;
     gap: 28px 20px;
   }
-  .foot-app__badges { flex-wrap: wrap; gap: 8px; }
   .pcard { grid-template-columns: 130px 1fr; height: 160px; }
   .pcard__media img { width: 100px; }
 }
@@ -3405,11 +3422,10 @@ main > :not(.hero),
    -------------------------------------------------------------------------- */
 
 @media (max-width: 620px) {
-  /* Mismo orden que en escritorio: Blog → Accessories → Reviews. */
+  /* Mismo orden que en escritorio: Blog → Reviews. */
   main { display: flex; flex-direction: column; }
   #news { order: 1; }
-  #accessories { order: 2; }
-  #reviews { order: 3; }
+  #reviews { order: 2; }
 
   /* Titulares de sección a 32 px, como el frame. */
   .display,
@@ -3430,11 +3446,6 @@ main > :not(.hero),
   .cat { height: 358px; }
   .cat:nth-child(n + 4) { display: none; }
 
-  /* Accesorios: dos tarjetas de 358 px. */
-  .acc-grid { grid-template-columns: 1fr; gap: 24px; }
-  .acc { min-height: 358px; }
-  .acc:nth-child(n + 3) { display: none; }
-
   /* Noticias: tarjetas de 330 × 460. */
   .article { width: 330px; height: 460px; }
   .article__title { font-size: 30px; line-height: 34px; }
@@ -3446,7 +3457,7 @@ main > :not(.hero),
   /* Footer en una columna, como el frame. */
   .foot-links { display: flex; flex-direction: column; gap: 28px; }
   .site-footer { padding: 40px 16px 32px; }
-  .foot-bottom { padding-top: 24px; gap: 24px; }
+  .foot-bottom { padding: 24px 0; gap: 40px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

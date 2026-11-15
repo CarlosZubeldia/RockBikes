@@ -7,11 +7,13 @@ alwaysApply: true
 
 Aplica estas reglas en todo diseño o CSS para anchos de móvil/tableta (en este proyecto, media queries ≤980 px, y ajustes finos ≤620 px).
 
-## CTAs a ancho completo
+## CTAs a ancho completo y al final de la sección
 
-- Los botones de acción (`.btn` y CTAs equivalentes de sección) ocupan **todo el ancho** del contenido.
+- Los botones de acción principales de cada sección (`.btn`, `.terrain__all`, `.news__all`, etc.) ocupan **todo el ancho** del contenido.
 - Siempre respetan el margen lateral del contenedor (`--gutter` / márgenes del `.container`): el botón llega de margen a margen, no de borde a borde de pantalla.
 - Centra el texto y el icono dentro del botón (`justify-content: center`).
+- En móvil, el CTA principal de cada sección va **siempre al final** de esa sección (después del contenido, carrusel o rejilla), no junto al titular.
+- En escritorio puede seguir en el cabezal; no rompas ese layout al aplicar la regla móvil.
 - No dejes CTAs «sueltos» a la derecha o con ancho de contenido en móvil.
 
 ## Carruseles sin margen derecho

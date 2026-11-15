@@ -7,4 +7,5 @@ alwaysApply: true
 - Antes de borrar archivos o hacer cambios grandes, explica qué vas a hacer y espera mi aprobación.
 - Al terminar, lista los archivos que has modificado.
 - Respeta el diseño visual existente. No cambies colores, tipografías ni espaciados si no te lo pido.
+- Los titulares de sección llevan siempre el mismo peso (`.display`, Obviously Black 900). No cambies el peso de un titular respecto al resto.
 - Nunca leas, muestres ni copies el contenido de .figma-token.
