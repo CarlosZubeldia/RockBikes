@@ -924,13 +924,39 @@ html.is-lightbox body { overflow: hidden; }
   .ride__title { font-size: 19vw; line-height: .86; }
   .ride__bike { position: static; width: 100%; margin-top: 8px; }
 
+  /* Carrusel relacionados: margen izquierdo, sin margen derecho (peek). */
   .related { margin: 40px 0 0; }
   .related > .frame { padding: 0 0 0 16px; }
-  .related .carousel__track { padding-left: 16px; }
-  .related .prod { flex-basis: 280px; }
+  .related .carousel__viewport {
+    width: calc(100% + 16px);
+    margin-right: -16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+    container-type: inline-size;
+  }
+  .related .carousel__track { gap: 12px; padding-left: 0; padding-right: 32px; }
+  .related .prod {
+    flex: 0 0 calc(100cqw - 32px);
+    width: calc(100cqw - 32px);
+    max-width: none;
+    touch-action: pan-x;
+  }
   .related__dots { margin-bottom: 40px; }
+
+  /* CTAs de ficha a ancho completo dentro del margen. */
+  .buybox__cart,
+  .foot-sub__btn {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
 }
 
 @media (max-width: 560px) {
   .rreview__rate { flex-wrap: wrap; gap: 8px 12px; }
+  .specs { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
+  .buybox__title { font-size: 26px; line-height: 30px; }
+  .ride__title { font-size: 17vw; }
 }

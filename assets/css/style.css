@@ -1012,15 +1012,12 @@ main > :not(.hero),
    -------------------------------------------------------------------------- */
 .hero--plain .hero__card { display: none; }
 .hero--plain .hero__video { transform: none; }
-/* Sin la lista de garantías el bloque se quedaba corto: 900 px de alto, y nunca
-   menos que la ventana menos 18 px, más los 24 del radio de la sección de
-   debajo: como esa sección se monta 24 px sobre el hero (margin-top negativo),
-   el recorte de sus esquinas cae sobre el vídeo y no sobre el blanco del body.
-   Así al abrir la página asoma una franja de 18 px de la sección siguiente;
+/* Por defecto el hero llena la ventana y deja ver 30 px de la sección de
+   debajo. Esa sección se monta 24 px sobre el hero (margin-top negativo + radio),
+   así que se suman esos 24 para que la franja visible sea justo 30.
    `svh` y no `vh` para que en móvil no cuente la barra del navegador. */
 .hero--plain {
-  min-height: 900px;
-  min-height: max(900px, calc(100svh - 18px + 24px));
+  min-height: calc(100svh - 30px + 24px);
 }
 
 /* Capa negra al 30 % entre el vídeo y el texto: aplana la foto lo justo para
@@ -1724,6 +1721,9 @@ main > :not(.hero),
 }
 .dots button[aria-current="true"] { background: var(--c-amber); width: 22px; border-radius: var(--radius-pill); }
 
+/* Puntos del terrain: solo en el carrusel móvil (≤980). */
+.terrain__dots { display: none; }
+
 /* --------------------------------------------------------------------------
    10. Tarjeta de producto (Most wanted)
    -------------------------------------------------------------------------- */
@@ -2194,13 +2194,18 @@ main > :not(.hero),
 
 /* Por debajo de 900 se apilan: el panel arriba y la foto abajo. */
 @media (max-width: 900px) {
-  .riders { height: 280vh; }
+  /* Scroll más corto en móvil: 7 categorías × ~22 vh. */
+  .riders { height: 160vh; }
 
-  .riders__sticky { padding: 24px 16px; }
+  .riders__sticky {
+    padding: 24px 16px;
+    align-items: stretch;
+  }
 
   .riders__cols {
     grid-template-columns: 1fr;
     gap: 12px;
+    height: auto;
     max-height: none;
   }
 
@@ -2214,7 +2219,10 @@ main > :not(.hero),
 
   .riders__cat { font-size: 18px; }
 
-  .riders__stage { min-height: 260px; }
+  .riders__stage {
+    min-height: 280px;
+    height: min(70vw, 420px);
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -2905,6 +2913,60 @@ main > :not(.hero),
   .nav__list { flex-direction: column; align-items: stretch; width: 100%; gap: 4px; }
   .nav__link { justify-content: space-between; }
   .nav__offer { margin: 8px 0 0; justify-content: center; }
+
+  /* Submenú a ancho completo bajo la barra (en vez de left: 301 px). */
+  .nav__sub {
+    left: 35px;
+    right: 35px;
+    top: 84px;
+    width: auto;
+    height: auto;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    padding: 16px 20px 24px;
+    border-radius: 20px;
+    z-index: 40;
+  }
+  .nav__cards {
+    position: static;
+    left: auto;
+    width: 100%;
+    height: auto;
+    padding: 12px 0 0;
+  }
+  .nav__cards-photo { height: 160px; }
+  .nav__sub-all { margin-top: 24px; }
+  .nav__cards-all { margin-top: 16px; }
+
+  /* Botón volver al listado principal (solo móvil / tableta). */
+  .nav__sub-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 8px;
+    padding: 8px 0;
+    border: 0;
+    background: none;
+    color: var(--c-yellow);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 40px;
+  }
+  .nav__sub-back:focus-visible {
+    outline: 3px solid var(--c-teal);
+    outline-offset: 2px;
+  }
+
+  /* Con el submenú abierto se oculta el panel principal; queda solo el 2.º nivel. */
+  .site-header.is-sub-open.is-menu-open .nav__menu {
+    display: none;
+  }
+}
+
+@media (min-width: 1181px) {
+  .nav__sub-back { display: none; }
 }
 
 /* El campo del buscador mide 394 px y va pegado al margen derecho, así que su
@@ -2917,9 +2979,6 @@ main > :not(.hero),
   .site-header.is-search-open .nav__actions { flex: 1; }
   .site-header.is-search-open .nav__search { width: 100%; }
 
-  /* Los tres paneles del menú suman 1051 px (301 + 320.5 + 429.5). Por debajo
-     de 1060 las fichas ya no caben; el segundo nivel se queda solo. */
-  .site-header.is-menu-open .nav__cards[data-visible] { display: none; }
 }
 
 /* La columna de noticias necesita 556 px y la fila de tarjetas otros 775; por
@@ -2944,21 +3003,235 @@ main > :not(.hero),
 @media (max-width: 980px) {
   :root { --section-y: 72px; }
 
-  .hero { min-height: 0; padding-bottom: 32px; }
-  .hero__inner { flex-direction: column; align-items: stretch; padding: 150px 24px 0; width: 100%; gap: 32px; }
+  /* Mismo criterio que en escritorio: pantalla completa menos 30 px visibles
+     de la sección siguiente (+24 del solape del terrain). */
+  .hero,
+  .hero--plain {
+    min-height: calc(100svh - 30px + 24px);
+    padding-bottom: 0;
+  }
+
+  /* Degradado del frame: #20131C opaco → α .32 a 57deg (stops remapeados al
+     ancho del frame: opaco hasta ~18 %, caída hasta ~60 %). */
+  .hero::after,
+  .hero--plain::after {
+    display: block;
+    background: linear-gradient(
+      57deg,
+      rgba(32, 19, 28, 1) 0%,
+      rgba(32, 19, 28, 1) 17.7%,
+      rgba(32, 19, 28, .32) 59.5%,
+      rgba(32, 19, 28, .32) 100%
+    );
+  }
+  /* Bloque de texto 360×316 (Figma 15247:8004): 15 px a cada lado, 53 abajo
+     para que el bloque quede en y=362 dentro de los 731. */
+  .hero__inner {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    padding: 70px 15px 53px;
+    width: 100%;
+    margin-inline: 0;
+    gap: 0;
+  }
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: none;
+  }
   /* El desplazamiento del vídeo es para el encuadre de escritorio; en móvil
      dejaría al ciclista fuera de pantalla. */
   .hero__video { transform: none; }
-  .hero__title { font-size: 58px; line-height: 1; }
+  .hero__title {
+    font-family: 'Obviously Demo', var(--font-display);
+    font-weight: 900;
+    font-size: 52px;
+    line-height: 54px;
+    opacity: 1;
+  }
+  .hero__title-alt { font-size: 1em; line-height: 54px; }
+  /* Título 170 + 18 de hueco + lead 50 = 238; luego 30 hasta el botón. */
+  .hero__lead {
+    margin-top: 18px;
+    max-width: none;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.4;
+    word-spacing: normal;
+  }
+  /* «See all» a ancho completo, píldora con borde blanco (Secondary CTA). */
+  .hero__copy .btn {
+    margin-top: 30px;
+    width: 100%;
+    height: 48px;
+    padding: 8px 16px;
+    justify-content: center;
+    background: #000;
+    border: 1px solid var(--c-white);
+    border-radius: 32px;
+    color: var(--c-white);
+  }
   .hero__card { margin-top: 0; width: 100%; max-width: 420px; }
   .pcard { width: 100%; max-width: 420px; }
   .usp { gap: 20px 32px; justify-content: flex-start; width: 100%; padding-inline: 24px; }
   .usp li + li::before { display: none; }
 
+  /* Terrain: carrusel; todas las cards en estado «hover», 20 px de la
+     siguiente a la vista, sin flechas (solo puntos debajo). */
+  .terrain__panels {
+    margin-top: 32px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    container-type: inline-size;
+    container-name: terrain-panels;
+    cursor: grab;
+  }
+  .terrain__panels.is-dragging { cursor: grabbing; }
+  .terrain__panels a,
+  .terrain__panels img {
+    touch-action: pan-x;
+    -webkit-user-drag: none;
+  }
+  .terrain__panels::-webkit-scrollbar { display: none; }
+  .terrain__list {
+    min-width: 0;
+    width: max-content;
+    height: 420px;
+    /* 12 de hueco + 20 de peek = 32, para poder alinear la última card. */
+    padding-inline: 0 32px;
+  }
+  .terrain__item,
+  .terrain__item.is-active {
+    /* Ancho del panel − 12 (gap) − 20 (peek de la siguiente). */
+    flex: 0 0 calc(100cqw - 32px);
+    scroll-snap-align: start;
+  }
+
+  /* Todas como la activa: nombre horizontal, píldora, texto y número amarillo. */
+  .terrain__name,
+  .is-active .terrain__name,
+  .terrain__item:not(.is-active) .terrain__name {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: 36px;
+    line-height: 1;
+  }
+  .terrain__num,
+  .is-active .terrain__num,
+  .terrain__item:not(.is-active) .terrain__num {
+    color: var(--c-yellow);
+    font-size: 24px;
+  }
+  .terrain__travel,
+  .is-active .terrain__travel,
+  .terrain__item:not(.is-active) .terrain__travel {
+    display: inline-block;
+    border-color: var(--c-yellow);
+    background: var(--c-yellow);
+    font-weight: 700;
+    color: #1C1117;
+  }
+  .terrain__more,
+  .is-active .terrain__more,
+  .terrain__item:not(.is-active) .terrain__more {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .terrain__link { padding: 20px; }
+
+  .terrain__dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+  .terrain__dots button {
+    background: rgba(255, 255, 255, .35);
+  }
+  .terrain__dots button[aria-current="true"] {
+    background: var(--c-amber);
+  }
+
   .display { font-size: 52px; line-height: 52px; }
 
   .section__head { flex-direction: column; align-items: flex-start; }
   .section__lead--right { margin-top: 0; }
+
+  /* —— Reglas móvil: CTAs a ancho completo (margen a margen) —— */
+  .btn {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+  .section__foot { display: block; }
+  .terrain__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .terrain__all,
+  .news__all,
+  .brands__copy .btn,
+  .riders__foot .btn {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  /* —— Carruseles: sin margen derecho; el peek llega al borde —— */
+  .terrain__panels,
+  #products .carousel__viewport {
+    width: calc(100% + var(--gutter));
+    margin-right: calc(var(--gutter) * -1);
+  }
+  .news__carousel,
+  .news__cards {
+    width: calc(100% + 24px);
+    margin-right: -24px;
+  }
+
+  /* Catálogo: mismo ancho de card que terrain (peek 20 + gap 12). */
+  #products .carousel__viewport {
+    container-type: inline-size;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  #products .carousel__track {
+    gap: 12px;
+    padding-inline-end: 32px;
+  }
+  #products .prod {
+    flex: 0 0 calc(100cqw - 32px);
+    width: calc(100cqw - 32px);
+    max-width: none;
+    touch-action: pan-x;
+  }
+  #products .prod img {
+    touch-action: pan-x;
+    -webkit-user-drag: none;
+  }
+
+  .news__cards {
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .news__cards a,
+  .news__cards img {
+    touch-action: pan-x;
+    -webkit-user-drag: none;
+  }
 
   /* En tableta, dos columnas; la ancha ocupa la fila entera. */
   .cat-grid { grid-template-columns: 1fr 1fr; }
@@ -2998,91 +3271,89 @@ main > :not(.hero),
   .foot-follow { justify-self: start; margin-bottom: 0; }
   .foot-app { justify-self: start; }
 
-/* Menú según el diseño móvil: una barra limpia, sin píldoras. El círculo del
-   menú va suelto y las tres acciones también, sin contenedor.
-
-   Se aplica en todo el rango en el que el hero ya se apila en columna, que es
-   el mismo punto en el que el diseño deja de ser el de escritorio.
-
-   Medidas tomadas del diseño a 390 px: barra de 68 de alto, círculo de 40, logo
-   de 150x16, iconos de 24, 16 px de margen izquierdo y 24 de derecho. El círculo
-   queda en y=14 y el logo en y=26, que es justo lo que sale con el relleno de 14
-   y el contenido de 40.
-
-   La barra lleva fondo propio porque es fija y el contenido pasa por debajo: sin
-   él, al llegar a una sección clara el logo blanco desaparecería. */
+/* Hero móvil (Figma 15595:3069): barra negra 70 px, 16 px a cada lado,
+   círculo 32, logo centrado ~171×18, iconos con hueco 16. Solo cabecera del
+   hero; el resto de la home no se toca aquí. */
 
   .nav {
-    height: 68px;
-    padding: 0 24px 0 16px;
-    /* En movil la barra va opaca: es fija y el contenido pasa por debajo, y sin
-       fondo el logo blanco desapareceria al llegar a una seccion clara. */
-    background: var(--c-plum);
+    height: 70px;
+    padding: 0 16px;
+    gap: 16px;
+    background: var(--c-black);
   }
 
-  /* El diseno movil no lleva la etiqueta «Menu»: solo el circulo. */
+  /* Solo el círculo; sin etiqueta «Menu». */
   .nav__burger-text { display: none; }
-  .nav__burger-circle { width: 40px; height: 40px; }
+  .nav__burger-circle { width: 32px; height: 32px; }
 
-  /* Y el logo va pegado al circulo, no centrado: con 390 px de ancho, centrado
-     se montaba encima de los iconos. */
-  .nav { gap: 16px; }
+  /* Logo en el hueco del medio (space-between), como en Figma. */
   .nav__logo {
     position: static;
     transform: none;
-    margin-right: auto;
+    margin: 0;
   }
-  .nav__logo img { width: 150px; height: 16px; }
-  .nav__actions { gap: 20px; }
+  .nav__logo img { width: 171px; height: 18px; }
+  .nav__actions { gap: 16px; }
+  /* Iconos a 24 px como en el diseño; zona ≥24×24 (WCAG 2.5.8). */
+  .nav__icon {
+    width: 24px;
+    height: 24px;
+  }
   .nav__menu {
-    top: 68px;
+    top: 70px;
     left: 16px;
     right: 16px;
     min-width: 0;
   }
+  .nav__sub {
+    left: 16px;
+    right: 16px;
+    top: 70px;
+    max-height: calc(100vh - 86px);
+  }
 
-  /* La barra baja a 68: el campo sigue en 36 y le quedan 16 por arriba, así que
-     el panel arranca en 36 + 16 = 68, igual que la barra. */
   .nav__search-panel { top: calc(100% + 16px); }
 
-  /* El desplegable va pegado a la barra, así que comparte su fondo sólido: uno
-     opaco y otro translúcido justo debajo se notaría. */
   .site-header.is-menu-open .nav__menu {
     left: 16px;
     right: 16px;
-    top: 68px;
+    top: 70px;
     width: auto;
     height: auto;
-    max-height: calc(100vh - 84px);
+    max-height: calc(100vh - 86px);
     overflow-y: auto;
-    background: var(--c-plum);
+    background: var(--c-black);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
 }
 
-
 @media (max-width: 620px) {
   :root { --section-y: 56px; }
 
-  /* Solo cerca del móvil: con el titular a todo el ancho y el texto encima de
-     la foto, el velo plano al 30 % no basta, así que vuelve el degradado
-     horizontal del diseño (más un oscurecido general). */
-  .hero::after {
-    background:
-      linear-gradient(180deg, rgba(32, 19, 28, .38), rgba(32, 19, 28, .52)),
-      linear-gradient(83deg,
-        #20131C 0%,
-        #20131C 30%,
-        rgba(32, 19, 28, .32) 72%,
-        rgba(32, 19, 28, .32) 100%);
+  /* Mismo degradado del hero móvil (15598:4326); no volver al velo plano. */
+  .hero::after,
+  .hero--plain::after {
+    background: linear-gradient(
+      57deg,
+      rgba(32, 19, 28, 1) 0%,
+      rgba(32, 19, 28, 1) 17.7%,
+      rgba(32, 19, 28, .32) 59.5%,
+      rgba(32, 19, 28, .32) 100%
+    );
   }
 
   .hero__title { font-size: 38px; line-height: 1; }
   .display { font-size: 34px; line-height: 34px; }
   .brands__title { font-size: 34px; line-height: 34px; }
 
+  /* El catálogo (#products) ya usa el ancho del terrain; aquí el resto. */
   .prod { flex-basis: 280px; }
+  #products .prod {
+    flex: 0 0 calc(100cqw - 32px);
+    width: calc(100cqw - 32px);
+    max-width: none;
+  }
   .prod__tag { top: 12px; right: 12px; min-width: 68px; min-height: 26px; padding: 0 7px; border-radius: 13px; font-size: 12px; line-height: 15px; }
   .prod__thumbs { left: 12px; right: 12px; bottom: 14px; gap: 6px; }
   .prod__thumb { width: 46px; height: 46px; border-radius: 5px; }
@@ -3105,8 +3376,12 @@ main > :not(.hero),
   .acc { min-height: 220px; padding: 20px; }
   .acc__title { font-size: 18px; line-height: 22px; }
 
-  .hero__inner { padding: 116px 20px 0; }
-  .hero { padding-bottom: 24px; }
+  .hero__inner { padding: 70px 15px 53px; margin-inline: 0; }
+  .hero,
+  .hero--plain {
+    min-height: calc(100svh - 30px + 24px);
+    padding-bottom: 0;
+  }
   .reviews__panel { padding: 32px 16px; }
 
   .news { padding: 56px 16px; }
@@ -3130,20 +3405,20 @@ main > :not(.hero),
    -------------------------------------------------------------------------- */
 
 @media (max-width: 620px) {
-  /* El diseño móvil deja accesorios, noticias y opiniones en ese orden. */
+  /* Mismo orden que en escritorio: Blog → Accessories → Reviews. */
   main { display: flex; flex-direction: column; }
-  #accessories { order: 1; }
-  #news { order: 2; }
+  #news { order: 1; }
+  #accessories { order: 2; }
   #reviews { order: 3; }
 
   /* Titulares de sección a 32 px, como el frame. */
   .display,
   .news__title { font-size: 32px; line-height: 32px; }
 
-  /* Hero: 52/54 en Obviously Demo de ancho normal, en tres líneas. */
+  /* Hero: 52/54 en Obviously Demo Black, en tres líneas (como Figma). */
   .hero__title {
     font-family: 'Obviously Demo', var(--font-display);
-    font-weight: 600;
+    font-weight: 900;
     font-size: 52px;
     line-height: 54px;
     letter-spacing: 0;
@@ -3170,6 +3445,8 @@ main > :not(.hero),
 
   /* Footer en una columna, como el frame. */
   .foot-links { display: flex; flex-direction: column; gap: 28px; }
+  .site-footer { padding: 40px 16px 32px; }
+  .foot-bottom { padding-top: 24px; gap: 24px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

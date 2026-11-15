@@ -1,0 +1,26 @@
+---
+description: Reglas de diseño para móvil (layout, CTAs y carruseles)
+alwaysApply: true
+---
+
+# Móvil
+
+Aplica estas reglas en todo diseño o CSS para anchos de móvil/tableta (en este proyecto, media queries ≤980 px, y ajustes finos ≤620 px).
+
+## CTAs a ancho completo
+
+- Los botones de acción (`.btn` y CTAs equivalentes de sección) ocupan **todo el ancho** del contenido.
+- Siempre respetan el margen lateral del contenedor (`--gutter` / márgenes del `.container`): el botón llega de margen a margen, no de borde a borde de pantalla.
+- Centra el texto y el icono dentro del botón (`justify-content: center`).
+- No dejes CTAs «sueltos» a la derecha o con ancho de contenido en móvil.
+
+## Carruseles sin margen derecho
+
+- En carruseles horizontales (terrain, productos, noticias, etc.) **quita el margen derecho**: la fila llega hasta el borde de la pantalla.
+- El margen **izquierdo** se mantiene (alineado con el resto del contenido).
+- Así se ve un trozo de la siguiente tarjeta y se entiende que se puede deslizar.
+- El relleno interno al final de la pista (para poder hacer scroll hasta la última card) no cuenta como margen visual derecho: puede existir, pero no debe dejar un hueco vacío fijo a la derecha del viewport.
+
+## No inventar excepciones
+
+Si un diseño de Figma contradice estas reglas en móvil, pregunta antes de saltártelas.

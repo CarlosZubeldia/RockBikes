@@ -236,15 +236,43 @@
       if (abierto && cards && cards.hasAttribute('data-visible')) { arrancarFicha(); }
     });
 
-    // Al elegir un enlace, el menú desplegado se cierra solo.
+    // ¿Menú en modo compacto (desplegable, ≤1180)? Ahí el 2.º nivel va a pantalla.
+    var menuCompacto = function () {
+      return window.matchMedia('(max-width: 1180px)').matches;
+    };
+
+    // Al elegir un enlace sin submenú, el desplegable se cierra.
+    // Si tiene submenú en móvil/tableta, se abre el segundo nivel en su lugar.
     menu.addEventListener('click', function (e) {
-      if (e.target.closest('a') && header.classList.contains('is-menu-open')) {
-        cerrarMenu();
+      var enlace = e.target.closest('a.nav__link');
+      if (!enlace || !header.classList.contains('is-menu-open')) { return; }
+      var clave = enlace.childNodes[0] && enlace.childNodes[0].textContent
+        ? enlace.childNodes[0].textContent.trim()
+        : enlace.textContent.trim();
+      if (menuCompacto() && SUBMENUS[clave]) {
+        e.preventDefault();
+        abrirSub(enlace);
+        return;
       }
+      cerrarMenu();
     });
 
     // Segundo nivel: se rellena al pasar por encima de un enlace que lo tenga.
     if (sub) {
+      // Botón «volver» para móvil/tableta (el CSS lo oculta en escritorio).
+      if (!sub.querySelector('[data-sub-back]')) {
+        var btnVolver = document.createElement('button');
+        btnVolver.type = 'button';
+        btnVolver.className = 'nav__sub-back';
+        btnVolver.setAttribute('data-sub-back', '');
+        btnVolver.setAttribute('aria-label', 'Back to main menu');
+        btnVolver.textContent = '← Menu';
+        sub.insertBefore(btnVolver, sub.firstChild);
+        btnVolver.addEventListener('click', function (e) {
+          e.preventDefault();
+          cerrarSub();
+        });
+      }
       var renderCards = function (ficha) {
         var datos = FICHAS[ficha];
         if (!datos || !cards) { return; }
@@ -348,18 +376,28 @@
       };
 
       menu.querySelectorAll('.nav__link').forEach(function (a) {
-        a.addEventListener('mouseenter', function () { abrirSub(a); });
-        a.addEventListener('focus', function () { abrirSub(a); });
+        a.addEventListener('mouseenter', function () {
+          if (!menuCompacto()) { abrirSub(a); }
+        });
+        a.addEventListener('focus', function () {
+          if (!menuCompacto()) { abrirSub(a); }
+        });
       });
 
       // El segundo y el tercer nivel son descendientes de .nav, así que el
       // leave que vale es el de la barra entera: si se cuelga del menú de
       // 301 px, entrar en el segundo nivel ya lo cerraría.
+      // En compacto no se cierra al salir: el usuario usa «← Menu» o Escape.
       var nav = document.querySelector('.nav');
-      if (nav) { nav.addEventListener('mouseleave', cerrarSub); }
+      if (nav) {
+        nav.addEventListener('mouseleave', function () {
+          if (!menuCompacto()) { cerrarSub(); }
+        });
+      }
 
       // Un enlace del submenú o de las fichas también cierra el menú.
       sub.addEventListener('click', function (e) {
+        if (e.target.closest('[data-sub-back]')) { return; }
         if (e.target.closest('a') && header.classList.contains('is-menu-open')) {
           cerrarMenu();
         }
@@ -768,8 +806,11 @@
   /* ------------------------------------------------ elige tu terreno -- */
   /* Cinco paneles; el que tiene el ratón o el foco se ensancha. El ancho lo
      lleva el CSS (`.is-active`), aquí solo se mueve la clase. Trail activo de
-     salida, como en el componente original. */
+     salida, como en el componente original. En móvil el CSS deja todas en
+     «hover» y los puntos marcan el carrusel (sin flechas). */
   var terrain = document.querySelector('[data-terrain]');
+  var terrainPanels = document.querySelector('.terrain__panels');
+  var terrainDots = document.querySelector('[data-terrain-dots]');
 
   if (terrain) {
     var terrainItems = [].slice.call(terrain.querySelectorAll('.terrain__item'));
@@ -787,9 +828,11 @@
         enlace.addEventListener('mouseenter', function () { terreno(item); });
         enlace.addEventListener('focus', function () { terreno(item); });
         /* En pantalla táctil no hay ratón: el primer toque abre el panel y el
-           segundo ya sigue el enlace. */
+           segundo ya sigue el enlace. En el carrusel móvil todas van abiertas,
+           así que el toque sigue el enlace. */
         enlace.addEventListener('click', function (e) {
-          if (!item.classList.contains('is-active')) {
+          var movil = window.matchMedia('(max-width: 980px)').matches;
+          if (!movil && !item.classList.contains('is-active')) {
             e.preventDefault();
             terreno(item);
           }
@@ -798,6 +841,43 @@
     }
 
     terreno(terrainItems[1] || terrainItems[0]);
+
+    if (terrainPanels && terrainDots && terrainItems.length) {
+      var tGap = 12;
+
+      for (var ti = 0; ti < terrainItems.length; ti++) {
+        var tDot = document.createElement('button');
+        tDot.type = 'button';
+        tDot.setAttribute('aria-label', 'Ir a la disciplina ' + (ti + 1));
+        if (ti === 0) { tDot.setAttribute('aria-current', 'true'); }
+        terrainDots.appendChild(tDot);
+      }
+
+      var tDotButtons = terrainDots.querySelectorAll('button');
+
+      function paintTerrainDots() {
+        var step = terrainItems[0].offsetWidth + tGap;
+        if (!step) { return; }
+        var index = Math.round(terrainPanels.scrollLeft / step);
+        if (index < 0) { index = 0; }
+        if (index > tDotButtons.length - 1) { index = tDotButtons.length - 1; }
+        for (var n = 0; n < tDotButtons.length; n++) {
+          if (n === index) { tDotButtons[n].setAttribute('aria-current', 'true'); }
+          else { tDotButtons[n].removeAttribute('aria-current'); }
+        }
+      }
+
+      for (var td = 0; td < tDotButtons.length; td++) {
+        (function (button, position) {
+          button.addEventListener('click', function () {
+            var step = terrainItems[0].offsetWidth + tGap;
+            terrainPanels.scrollTo({ left: position * step, behavior: 'smooth' });
+          });
+        })(tDotButtons[td], td);
+      }
+
+      terrainPanels.addEventListener('scroll', paintTerrainDots, { passive: true });
+    }
   }
 
   /* ------------------------------------------------------ arrastrar filas -- */
@@ -838,6 +918,8 @@
       }
 
       row.addEventListener('pointerdown', function (e) {
+        /* Ratón: arrastre propio. Dedo/lápiz: el scroll nativo (touch-action:
+           pan-x) mueve la fila; no interceptamos para no pelear con él. */
         if (e.pointerType !== 'mouse' || e.button !== 0) { return; }
         // Los botones (flechas y miniaturas) no arrastran la fila.
         if (e.target.closest('button')) { return; }
