@@ -182,7 +182,10 @@
     pararFicha();
     sub.removeAttribute('data-visible');
     if (cards) { cards.removeAttribute('data-visible'); }
-    if (header) { header.classList.remove('is-sub-open'); }
+    if (header) {
+      header.classList.remove('is-sub-open');
+      header.classList.remove('is-cards-open');
+    }
     if (enlaceActivo) {
       enlaceActivo.classList.remove('is-active');
       enlaceActivo = null;
@@ -265,11 +268,23 @@
         btnVolver.type = 'button';
         btnVolver.className = 'nav__sub-back';
         btnVolver.setAttribute('data-sub-back', '');
-        btnVolver.setAttribute('aria-label', 'Back to main menu');
-        btnVolver.textContent = '← Menu';
+        btnVolver.setAttribute('aria-label', 'Go back to main menu');
+        btnVolver.innerHTML =
+          '<svg class="nav__sub-back-icon" viewBox="0 0 20 20" aria-hidden="true">' +
+            '<path d="M15 10H5M9 5.5L4.5 10 9 14.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+          '<span>GO BACK</span>';
         sub.insertBefore(btnVolver, sub.firstChild);
         btnVolver.addEventListener('click', function (e) {
           e.preventDefault();
+          // En móvil: desde la ficha (3.er nivel) se vuelve a la lista; desde
+          // la lista, al menú principal.
+          if (header.classList.contains('is-cards-open') && cards) {
+            header.classList.remove('is-cards-open');
+            cards.removeAttribute('data-visible');
+            pararFicha();
+            return;
+          }
           cerrarSub();
         });
       }
@@ -319,6 +334,8 @@
         if (!subLista) { return; }
         subLista.querySelectorAll('a').forEach(function (a) {
           var mostrar = function () {
+            // En compacto las fichas se abren con clic (pantalla aparte).
+            if (menuCompacto()) { return; }
             var ficha = a.getAttribute('data-ficha');
             if (ficha) {
               marcarSubActiva(a);
@@ -356,12 +373,14 @@
           }).join('');
           conectarFichas();
         }
-        // Al abrir una categoría, se muestra ya la ficha de la primera subcategoría.
+        // Escritorio: se muestra ya la ficha de la primera subcategoría.
+        // Móvil: solo la lista (el 3.er nivel se abre al pulsar un ítem).
+        header.classList.remove('is-cards-open');
         var primeraConFicha = null;
         for (var i = 0; i < datos.items.length; i++) {
           if (datos.items[i].ficha) { primeraConFicha = datos.items[i]; break; }
         }
-        if (primeraConFicha && cards) {
+        if (!menuCompacto() && primeraConFicha && cards) {
           var primerEnlace = subLista && subLista.querySelector('[data-ficha="' + primeraConFicha.ficha + '"]');
           marcarSubActiva(primerEnlace);
           renderCards(primeraConFicha.ficha);
@@ -396,8 +415,20 @@
       }
 
       // Un enlace del submenú o de las fichas también cierra el menú.
+      // En compacto, un ítem con ficha abre el 3.er nivel en vez de navegar.
       sub.addEventListener('click', function (e) {
         if (e.target.closest('[data-sub-back]')) { return; }
+        var enlaceSub = e.target.closest('.nav__sub-list a');
+        if (menuCompacto() && enlaceSub) {
+          var ficha = enlaceSub.getAttribute('data-ficha');
+          if (ficha) {
+            e.preventDefault();
+            marcarSubActiva(enlaceSub);
+            renderCards(ficha);
+            header.classList.add('is-cards-open');
+            return;
+          }
+        }
         if (e.target.closest('a') && header.classList.contains('is-menu-open')) {
           cerrarMenu();
         }
