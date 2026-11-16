@@ -1,8 +1,8 @@
 /* ==========================================================================
    ROCK BIKES — comportamiento de la ficha de producto
 
-   Solo lo que esta página necesita de verdad: los acordeones, las pastillas de
-   batería, los puntos de la fila de relacionados y el botón de copiar enlace.
+   Solo lo que esta página necesita de verdad: los acordeones, los puntos de la
+   fila de relacionados y el botón de copiar enlace.
    El arrastre de la galería y de la fila de tarjetas lo pone main.js con
    [data-drag-scroll], y la cabecera adhesiva también viene de allí.
    ========================================================================== */
@@ -41,21 +41,6 @@
         });
       })(items[i]);
     }
-  }
-
-  /* ---------------------------- batería / variantes ----------------------- */
-
-  var pills = document.querySelectorAll('.buybox__pill');
-  for (var p = 0; p < pills.length; p++) {
-    (function (pill) {
-      pill.addEventListener('click', function () {
-        for (var n = 0; n < pills.length; n++) {
-          var active = pills[n] === pill;
-          pills[n].classList.toggle('is-active', active);
-          pills[n].setAttribute('aria-pressed', active ? 'true' : 'false');
-        }
-      });
-    })(pills[p]);
   }
 
   /* ------------------------- puntos de los relacionados ------------------- */

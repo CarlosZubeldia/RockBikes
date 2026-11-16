@@ -119,12 +119,12 @@
     shoes: { imagen: 'assets/opt/acc-shoes.webp', nombre: 'Shoes & pedals', productos: tresProductos('Flat', 'Sticky sole, all-day comfort') },
     starter: { imagen: 'assets/opt/acc-best-brands.webp', nombre: 'Trail starter kit', productos: tresProductos('Starter', 'Everything for your first trails') },
 
-    wheels: { imagen: 'assets/opt/cat-wheels.webp', nombre: 'Wheels & tyres', productos: tresProductos('Wheelset', 'Tubeless-ready trail wheels') },
+    wheels: { imagen: 'assets/opt/ficha-detalle-ruedas.webp', nombre: 'Wheels & tyres', productos: tresProductos('Wheelset', 'Tubeless-ready trail wheels') },
     suspension: { imagen: 'assets/opt/ficha-detalle-plataforma.webp', nombre: 'Suspension', productos: tresProductos('Fork', 'Plush travel, dialled damping') },
-    drivetrain: { imagen: 'assets/opt/ficha-detalle-pantalla.webp', nombre: 'Drivetrain', productos: tresProductos('Groupset', 'Crisp shifts, long life') },
+    drivetrain: { imagen: 'assets/opt/ficha-detalle-plataforma.webp', nombre: 'Drivetrain', productos: tresProductos('Groupset', 'Crisp shifts, long life') },
     brakes: { imagen: 'assets/opt/ficha-detalle-frenos.webp', nombre: 'Brakes', productos: tresProductos('Stop', 'Four-piston control') },
-    cockpit: { imagen: 'assets/opt/ficha-detalle-compacto.webp', nombre: 'Cockpit', productos: tresProductos('Bar', 'Trail-tuned control') },
-    saddles: { imagen: 'assets/opt/ficha-detalle-ruedas.webp', nombre: 'Saddles & seatposts', productos: tresProductos('Dropper', 'On-the-fly adjust') },
+    cockpit: { imagen: 'assets/opt/ficha-detalle-pantalla.webp', nombre: 'Cockpit', productos: tresProductos('Bar', 'Trail-tuned control') },
+    saddles: { imagen: 'assets/opt/ficha-detalle-compacto.webp', nombre: 'Saddles & seatposts', productos: tresProductos('Dropper', 'On-the-fly adjust') },
 
     jerseys: { imagen: 'assets/opt/acc-clothing.webp', nombre: 'Jerseys', productos: tresProductos('Jersey', 'Breathable trail fit') },
     shorts: { imagen: 'assets/opt/finder-other.webp', nombre: 'Shorts', productos: tresProductos('Short', 'Stretch, pocket space') },

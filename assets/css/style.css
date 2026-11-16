@@ -1309,14 +1309,15 @@ main > :not(.hero),
   color: var(--c-yellow);
 }
 
-/* El titular va con el mismo `.display` de 60 px que el resto de secciones. */
-.terrain__title { margin-bottom: 16px; }
+/* Mismo ritmo que Opinions / Catalogue: titular sin margen, lead a 20 px. */
+.terrain__title { margin-bottom: 0; }
 
 .terrain__lead {
-  margin: 0;
+  margin: 20px 0 0;
   max-width: 560px;
   font-size: 18px;
-  line-height: 29px;
+  font-weight: 600;
+  line-height: 21px;
   color: #CFC7CC;
 }
 
@@ -1398,6 +1399,14 @@ main > :not(.hero),
   font-size: 24px;
   font-weight: 600;
   color: var(--c-white);
+  /* Contorno gris claro: el amarillo/blanco se pierde sobre cielos claros. */
+  -webkit-text-stroke: 1.5px var(--c-text-soft);
+  paint-order: stroke fill;
+  text-shadow:
+    -1px -1px 0 #8C8C8C,
+     1px -1px 0 #8C8C8C,
+    -1px  1px 0 #8C8C8C,
+     1px  1px 0 #8C8C8C;
 }
 /* El número se enciende en amarillo al abrirse el panel; en reposo va en blanco. */
 .is-active .terrain__num { color: var(--c-yellow); }
@@ -1878,7 +1887,13 @@ main > :not(.hero),
   padding: 100px 0 60px;
 }
 
-.brands__lead { margin-top: 24px; font-size: 18px; line-height: 21px; color: var(--c-white); }
+.brands__lead {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21px;
+  color: var(--c-white);
+}
 .brands__copy .btn { margin-top: 32px; }
 
 /* El hueco en el diseño mide 639×509 —proporción 1,26:1—, no 16:9: Figma recorta
@@ -1927,10 +1942,16 @@ main > :not(.hero),
   color: var(--c-yellow);
 }
 
-.brands__sub { margin-top: 24px; font-size: 18px; color: var(--c-white); }
+.brands__sub {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21px;
+  color: var(--c-white);
+}
 
 /* Segundo bloque de marcas: titular propio sobre la fila de logos. */
-.brands__row .brands__title { margin: 0 0 16px; color: var(--c-white); }
+.brands__row .brands__title { margin: 0; color: var(--c-white); }
 
 /* Fila de marcas: cinco logos; Escape al final para el wrap en móvil. */
 .brands__logos {
@@ -2017,8 +2038,9 @@ main > :not(.hero),
 .riders__lead {
   margin: 20px 0 0;
   max-width: 460px;
-  font-size: 17px;
-  line-height: 1.375;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21px;
 }
 
 .riders__list {
@@ -2246,9 +2268,11 @@ main > :not(.hero),
 
   .riders__lead {
     display: block;
-    margin-top: 16px;
+    margin-top: 20px;
     max-width: none;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 21px;
   }
 
   .riders__list {
@@ -2532,17 +2556,17 @@ main > :not(.hero),
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: clamp(24px, calc(24px + (100vw - 1366px) * 0.196), 45px);
+  gap: 0;
   align-self: stretch;
 }
 
-/* Antetítulo y titular van juntos, sin el hueco que separa al resto de hijos. */
+/* Antetítulo y titular juntos; lead a 20 px, como Opinions. */
 .news__heading {
   display: flex;
   flex-direction: column;
 }
 .news__title {
-  margin: 0 0 clamp(12px, calc(12px + (100vw - 1366px) * 0.159), 29px);
+  margin: 0;
   font-family: var(--font-display);
   font-size: 60px;
   font-weight: 900;
@@ -2552,15 +2576,17 @@ main > :not(.hero),
 .news__title span { color: var(--c-yellow); }
 .news__lead {
   width: clamp(452px, calc(464px + (100vw - 1366px) * -0.112), 464px);
-  margin: 0;
-  font-size: clamp(18px, calc(18px + (100vw - 1366px) * 0.0187), 20px);
-  line-height: clamp(22.68px, calc(22.68px + (100vw - 1366px) * 0.031), 26px);
+  margin: 20px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21px;
   color: #F0F0F0;
 }
 .news__all {
   display: inline-flex;
   align-items: center;
   gap: clamp(8px, calc(8px + (100vw - 1366px) * 0.0374), 12px);
+  margin-top: 32px;
   height: clamp(48px, calc(48px + (100vw - 1366px) * 0.224), 72px);
   padding: 0 clamp(18px, calc(18px + (100vw - 1366px) * 0.056), 24px);
   border: 1px solid var(--c-white);
@@ -3277,11 +3303,14 @@ main > :not(.hero),
   .news {
     display: flex;
     flex-direction: column;
+    /* Sin gap: con display:contents el hueco de 40 px se colaba entre
+       titular y lead (20 + 40 = 60). El ritmo lo marcan los márgenes. */
+    gap: 0;
   }
   .news__head { display: contents; }
   .news__heading { order: 1; }
   .news__lead { order: 2; }
-  .news__carousel { order: 3; }
+  .news__carousel { order: 3; margin-top: 40px; }
   .news__all { order: 4; margin-top: 32px; }
 
   .brands__top {

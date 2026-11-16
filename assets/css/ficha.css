@@ -386,37 +386,6 @@ html.is-lightbox body { overflow: hidden; }
   color: #454545;
 }
 
-.buybox__opt { display: flex; align-items: center; gap: 24px; margin-top: 12px; }
-.buybox__opt-label { font-size: 16px; font-weight: 400; line-height: 20px; color: #000; flex: none; }
-.buybox__pills {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  height: 44px;
-  padding: 4px;
-  border: 1px solid #5E178A;
-  border-radius: 16px;
-  flex: 1;
-  min-width: 0;
-}
-.buybox__pill {
-  flex: 1 1 0;
-  min-width: 0;
-  height: 36px;
-  padding: 0 8px;
-  border: 0;
-  border-radius: 16px;
-  background: transparent;
-  color: #340D4C;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  cursor: pointer;
-  transition: background-color .18s ease, color .18s ease;
-}
-.buybox__pill.is-active { background: var(--c-yellow); color: #0E090D; }
-
 .buybox__stock { margin: 0; font-size: 16px; font-weight: 300; line-height: 20px; color: #454545; }
 .buybox__stock strong { font-weight: 500; color: #56157E; }
 
@@ -737,52 +706,11 @@ html.is-lightbox body { overflow: hidden; }
 /* El separador de 8 px entre autor y comentario. */
 .rreview__who + .rreview__text { margin-top: -8px; }
 
-.ureviews__all {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 16px;
-  color: var(--c-yellow);
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 22px;
-}
-.ureviews__all:hover { color: #E0BE00; }
-.ureviews__all .icon-arrow { width: 20px; height: 20px; }
+/* Mismo botón del sistema (.btn); solo el margen respecto a la lista. */
+.ureviews__all { margin-top: 24px; }
 
 /* --------------------------------------------------------------------------
-   8. Banner RIDE INTO THE WILD
-
-   La foto no es un fondo: en el diseño está colocada con una matriz dentro del
-   marco. Traducida a porcentajes del marco son estos cuatro números.
-   -------------------------------------------------------------------------- */
-
-.ride { margin-top: 60px; background: #FBBF24; overflow: hidden; }
-.ride > .frame { position: relative; height: 720px; }
-
-.ride__bike {
-  position: absolute;
-  left: 36.2%;
-  top: 21.6%;
-  width: 57.9%;
-  height: auto;
-  max-width: none;
-}
-
-.ride__copy { position: absolute; left: 81px; top: 150px; width: 341px; }
-.ride__logo { width: 337px; height: auto; }
-.ride__title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 120.84px;
-  font-weight: 900;
-  line-height: 94.62px;
-  letter-spacing: -.01em;
-  color: #fff;
-}
-
-/* --------------------------------------------------------------------------
-   9. Relacionados
+   8. Relacionados
 
    Las tarjetas son las mismas de «Most wanted»: aquí solo cambian el hueco
    entre ellas (20 px) y los puntos, que no son la píldora amarilla del home.
@@ -914,16 +842,6 @@ html.is-lightbox body { overflow: hidden; }
   .ureviews__list { width: 100%; margin-top: 16px; }
   .rreview { padding: 16px; }
 
-  /* En el marcado la foto va antes que el texto (en escritorio ambas son
-     absolutas y da igual); apiladas hay que devolver el texto arriba. */
-  .ride { margin-top: 40px; }
-  .ride > .frame { display: flex; flex-direction: column; height: auto; padding: 40px 16px 0; }
-  .ride__copy { order: -1; }
-  .ride__copy { position: static; width: auto; }
-  .ride__logo { width: 200px; height: auto; }
-  .ride__title { font-size: 19vw; line-height: .86; }
-  .ride__bike { position: static; width: 100%; margin-top: 8px; }
-
   /* Carrusel relacionados: margen izquierdo, sin margen derecho (peek). */
   .related { margin: 40px 0 0; }
   .related > .frame { padding: 0 0 0 16px; }
@@ -956,5 +874,4 @@ html.is-lightbox body { overflow: hidden; }
   .rreview__rate { flex-wrap: wrap; gap: 8px 12px; }
   .specs { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
   .buybox__title { font-size: 26px; line-height: 30px; }
-  .ride__title { font-size: 17vw; }
 }
