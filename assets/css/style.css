@@ -1403,14 +1403,6 @@ main > :not(.hero),
   font-size: 24px;
   font-weight: 600;
   color: var(--c-white);
-  /* Contorno gris claro: el amarillo/blanco se pierde sobre cielos claros. */
-  -webkit-text-stroke: 1.5px var(--c-text-soft);
-  paint-order: stroke fill;
-  text-shadow:
-    -1px -1px 0 #8C8C8C,
-     1px -1px 0 #8C8C8C,
-    -1px  1px 0 #8C8C8C,
-     1px  1px 0 #8C8C8C;
 }
 /* El número se enciende en amarillo al abrirse el panel; en reposo va en blanco. */
 .is-active .terrain__num { color: var(--c-yellow); }
@@ -2011,7 +2003,7 @@ main > :not(.hero),
   display: contents;
 }
 
-/* Panel amarillo: titular, descripción y lista de categorías. */
+/* Panel amarillo: titular arriba, lista centrada entre titular y CTA, pie libre. */
 .riders__panel {
   grid-column: 1;
   grid-row: 1;
@@ -2020,7 +2012,7 @@ main > :not(.hero),
   height: calc(100vh - 270px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 24px;
   padding: 48px 40px 72px;
   border-radius: 16px;
@@ -2048,12 +2040,16 @@ main > :not(.hero),
 }
 
 .riders__list {
+  /* Ocupa el hueco bajo el titular y centra las categorías respecto al CTA. */
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2px;
   margin: 0;
   padding: 0;
   list-style: none;
+  min-height: 0;
 }
 
 .riders__cat {
@@ -2446,7 +2442,8 @@ main > :not(.hero),
   background: var(--c-white);
   border-radius: 4px;
   padding: 22px 24px 26px;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, .06), inset 0 0 0 1px #EDEDED;
+  /* Solo el borde interior: la sombra rellenaba de gris el hueco entre cards. */
+  box-shadow: inset 0 0 0 1px #EDEDED;
 }
 
 /* Opiniones: mismo arrastre y puntos que «Most wanted» / noticias. */
@@ -2609,10 +2606,12 @@ main > :not(.hero),
    del Figma: la tarjeta anterior se va ocultando hacia el titular. */
 .news__carousel {
   position: relative;
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-width: 0;
   align-self: center;
-  height: 580px;
+  height: auto;
 }
 .news__carousel::before {
   content: '';
@@ -2628,7 +2627,7 @@ main > :not(.hero),
 .news__cards {
   display: flex;
   gap: clamp(35px, calc(35px + (100vw - 1366px) * 0.617), 101px);
-  height: 100%;
+  height: 580px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -2636,6 +2635,18 @@ main > :not(.hero),
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   cursor: grab;
+}
+
+/* Puntos bajo las cards; en fondo ciruela, inactivos más claros. */
+.news__foot {
+  justify-content: center;
+  margin-top: 24px;
+}
+.news__foot .dots button {
+  background: rgba(255, 255, 255, .35);
+}
+.news__foot .dots button[aria-current="true"] {
+  background: var(--c-amber);
 }
 .news__cards::-webkit-scrollbar { display: none; }
 .news__cards.is-dragging { cursor: grabbing; scroll-snap-type: none; }
@@ -3151,8 +3162,8 @@ main > :not(.hero),
   .news__lead { width: 100%; max-width: 464px; }
   /* El align-self: center del escritorio dejaba la fila con su ancho máximo
      (2760 px) y provocaba scroll horizontal en todo el documento. */
-  .news__carousel { align-self: stretch; height: 580px; }
-  .news__cards { width: 100%; max-width: 100%; }
+  .news__carousel { align-self: stretch; height: auto; }
+  .news__cards { width: 100%; max-width: 100%; height: 580px; }
   .news__carousel::before { width: 0; }
 }
 
@@ -3362,26 +3373,30 @@ main > :not(.hero),
     width: calc(100% + var(--gutter));
     margin-right: calc(var(--gutter) * -1);
   }
+  /* Blog: el padding de .news es 24 px (≤1100); el sangrado va a juego. */
   .news__carousel,
   .news__cards {
     width: calc(100% + 24px);
     margin-right: -24px;
   }
 
-  /* Catálogo y opiniones: mismo ancho de card (peek 20 + gap 12). */
+  /* Catálogo, opiniones y blog: mismo ancho de card (peek ~20 + gap 12). */
   #products .carousel__viewport,
-  .reviews__carousel .carousel__viewport {
+  .reviews__carousel .carousel__viewport,
+  .news__carousel {
     container-type: inline-size;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
   }
   #products .carousel__track,
-  .reviews__carousel .carousel__track {
+  .reviews__carousel .carousel__track,
+  .news__cards {
     gap: 12px;
     padding-inline-end: 32px;
   }
   #products .prod,
-  .reviews__carousel .review {
+  .reviews__carousel .review,
+  .article {
     flex: 0 0 calc(100cqw - 32px);
     width: calc(100cqw - 32px);
     max-width: none;
@@ -3418,11 +3433,10 @@ main > :not(.hero),
 
   .news__title { font-size: 48px; line-height: 48px; }
 
-  /* Tarjetas de noticias más estrechas y sin alto fijo: en móvil 580 px de alto
-     con 327 de ancho dejaban el texto descolgado. */
+  /* Blog: mismo peek que catálogo; alto fijo razonable en móvil. */
   .news__carousel { height: auto; }
-  .news__cards { height: auto; gap: 16px; }
-  .article { width: min(78vw, 340px); height: 420px; }
+  .news__cards { height: auto; }
+  .article { height: 420px; }
   .article__content { left: 20px; right: 20px; bottom: 20px; }
   .article__title { font-size: 30px; line-height: 34px; }
   .article__summary { font-size: 14px; line-height: 18px; }
@@ -3561,8 +3575,11 @@ main > :not(.hero),
 
   .news { padding: 56px 16px; }
   .news__title { font-size: 40px; line-height: 40px; }
-  .news__cards { gap: 20px; }
-  .article { width: 84vw; }
+  .news__carousel,
+  .news__cards {
+    width: calc(100% + 16px);
+    margin-right: -16px;
+  }
   .article__content { left: 20px; right: 20px; bottom: 20px; }
 
   .foot-links {
@@ -3603,8 +3620,8 @@ main > :not(.hero),
   .cat { height: 358px; }
   .cat:nth-child(n + 4) { display: none; }
 
-  /* Noticias: tarjetas de 330 × 460. */
-  .article { width: 330px; height: 460px; }
+  /* Noticias: mismo peek que productos; un poco más altas. */
+  .article { height: 460px; }
   .article__title { font-size: 30px; line-height: 34px; }
 
   /* Reseñas: score arriba, carrusel con el mismo peek que productos. */

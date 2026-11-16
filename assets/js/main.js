@@ -1110,10 +1110,6 @@
     var cards = section.querySelectorAll(cardSelector);
     if (!scroller || !dotsList || !cards.length) { return; }
 
-    var gapDesktop = 24;
-    var gapMobile = 12;
-    var mobileMq = window.matchMedia('(max-width: 980px)');
-
     for (var i = 0; i < cards.length; i++) {
       var dot = document.createElement('button');
       dot.type = 'button';
@@ -1124,13 +1120,17 @@
 
     var dotButtons = dotsList.querySelectorAll('button');
 
-    function stepGap() {
-      return mobileMq.matches ? gapMobile : gapDesktop;
+    /* Hueco real entre cards (productos 24/12, blog clamp, etc.). */
+    function stepSize() {
+      if (cards.length > 1) {
+        return cards[1].offsetLeft - cards[0].offsetLeft;
+      }
+      return cards[0].offsetWidth;
     }
 
     function paintDots() {
-      var step = cards[0].offsetWidth + stepGap();
-      var index = Math.round(scroller.scrollLeft / step);
+      var step = stepSize();
+      var index = step > 0 ? Math.round(scroller.scrollLeft / step) : 0;
       if (index < 0) { index = 0; }
       if (index > dotButtons.length - 1) { index = dotButtons.length - 1; }
       for (var n = 0; n < dotButtons.length; n++) {
@@ -1143,7 +1143,7 @@
       (function (button, position) {
         button.addEventListener('click', function () {
           scroller.scrollTo({
-            left: position * (cards[0].offsetWidth + stepGap()),
+            left: position * stepSize(),
             behavior: 'smooth'
           });
         });
@@ -1155,4 +1155,5 @@
 
   bindScrollDots(document.getElementById('products'), '.prod');
   bindScrollDots(document.querySelector('.reviews__carousel'), '.review');
+  bindScrollDots(document.getElementById('news'), '.article');
 })();
