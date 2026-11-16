@@ -1932,8 +1932,7 @@ main > :not(.hero),
 /* Segundo bloque de marcas: titular propio sobre la fila de logos. */
 .brands__row .brands__title { margin: 0 0 16px; color: var(--c-white); }
 
-/* La fila de marcas del diseño actual: cinco logos con 81.6 px entre ellos y
-   centrados en vertical sobre el más alto (Cycling, 157.4). */
+/* Fila de marcas: cinco logos; Escape al final para el wrap en móvil. */
 .brands__logos {
   position: relative;
   display: flex;
@@ -2398,9 +2397,8 @@ main > :not(.hero),
   grid-template-columns: 300px 1fr;
   gap: 40px;
   align-items: center;
-  background: var(--c-surface);
-  border-radius: var(--radius);
-  padding: 100px 35px;
+  background: transparent;
+  padding: 0;
 }
 .reviews { background: var(--c-white); }
 
@@ -2418,10 +2416,24 @@ main > :not(.hero),
 .review {
   flex: 0 0 285px;
   background: var(--c-white);
-  border-radius: var(--radius);
+  border-radius: 4px;
   padding: 22px 24px 26px;
-  box-shadow: 0 4px 18px rgba(32,19,28,.05);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, .06), inset 0 0 0 1px #EDEDED;
 }
+
+/* Opiniones: mismo arrastre y puntos que «Most wanted» / noticias. */
+.reviews__carousel .carousel__viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+}
+.reviews__carousel .carousel__viewport::-webkit-scrollbar { display: none; }
+.reviews__carousel .carousel__viewport.is-dragging { cursor: grabbing; }
+.reviews__carousel .carousel__track { transform: none; transition: none; }
+.reviews__carousel .review { scroll-snap-align: start; }
 
 .review__head { display: flex; align-items: center; gap: 12px; }
 .review__avatar {
@@ -2448,7 +2460,7 @@ main > :not(.hero),
   overflow: hidden;
 }
 
-.reviews__carousel { margin-top: 48px; }
+.reviews__carousel { margin-top: 0; min-width: 0; }
 
 /* Mismo efecto de flecha que el resto de botones de la web: la que hay sale
    hacia la derecha y se desvanece, y otra entra desde la izquierda. El ancho
@@ -3299,7 +3311,8 @@ main > :not(.hero),
 
   /* —— Carruseles: sin margen derecho; el peek llega al borde —— */
   .terrain__panels,
-  #products .carousel__viewport {
+  #products .carousel__viewport,
+  .reviews__carousel .carousel__viewport {
     width: calc(100% + var(--gutter));
     margin-right: calc(var(--gutter) * -1);
   }
@@ -3309,22 +3322,28 @@ main > :not(.hero),
     margin-right: -24px;
   }
 
-  /* Catálogo: mismo ancho de card que terrain (peek 20 + gap 12). */
-  #products .carousel__viewport {
+  /* Catálogo y opiniones: mismo ancho de card (peek 20 + gap 12). */
+  #products .carousel__viewport,
+  .reviews__carousel .carousel__viewport {
     container-type: inline-size;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
   }
-  #products .carousel__track {
+  #products .carousel__track,
+  .reviews__carousel .carousel__track {
     gap: 12px;
     padding-inline-end: 32px;
   }
-  #products .prod {
+  #products .prod,
+  .reviews__carousel .review {
     flex: 0 0 calc(100cqw - 32px);
     width: calc(100cqw - 32px);
     max-width: none;
   }
   #products .prod img { -webkit-user-drag: none; }
+
+  /* Sin flechas en móvil: se desliza / arrastra como el resto. */
+  .reviews__carousel .carousel__arrow { display: none; }
 
   .news__cards {
     overscroll-behavior-x: contain;
@@ -3343,7 +3362,11 @@ main > :not(.hero),
   .brands__logos { gap: 32px; --mark-scale: .72; }
   .brands__title { font-size: 52px; line-height: 1; }
 
-  .reviews__panel { grid-template-columns: 1fr; padding: 48px 24px; }
+  .reviews__panel {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 0;
+  }
 
   .finder-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -3475,7 +3498,6 @@ main > :not(.hero),
   .prod__price { margin-top: 24px; font-size: 14px; line-height: 18px; }
   .prod__swatch { width: 12px; height: 12px; }
   .prod__colors { font-size: 12px; line-height: 18px; }
-  .review { flex-basis: 260px; }
   .cat-grid { grid-template-columns: 1fr; }
   .cat--wide { grid-column: auto; }
   .cat:first-child { grid-column: auto; }
@@ -3490,7 +3512,6 @@ main > :not(.hero),
     min-height: calc(100svh - 30px + 24px);
     padding-bottom: 0;
   }
-  .reviews__panel { padding: 32px 16px; }
 
   .news { padding: 56px 16px; }
   .news__title { font-size: 40px; line-height: 40px; }
@@ -3540,9 +3561,9 @@ main > :not(.hero),
   .article { width: 330px; height: 460px; }
   .article__title { font-size: 30px; line-height: 34px; }
 
-  /* Reseñas compactas: panel de 342 px de ancho. */
-  .reviews__panel { padding: 20px; gap: 16px; }
-  .reviews__carousel { margin-top: 16px; }
+  /* Reseñas: score arriba, carrusel con el mismo peek que productos. */
+  .reviews__panel { gap: 24px; }
+  .reviews__carousel .carousel__foot { margin-top: 24px; }
 
   /* Footer en una columna, como el frame. */
   .foot-links { display: flex; flex-direction: column; gap: 28px; }

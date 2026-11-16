@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="assets/css/style.css?v=20261115aj">
+<link rel="stylesheet" href="assets/css/style.css?v=20261116d">
 </head>
 <body>
 
@@ -474,19 +474,17 @@
     <h3 class="brands__title">Enjoy the best brands</h3>
     <p class="brands__sub">Quality, performance and confidence in every bike.</p>
     <ul class="brands__logos">
-      <!-- Los cinco logos son SVG exportados de Figma con sus medidas; en el
-           diseño ya van en amarillo plano. --mark-scale los reduce a la vez en
-           pantallas pequeñas. -->
+      <!-- Escape va el último para que en móvil la fila de dos quede más equilibrada. -->
       <li><img src="assets/logos/cycling.svg" alt="Cycling" loading="lazy"
                style="width:calc(107px * var(--mark-scale,1)); height:calc(157.4px * var(--mark-scale,1))"></li>
       <li><img src="assets/logos/evil.svg" alt="Evil" loading="lazy"
                style="width:calc(111.2px * var(--mark-scale,1)); height:calc(110.9px * var(--mark-scale,1))"></li>
-      <li><img src="assets/logos/lux-escape.svg" alt="Lux Escape" loading="lazy"
-               style="width:calc(279.1px * var(--mark-scale,1)); height:calc(60px * var(--mark-scale,1))"></li>
       <li><img src="assets/logos/the-radavist.svg" alt="The Radavist" loading="lazy"
                style="width:calc(136.1px * var(--mark-scale,1)); height:calc(101px * var(--mark-scale,1))"></li>
       <li><img src="assets/logos/bike-travel.svg" alt="Bike Travel" loading="lazy"
                style="width:calc(106.1px * var(--mark-scale,1)); height:calc(128.5px * var(--mark-scale,1))"></li>
+      <li><img src="assets/logos/lux-escape.svg" alt="Lux Escape" loading="lazy"
+               style="width:calc(279.1px * var(--mark-scale,1)); height:calc(60px * var(--mark-scale,1))"></li>
     </ul>
     <a class="btn btn--ghost" href="#">See more <svg class="icon-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   </div>
@@ -758,9 +756,9 @@
         <img class="score__google" src="assets/opt/google-logo-wine-1-0cc2f6.png" alt="Google" loading="lazy">
       </div>
 
-      <div class="carousel reviews__carousel" data-carousel>
-        <div class="carousel__viewport">
-          <ul class="carousel__track" data-carousel-track>
+      <div class="carousel reviews__carousel">
+        <div class="carousel__viewport" data-drag-scroll>
+          <ul class="carousel__track">
             <li class="review">
               <div class="review__head">
                 <span class="review__avatar review__avatar--p">P</span>
@@ -799,14 +797,8 @@
             </li>
           </ul>
         </div>
-        <button class="carousel__arrow carousel__arrow--prev" type="button" data-carousel-prev aria-label="Previous reviews">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="carousel__arrow carousel__arrow--next" type="button" data-carousel-next aria-label="Next reviews">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
         <div class="carousel__foot">
-          <ol class="dots" data-carousel-dots></ol>
+          <ol class="dots"></ol>
         </div>
       </div>
     </div>
@@ -911,6 +903,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=20261115q"></script>
+<script src="assets/js/main.js?v=20261116a"></script>
 </body>
 </html>

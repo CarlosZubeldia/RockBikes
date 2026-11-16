@@ -1100,49 +1100,59 @@
     })(productGalleries[p]);
   }
 
-  /* --------------------------------- «Most wanted»: arrastre y puntos -- */
+  /* --------------- carruseles con arrastre + puntos (productos, opiniones) -- */
 
-  // La fila de productos se arrastra con el ratón (el mismo comportamiento que
-  // «Las noticias») y los puntos marcan y llevan a cada tarjeta.
-  var mostWanted = document.getElementById('products');
-  if (mostWanted) {
-    var scroller = mostWanted.querySelector('[data-drag-scroll]');
-    var dotsList = mostWanted.querySelector('.dots');
-    var productCards = mostWanted.querySelectorAll('.prod');
+  // Misma lógica que «Most wanted»: scroll nativo, arrastre y puntos.
+  function bindScrollDots(section, cardSelector) {
+    if (!section) { return; }
+    var scroller = section.querySelector('[data-drag-scroll]');
+    var dotsList = section.querySelector('.dots');
+    var cards = section.querySelectorAll(cardSelector);
+    if (!scroller || !dotsList || !cards.length) { return; }
 
-    if (scroller && dotsList && productCards.length) {
-      var gap = 24;
+    var gapDesktop = 24;
+    var gapMobile = 12;
+    var mobileMq = window.matchMedia('(max-width: 980px)');
 
-      for (var i = 0; i < productCards.length; i++) {
-        var dot = document.createElement('button');
-        dot.type = 'button';
-        dot.setAttribute('aria-label', 'Ir a la tarjeta ' + (i + 1));
-        if (i === 0) { dot.setAttribute('aria-current', 'true'); }
-        dotsList.appendChild(dot);
-      }
-
-      var dotButtons = dotsList.querySelectorAll('button');
-
-      function paintDots() {
-        var step = productCards[0].offsetWidth + gap;
-        var index = Math.round(scroller.scrollLeft / step);
-        if (index < 0) { index = 0; }
-        if (index > dotButtons.length - 1) { index = dotButtons.length - 1; }
-        for (var n = 0; n < dotButtons.length; n++) {
-          if (n === index) { dotButtons[n].setAttribute('aria-current', 'true'); }
-          else { dotButtons[n].removeAttribute('aria-current'); }
-        }
-      }
-
-      for (var d = 0; d < dotButtons.length; d++) {
-        (function (button, position) {
-          button.addEventListener('click', function () {
-            scroller.scrollTo({ left: position * (productCards[0].offsetWidth + gap), behavior: 'smooth' });
-          });
-        })(dotButtons[d], d);
-      }
-
-      scroller.addEventListener('scroll', paintDots, { passive: true });
+    for (var i = 0; i < cards.length; i++) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', 'Ir a la tarjeta ' + (i + 1));
+      if (i === 0) { dot.setAttribute('aria-current', 'true'); }
+      dotsList.appendChild(dot);
     }
+
+    var dotButtons = dotsList.querySelectorAll('button');
+
+    function stepGap() {
+      return mobileMq.matches ? gapMobile : gapDesktop;
+    }
+
+    function paintDots() {
+      var step = cards[0].offsetWidth + stepGap();
+      var index = Math.round(scroller.scrollLeft / step);
+      if (index < 0) { index = 0; }
+      if (index > dotButtons.length - 1) { index = dotButtons.length - 1; }
+      for (var n = 0; n < dotButtons.length; n++) {
+        if (n === index) { dotButtons[n].setAttribute('aria-current', 'true'); }
+        else { dotButtons[n].removeAttribute('aria-current'); }
+      }
+    }
+
+    for (var d = 0; d < dotButtons.length; d++) {
+      (function (button, position) {
+        button.addEventListener('click', function () {
+          scroller.scrollTo({
+            left: position * (cards[0].offsetWidth + stepGap()),
+            behavior: 'smooth'
+          });
+        });
+      })(dotButtons[d], d);
+    }
+
+    scroller.addEventListener('scroll', paintDots, { passive: true });
   }
+
+  bindScrollDots(document.getElementById('products'), '.prod');
+  bindScrollDots(document.querySelector('.reviews__carousel'), '.review');
 })();
