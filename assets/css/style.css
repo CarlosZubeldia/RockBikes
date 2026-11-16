@@ -801,12 +801,16 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   display: flex;
   align-items: center;
   flex: none;
-  width: 40px;
+  /* Antes width:40px recortaba «Close»; el texto manda el ancho. */
+  width: auto;
+  min-width: 44px;
+  min-height: 36px;
   height: 36px;
   padding: 0;
   font: 400 16px/20px var(--font-body);
   color: #000;
   text-align: left;
+  white-space: nowrap;
 }
 .nav__search-close:hover { text-decoration: underline; }
 
@@ -2912,8 +2916,8 @@ main > :not(.hero),
   outline-offset: 2px;
 }
 .foot-follow .social img {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   filter: brightness(0);
   pointer-events: none;
 }
@@ -3100,8 +3104,21 @@ main > :not(.hero),
    corta en 1060 para que no queden a ras. */
 @media (max-width: 1060px) {
   .site-header.is-search-open .nav__logo { display: none; }
-  .site-header.is-search-open .nav__actions { flex: 1; }
-  .site-header.is-search-open .nav__search { width: 100%; }
+  .site-header.is-search-open .nav__actions {
+    flex: 1;
+    min-width: 0;
+  }
+  .site-header.is-search-open .nav__search {
+    width: 100%;
+    min-width: 0;
+    /* Hueco entre la píldora y Close, y margen visual al borde. */
+    gap: 12px;
+    padding-right: 4px;
+  }
+  .site-header.is-search-open .nav__search-field {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
 
   /* Buscador móvil (Figma 15430:9888): panel blanco a pantalla completa. */
   .site-header.is-search-open .nav__search-panel {
@@ -3426,19 +3443,19 @@ main > :not(.hero),
     box-sizing: border-box;
   }
   .foot-follow .social {
-    gap: 4px;
+    gap: 8px;
   }
   .foot-follow .social a {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    min-height: 44px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
     background: transparent;
     border-radius: 0;
   }
   .foot-follow .social img {
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
   }
 
 /* Hero móvil (Figma 15595:3069): barra negra 70 px, 16 px a cada lado,
