@@ -2003,7 +2003,7 @@ main > :not(.hero),
   display: contents;
 }
 
-/* Panel amarillo: titular arriba, lista centrada entre titular y CTA, pie libre. */
+/* Panel amarillo: titular arriba; lista centrada en el hueco sin solaparse. */
 .riders__panel {
   grid-column: 1;
   grid-row: 1;
@@ -2018,7 +2018,17 @@ main > :not(.hero),
   border-radius: 16px;
   background: #FFD800;
   color: #000;
+  overflow-x: clip;
   overflow-y: auto;
+  scrollbar-gutter: stable;
+  container-type: inline-size;
+  container-name: riders-panel;
+}
+
+.riders__panel-top {
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* Solo en el panel amarillo: el antetítulo va en negro puro (#000). */
@@ -2026,9 +2036,13 @@ main > :not(.hero),
   color: #000;
 }
 
-/* Mismo `.display` (Obviously Black 900) que el resto de secciones. */
-.riders__title {
+/* Mismo peso `.display`; escala con el ancho del panel (cqi) para que
+   «COMPLEMENT» quepa. Más específico que `.display` en los @media. */
+.riders .riders__title {
   color: #000;
+  max-width: 100%;
+  font-size: clamp(28px, 11cqi, 60px);
+  line-height: 1;
 }
 
 .riders__lead {
@@ -2040,16 +2054,16 @@ main > :not(.hero),
 }
 
 .riders__list {
-  /* Ocupa el hueco bajo el titular y centra las categorías respecto al CTA. */
-  flex: 1 1 auto;
+  /* margin auto centra la lista en el hueco; si no cabe, márgenes a 0 y
+     el panel hace scroll — el lead y las categorías no se solapan. */
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 2px;
-  margin: 0;
+  margin-top: auto;
+  margin-bottom: auto;
   padding: 0;
   list-style: none;
-  min-height: 0;
 }
 
 .riders__cat {
@@ -2250,6 +2264,8 @@ main > :not(.hero),
 
   /* Caja amarilla: titular + lead (sin lista de categorías). */
   .riders__panel {
+    display: flex;
+    flex-direction: column;
     grid-column: auto;
     grid-row: auto;
     order: 1;
