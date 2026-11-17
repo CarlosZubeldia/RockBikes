@@ -387,7 +387,7 @@ html.is-lightbox body { overflow: hidden; }
 }
 
 .buybox__stock { margin: 0; font-size: 16px; font-weight: 300; line-height: 20px; color: #454545; }
-.buybox__stock strong { font-weight: 500; color: #56157E; }
+.buybox__stock strong { font-weight: 500; color: var(--fx-blue); }
 
 .buybox__cart {
   width: 100%;

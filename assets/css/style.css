@@ -2897,7 +2897,7 @@ main > :not(.hero),
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 5px 10px 32px;
+  padding: 32px 10px 32px;
   border-top: 1px solid #fff;
 }
 .foot-sub, .foot-follow { min-width: 0; }
